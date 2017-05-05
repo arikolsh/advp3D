@@ -1,8 +1,14 @@
 #include "NaivePlayer.h"
+#include <iostream>
 
 #define EMPTY_CELL '-'
 
 using namespace std;
+
+IBattleshipGameAlgo* GetAlgorithm()
+{
+	return new NaivePlayer();			// Return last instance
+}
 
 NaivePlayer::NaivePlayer(): _playerNum(-1),_attackPosition(0),_rows(0),_cols(0)
 {
@@ -10,6 +16,8 @@ NaivePlayer::NaivePlayer(): _playerNum(-1),_attackPosition(0),_rows(0),_cols(0)
 
 void NaivePlayer::setBoard(int player, const char ** board, int numRows, int numCols)
 {
+	cout << "setting board in naive player!!" << endl; //debug
+
 	_rows = numRows;
 	_cols = numCols;
 	string emptyLine = string(_cols + 2, EMPTY_CELL);

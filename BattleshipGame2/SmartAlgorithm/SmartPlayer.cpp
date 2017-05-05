@@ -13,8 +13,16 @@
 
 bool print_mode = true;
 
+IBattleshipGameAlgo* GetAlgorithm()
+{
+	return new SmartPlayer();			// Return last instance
+}
+
+
 //Constructor
-SmartPlayer::SmartPlayer() : _attack({-1,-1}) {}
+SmartPlayer::SmartPlayer() : _playerNum(-1), _attack({-1,-1}), _rows(0), _cols(0)
+{
+}
 
 //Destructor
 SmartPlayer::~SmartPlayer()
@@ -24,6 +32,8 @@ SmartPlayer::~SmartPlayer()
 
 void SmartPlayer::setBoard(int player, const char** board, int numRows, int numCols)
 {
+	cout << "setting board in smart player!!" << endl; //debug
+
 	_playerNum = player;
 	_rows = numRows, _cols = numCols;
 	copyBoard(board); // Copy all player's ships to _board

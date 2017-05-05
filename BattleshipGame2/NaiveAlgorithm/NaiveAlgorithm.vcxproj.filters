@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NaivePlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IBattleshipGameAlgo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="NaivePlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IBattleshipGameAlgo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NaivePlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,6 +20,11 @@
 #define ERROR -1
 #define INVALID_ATTACK {-1,-1}
 
+IBattleshipGameAlgo* GetAlgorithm()
+{
+	return new PredictedPlayer();			// Return last instance
+}
+
 //Constructor
 PredictedPlayer::PredictedPlayer(): _playerNum(-1), _attackFilePath(EMPTY),_playerAttacks({}),_attackPosition(-1)
 {
@@ -33,6 +38,7 @@ PredictedPlayer::~PredictedPlayer()
 
 void PredictedPlayer::setBoard(int player, const char** board, int numRows, int numCols)
 {
+	cout << "setting board in predicted player!!" << endl; //debug
 	_playerNum = player;
 }
 

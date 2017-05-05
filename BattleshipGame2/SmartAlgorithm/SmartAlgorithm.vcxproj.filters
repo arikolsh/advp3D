@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SmartPlayer.h">
+    <ClInclude Include="IBattleshipGameAlgo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IBattleshipGameAlgo.h">
+    <ClInclude Include="SmartPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

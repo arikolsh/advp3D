@@ -31,7 +31,7 @@
 #define NUM_SHIP_TYPES 4
 #define A_NUM 0
 #define B_NUM 1
-#define BOARD_OFFSET 0 //offset of board gui
+#define BOARD_OFFSET 3 //offset of board gui
 /* gui helper methods */
 void gotoxy(int x, int y);
 WORD GetConsoleTextAttribute(HANDLE hCon);
@@ -74,31 +74,6 @@ char** GameBoard::initBoard(int rows, int cols)
 		}
 	}
 	return board;
-
-
-	/*char** board = static_cast<char**>(malloc(rows * sizeof(char*)));
-	if (board == nullptr)
-	{
-		ALLOC_ERR;
-		return nullptr;
-	}
-
-	for (int i = 0; i < rows; i++)
-	{
-		board[i] = static_cast<char*>(malloc(cols * sizeof(char)));
-		if (board[i] == nullptr)
-		{
-			ALLOC_ERR;
-			freeBoard(board, i);
-			return nullptr;
-		}
-	}
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			board[i][j] = EMPTY_CELL;
-		}
-	}
-	return board;*/
 }
 
 vector<string> GameBoard::getFullBoard() const
@@ -165,7 +140,7 @@ void GameBoard::printGameBoard()
 void GameBoard::mark(int i, int j, char c) const
 {
 	//move cursor to row i and col j
-	gotoxy(j + BOARD_OFFSET, i);
+	gotoxy(j, i + BOARD_OFFSET);
 	//print symbol
 	cout << c;
 	//move cursor to below the board
