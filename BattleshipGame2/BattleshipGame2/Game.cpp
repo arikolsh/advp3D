@@ -16,7 +16,7 @@
 
 using namespace std;
 
-bool PrintMode = false;
+bool PrintMode = false; //for debug purposes
 
 void printBoard(int player, char** board, int rows, int cols);
 
@@ -64,6 +64,10 @@ int main(int argc, char* argv[])
 		game_board.printGameBoard();
 		printBoard(A_NUM, playerBoardA, COLS, ROWS);
 		printBoard(B_NUM, playerBoardB, COLS, ROWS);
+		cout << "dll-1 is: " << inputFiles[1] << endl;
+		cout << "dll-2 is: " << inputFiles[2] << endl;
+		isQuiet = true;
+		delay = 0;
 	}
 
 	/* init game manager */
@@ -157,7 +161,7 @@ int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player , HINSTANCE& h
 	if (!getAlgo)
 	{
 		//todo: check if proper error
-		cout << "could not load function GetShape()" << endl;
+		cout << "could not load function GetAlgorithm()" << endl;
 		FreeLibrary(hDll);
 		return EXIT_FAILURE;
 	}

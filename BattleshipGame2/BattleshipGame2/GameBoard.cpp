@@ -31,7 +31,8 @@
 #define NUM_SHIP_TYPES 4
 #define A_NUM 0
 #define B_NUM 1
-#define BOARD_OFFSET 3 //offset of board gui
+#define BOARD_OFFSET 0 //offset of board gui
+#define WHITE 15
 /* gui helper methods */
 void gotoxy(int x, int y);
 WORD GetConsoleTextAttribute(HANDLE hCon);
@@ -117,6 +118,17 @@ void GameBoard::draw(int delay) const
 	colors[ROCKET_SHIP] = 2; //green
 	colors[DESTROYER] = 4; //red
 	colors[EMPTY_CELL] = 8; //gray
+	//first print the board in default color and then
+	//fill it with colors !
+	for (int i = 1; i < _rows - 1; i++)
+	{
+		for (int j = 1; j < _cols - 1; j++)
+		{
+			cell = _fullBoard[i][j];
+			mark(i, j, cell, WHITE, 0);
+		}
+	}
+	//fill it with color
 	for (int i = 1; i < _rows - 1; i++)
 	{
 		for (int j = 1; j < _cols - 1; j++)
@@ -125,6 +137,8 @@ void GameBoard::draw(int delay) const
 			mark(i, j, cell, colors[tolower(cell)] | FOREGROUND_INTENSITY, delay);
 		}
 	}
+	//delay for 100 milliseconds to appreciate what just happened
+	this_thread::sleep_for(chrono::milliseconds(100));
 }
 
 void GameBoard::printGameBoard()

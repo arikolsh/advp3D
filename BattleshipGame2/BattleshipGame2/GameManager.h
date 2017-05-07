@@ -2,12 +2,11 @@
 #include "GameBoard.h"
 #define NUM_PLAYERS 2
 
-class GameManager{
+class GameManager {
 public:
 	explicit GameManager(GameBoard* gameBoard, bool isQuiet, int delay);
 	int getPlayerScore(int player) const;
 	bool isPlayerDefeated(int player) const;
-	int getCurrentPlayer() const;
 	static void printShipsMap(map<pair<int, int>, pair<shared_ptr<Ship>, bool>>& shipsMap);
 	/* Search for the attack point in shipsMap:
 	* If attack point is not in map --> it's a Miss!
@@ -27,7 +26,7 @@ public:
 	* the number of the winner player.
 	*/
 	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS]);
-private: 
+private:
 	map<pair<int, int>, pair<shared_ptr<Ship>, bool>> _shipsMap;
 	GameManager() = delete;
 	GameManager(const GameManager& that) = delete;

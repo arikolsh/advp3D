@@ -2,6 +2,7 @@
 
 #include "IBattleshipGameAlgo.h"
 #include <vector>
+#include <tuple>
 
 using namespace std;
 
@@ -27,22 +28,31 @@ public:
 
 	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override;	// notify on last move result
 
-	static void TEST_PLAYER();
-
 
 private:
 
+	enum AttackingState { Routine, Hunting_x, Hunting_y };
+	AttackingState _attacking_state;
+	tuple<int, int, AttackResult, int> _lastAttack; // { row, col, result , player };
+	bool _finishedAttacks;
 	// Private fields:
 	int _playerNum;
 	pair<int, int> _attack; //Next point to attack
 	pair<int, int> _pos; //Points on player's board
 	vector<string> _board; //Holds all player's ships + 'x' mark for every cell that shouldn't be attacked
 	int _rows, _cols;
+	bool _y_directionFailed, _x_directionFailed;
 
 	// Private functions:
 	void copyBoard(const char** board);
-	void SmartPlayer::markPotentialHits();
+	void markPotentialHits();
 	bool potentialHit(int row, int col); //check if the cell is empty and in addition check :down, up, left, right, upper left, upper right, down left, down right
-	void SmartPlayer::updatePosition(int i, int j);
-	void SmartPlayer::printBoard(bool fullPrint) const;
+	void updatePosition(int i, int j);
+	bool isOpponentOwnGoal(int row, int col, int player) const;
+	void emptySurroundingCells(int row, int col);
+	pair<int, int> attackRoutine();
+	pair<int, int> attackHuntingX();
+	pair<int, int> attackHuntingY();
+	static bool shipBelongsToPlayer(char c, int player);
+	void printBoard(bool fullPrint) const;
 };

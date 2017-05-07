@@ -26,7 +26,7 @@ IBattleshipGameAlgo* GetAlgorithm()
 }
 
 //Constructor
-PredictedPlayer::PredictedPlayer(): _playerNum(-1), _attackFilePath(EMPTY),_playerAttacks({}),_attackPosition(-1)
+PredictedPlayer::PredictedPlayer() : _playerNum(-1), _attackFilePath(EMPTY), _playerAttacks({}), _attackPosition(-1)
 {
 }
 
@@ -38,7 +38,6 @@ PredictedPlayer::~PredictedPlayer()
 
 void PredictedPlayer::setBoard(int player, const char** board, int numRows, int numCols)
 {
-	cout << "setting board in predicted player!!" << endl; //debug
 	_playerNum = player;
 }
 
@@ -81,7 +80,7 @@ void PredictedPlayer::SetAttackFilePath(int playerNum, const string& dirPath)
 
 std::pair<int, int> PredictedPlayer::attack()
 {
-	pair<int,int> attack = INVALID_ATTACK;
+	pair<int, int> attack = INVALID_ATTACK;
 	if (++_attackPosition < _playerAttacks.size())
 	{
 		attack = _playerAttacks[_attackPosition];
@@ -126,7 +125,7 @@ bool PredictedPlayer::isValidAttack(pair<int, int> attack)
 }
 
 /* This method gets a line from the attack file
- * and tries to parse it into a valid attack point 
+ * and tries to parse it into a valid attack point
  * that is returned as a pair <int, int>.
  * If the line does not consist of a valid attack pair,
  * {-1 , -1} is returned to sign an illegal attack */
