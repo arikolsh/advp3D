@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
 
 }
 
-int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player , HINSTANCE& hDll)
+int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hDll)
 {
 	// define function of the type we expect
 	typedef IBattleshipGameAlgo *(*GetAlgoType)();
@@ -150,7 +150,7 @@ int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player , HINSTANCE& h
 	hDll = LoadLibraryA(dllPath.c_str());
 	if (!hDll)
 	{
-		cout << "could not load the dynamic library" << endl;
+		cout << "Cannot load dll: " << dllPath << endl;
 		return EXIT_FAILURE;
 	}
 
@@ -159,8 +159,7 @@ int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player , HINSTANCE& h
 	getAlgo = GetAlgoType(GetProcAddress(hDll, "GetAlgorithm"));
 	if (!getAlgo)
 	{
-		//todo: check if proper error
-		cout << "could not load function GetAlgorithm()" << endl;
+		cout << "Algorithm initialization failed for dll: " << dllPath << endl;
 		FreeLibrary(hDll);
 		return EXIT_FAILURE;
 	}
@@ -187,7 +186,7 @@ void getArgs(int argc, char** argv, bool& isQuiet, int& delay, string& searchDir
 {
 	vector<string> argsVector(argv, argv + argc);
 	int i = 1;
-	while(i<argc)
+	while (i < argc)
 	{
 
 		if (argsVector[i] == "-quiet")
