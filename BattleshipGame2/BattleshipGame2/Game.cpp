@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include "GameUtils.h"
 #include <vector>
 #include <filesystem>
@@ -187,7 +186,8 @@ void printBoard(int player, char** board, int rows, int cols)
 void getArgs(int argc, char** argv, bool& isQuiet, int& delay, string& searchDir)
 {
 	vector<string> argsVector(argv, argv + argc);
-	for (int i = 1; i < argc; i++)
+	int i = 1;
+	while(i<argc)
 	{
 
 		if (argsVector[i] == "-quiet")
@@ -196,13 +196,14 @@ void getArgs(int argc, char** argv, bool& isQuiet, int& delay, string& searchDir
 		}
 		else if (argsVector[i] == "-delay")
 		{
-			delay = stoi(argsVector[++i]);
+			i++;
+			delay = stoi(argsVector[i]);
 		}
 		else
 		{
 			searchDir = argsVector[i];
-			cout << searchDir;
 		}
+		i++;
 	}
 	if (isQuiet)
 	{
