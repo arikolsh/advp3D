@@ -4,7 +4,8 @@
 #define NUM_PLAYERS 2
 #define A_NUM 0
 #define B_NUM 1
-#define BOMB_COLOR 6 //brown
+#define BOMB_COLOR_A 6 //brown
+#define BOMB_COLOR_B 3 //cyan
 #define BOMB_SYMBOL '@'
 #define HIT_COLOR 5 //magneta
 #define HIT_SYMBOL '*'
@@ -17,7 +18,8 @@
 #define HORIZONTAL 1
 #define VERTICAL 0
 
-bool printMode = false;
+bool printAttacks = false; //debug purposes
+bool printMaps = false; //debug purposes
 
 GameManager::GameManager(GameBoard* gameBoard, bool isQuiet, int delay)
 {
@@ -80,13 +82,8 @@ int GameManager::getPlayerScore(int player) const
 
 bool GameManager::isPlayerDefeated(int player) const
 {
-	return player == A_NUM ? _playersNumActiveShips.first <= 0 
-	: _playersNumActiveShips.second <= 0;
-}
-
-int GameManager::getCurrentPlayer() const
-{
-	return _currentPlayer;
+	return player == A_NUM ? _playersNumActiveShips.first <= 0
+		: _playersNumActiveShips.second <= 0;
 }
 
 void GameManager::printShipsMap(map<pair<int, int>, pair<shared_ptr<Ship>, bool>>& shipsMap)
@@ -114,22 +111,23 @@ void GameManager::printShipsMap(map<pair<int, int>, pair<shared_ptr<Ship>, bool>
 * Else, return Hit. */
 AttackResult GameManager::executeAttack(int attackedPlayerNum, pair<int, int> attack)
 {
-	if (printMode)
+	int bombColor = attackedPlayerNum == A_NUM ? BOMB_COLOR_A : BOMB_COLOR_B;
+	if (printAttacks)
 	{
-		cout << "player " << attackedPlayerNum << " is attacked on "
+		cout << "player " << 1 - attackedPlayerNum << " is attacking "
 			<< attack.first << "," << attack.second << endl;
 		cout << "Result: ";
 	}
 
 	if (!_isQuiet)
 	{ //bomp the point
-		_gameBoard->mark(attack.first, attack.second, BOMB_SYMBOL, BOMB_COLOR, _delay);
+		_gameBoard->mark(attack.first, attack.second, BOMB_SYMBOL, bombColor, _delay);
 	}
 
 	auto found = _shipsMap.find(attack);
 	if (found == _shipsMap.end()) //attack point not in map --> Miss
 	{
-		if (printMode)
+		if (printAttacks)
 		{
 			cout << "Miss" << endl;
 		}
@@ -154,13 +152,13 @@ AttackResult GameManager::executeAttack(int attackedPlayerNum, pair<int, int> at
 		_currentPlayer = attackedPlayerNum;
 		if (ship->getLife() == 0) //ship already sank.. Miss
 		{
-			if (printMode)
+			if (printAttacks)
 			{
 				cout << "Miss (hit a sunken ship)" << endl;
 			}
 			return AttackResult::Miss;
 		}
-		if (printMode)
+		if (printAttacks)
 		{
 			cout << "Hit (ship was already hit before but still has'nt sunk..)" << endl;
 		}
@@ -169,16 +167,16 @@ AttackResult GameManager::executeAttack(int attackedPlayerNum, pair<int, int> at
 
 	ship->hit(); //Hit the ship (Take one off the ship life)
 	found->second.second = true; //Mark cell as a 'Hit'
-	if (printMode)
+	if (printAttacks)
 	{
 		cout << "Hit ship " << ship->getType() << endl;
 	}
 	int shipType = ship->getType();
 	if (isOwnGoal(attackedPlayerNum, shipType))
 	{
-		if (printMode)
+		if (printAttacks)
 		{
-			cout << "own goal! player " << _currentPlayer << " hit his own ship" << endl;
+			cout << "own goal! player " << 1 - attackedPlayerNum << " hit his own ship" << endl;
 		}
 		//in case of own goal pass turn to opponent
 		_currentPlayer = attackedPlayerNum;
@@ -206,7 +204,7 @@ AttackResult GameManager::executeAttack(int attackedPlayerNum, pair<int, int> at
 		{
 			_playerScores.second += ship->getSinkPoints();
 		}
-		if (printMode)
+		if (printAttacks)
 		{
 			cout << "Sink! Score: " << ship->getSinkPoints() << endl;
 		}
@@ -239,7 +237,7 @@ int GameManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 		int drawDelay = 15;
 		_gameBoard->draw(drawDelay);
 	}
-	if(printMode)
+	if (printMaps)
 	{
 		cout << "Ships Map at start point: " << endl;
 		printShipsMap(_shipsMap);
@@ -250,8 +248,10 @@ int GameManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 	bool finishedAttacks[NUM_PLAYERS] = { false,false };
 	pair<int, int> attackPoint;
 	AttackResult attackResult;
+	int attacker;
 	while (true)
 	{
+		attacker = _currentPlayer;
 		//Player declares his next attack:
 		attackPoint = players[_currentPlayer]->attack();
 		if (attackPoint.first == -1)
@@ -265,11 +265,16 @@ int GameManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 			_currentPlayer = 1 - _currentPlayer;
 			continue;
 		}
-		
 
 		attackResult = executeAttack(1 - _currentPlayer, attackPoint);
-		players[A_NUM]->notifyOnAttackResult(_currentPlayer, attackPoint.first, attackPoint.second, attackResult);
-		players[B_NUM]->notifyOnAttackResult(_currentPlayer, attackPoint.first, attackPoint.second, attackResult);
+		/*if (printAttacks)
+		{
+		cout << "notifyOnAttackResult: Player " << attacker << " attacked "
+		<< attackPoint.first << "," << attackPoint.second << " Result is "
+		<< static_cast<int>(attackResult) <<endl << endl;
+		}*/
+		players[A_NUM]->notifyOnAttackResult(attacker, attackPoint.first, attackPoint.second, attackResult);
+		players[B_NUM]->notifyOnAttackResult(attacker, attackPoint.first, attackPoint.second, attackResult);
 		//check for defeated players
 		if (isPlayerDefeated(1 - _currentPlayer))
 		{
@@ -284,7 +289,7 @@ int GameManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 			break;
 		}
 	}
-	if (printMode)
+	if (printMaps)
 	{
 		cout << "Ships Map at Finish point: " << endl;
 		printShipsMap(_shipsMap);
