@@ -73,13 +73,7 @@ void SmartPlayer::copyBoard(const char** board)
 		for (int j = 0; j < _cols; j++)
 		{
 			cell = board[i][j];
-			if (!shipBelongsToPlayer(cell, _playerNum)) { continue; } // Skip non-ship cells
-
-			if ((_playerNum == A_NUM && cell == toupper(cell)) ||
-				(_playerNum == B_NUM && cell == tolower(cell)))
-			{
-				_board[i + 1][j + 1] = cell; // Copy valid ship char
-			}
+			_board[i + 1][j + 1] = cell == ' ' ? EMPTY_CELL : cell;
 		}
 	}
 }

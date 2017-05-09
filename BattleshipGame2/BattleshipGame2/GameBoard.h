@@ -16,6 +16,8 @@ public:
 	int init(string path);
 	/* get full board including padding */
 	vector<string> getFullBoard() const;
+	/* get player board with original rows and columns.
+	 * every char with EMPTY-SYMBOL replace with ' '*/
 	char** getPlayerBoard(int player) const;
 	/* draw the game board for gui purposes with padding */
 	void draw(int delay) const;
@@ -55,6 +57,6 @@ private:
 	/* mark the i,j point on screen with the c symbol with color. */
 	void mark(int i, int j, char c, int color) const;
 	/* Allocates a rows x cols board filled with empty cells for the use of getPlayerBoard function*/
-	static char** initBoard(int rows, int cols);
+	static char** initBoard(int rows, int cols, bool fillEmptySymbol);
 };
 

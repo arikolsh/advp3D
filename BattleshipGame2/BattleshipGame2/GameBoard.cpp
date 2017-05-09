@@ -62,16 +62,18 @@ int GameBoard::init(string path)
 	return SUCCESS;
 }
 
-char** GameBoard::initBoard(int rows, int cols)
+char** GameBoard::initBoard(int rows, int cols, bool fillEmptySymbol)
 {
 	char** board = new char*[rows];
 	for (int i = 0; i < rows; i++)
 	{
 		board[i] = new char[cols];
 	}
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			board[i][j] = EMPTY_CELL;
+	if (fillEmptySymbol) {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				board[i][j] = EMPTY_CELL;
+			}
 		}
 	}
 	return board;
@@ -90,7 +92,7 @@ char ** GameBoard::getPlayerBoard(int player) const
 	// player is A => decider is false => will only insert upper case chars
 	// player is B => decider is true => will only insert lower case chars 
 	bool decider = player == A_NUM ? false : true;
-	char** playerBoard = initBoard(_rows - 2, _cols - 2);
+	char** playerBoard = initBoard(_rows - 2, _cols - 2, false);
 	if (playerBoard == nullptr)
 	{
 		return nullptr;
@@ -100,8 +102,12 @@ char ** GameBoard::getPlayerBoard(int player) const
 		for (int j = 0; j < _cols - 2; j++)
 		{
 			c = _fullBoard[i + 1][j + 1];
-			if (c == EMPTY_CELL) { continue; }
-			condition = tolower(c) == c; //condition true iff c was lower case
+			if (c == EMPTY_CELL)
+			{
+				playerBoard[i][j] = ' ';
+				continue;
+			}
+			condition = tolower(c) == c; //condition true iff c is lower case
 			if (condition == decider) { playerBoard[i][j] = c; }
 		}
 	}
@@ -158,7 +164,7 @@ void GameBoard::mark(int i, int j, char c) const
 	//print symbol
 	cout << c;
 	//move cursor to below the board
-	gotoxy(0, _cols+3);
+	gotoxy(0, _cols + 3);
 }
 
 void GameBoard::mark(int i, int j, char c, int color) const
@@ -181,13 +187,13 @@ void GameBoard::mark(int i, int j, char c, int color, int delay) const
 }
 
 int GameBoard::getRows(bool padding) const
-{	
-	return padding ? _rows : _rows-2;
+{
+	return padding ? _rows : _rows - 2;
 }
 
 int GameBoard::getCols(bool padding) const
 {
-	return padding ? _cols: _cols-2;
+	return padding ? _cols : _cols - 2;
 }
 
 
@@ -199,9 +205,9 @@ void GameBoard::destroyBoard(char ** board, int rows)
 	}
 	for (int i = 0; i < rows; i++)
 	{
-		delete [] board[i];
+		delete[] board[i];
 	}
-	delete [] board;
+	delete[] board;
 }
 
 int GameBoard::fillBoardFromFile(string path)
@@ -210,7 +216,7 @@ int GameBoard::fillBoardFromFile(string path)
 	int row = 1, err;
 	int m;
 	ifstream file(path);
-	char **tmpBoard = initBoard(_rows,_cols);
+	char **tmpBoard = initBoard(_rows, _cols, true);
 	if (tmpBoard == nullptr) {
 		return FAILURE;
 	}
