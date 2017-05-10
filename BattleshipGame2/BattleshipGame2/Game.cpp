@@ -15,7 +15,7 @@
 
 using namespace std;
 
-bool PrintMode = false; //for debug purposes
+bool PrintMode = true; //for debug purposes
 
 void printBoard(int player, char** board, int rows, int cols);
 

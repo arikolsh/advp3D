@@ -25,7 +25,7 @@ void NaivePlayer::setBoard(int player, const char ** board, int numRows, int num
 	for (int i = 0; i < numRows; i++) {
 		for (int j = 0; j < numCols; j++)
 		{
-			_board[i + 1][j + 1] = board[i][j];
+			_board[i + 1][j + 1] = board[i][j] == ' ' ? EMPTY_CELL : board[i][j];
 		}
 	}
 }
