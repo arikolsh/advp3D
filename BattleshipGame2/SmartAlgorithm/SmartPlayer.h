@@ -28,8 +28,6 @@ public:
 
 	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override;	// notify on last move result
 
-	static void TEST_PLAYER();
-
 
 private:
 
@@ -51,7 +49,7 @@ private:
 	bool potentialHit(int row, int col); //check if the cell is empty and in addition check :down, up, left, right, upper left, upper right, down left, down right
 	void updatePosition(int i, int j);
 	bool isOpponentOwnGoal(int row, int col, int player) const;
-	void emptySurroundingCells(int row, int col, int y_limit, int x_limit);
+	void emptySurroundingCells(int row, int col);
 	pair<int, int> attackRoutine();
 	pair<int, int> attackHuntingX();
 	pair<int, int> attackHuntingY();
