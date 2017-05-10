@@ -27,8 +27,8 @@ IBattleshipGameAlgo* GetAlgorithm()
 }
 
 //Constructor
-SmartPlayer::SmartPlayer() : _attacking_state(Routine), _finishedAttacks(false), _playerNum(-1), _attack({ -1,-1 }),
-_pos(START_POINT), _rows(0), _cols(0), _y_directionFailed(false), _x_directionFailed(false)
+SmartPlayer::SmartPlayer() : _playerNum(-1), _rows(0), _cols(0), _pos(START_POINT),
+_finishedAttacks(false), _attack({ -1,-1 }), _attacking_state(Routine), _x_directionFailed(false), _y_directionFailed(false)
 {
 }
 
@@ -73,7 +73,13 @@ void SmartPlayer::copyBoard(const char** board)
 		for (int j = 0; j < _cols; j++)
 		{
 			cell = board[i][j];
-			_board[i + 1][j + 1] = cell == ' ' ? EMPTY_CELL : cell;
+			if (!shipBelongsToPlayer(cell, _playerNum)) { continue; } // Skip non-ship cells
+
+			if ((_playerNum == A_NUM && cell == toupper(cell)) ||
+				(_playerNum == B_NUM && cell == tolower(cell)))
+			{
+				_board[i + 1][j + 1] = cell; // Copy valid ship char
+			}
 		}
 	}
 }
