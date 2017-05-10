@@ -27,8 +27,8 @@ IBattleshipGameAlgo* GetAlgorithm()
 }
 
 //Constructor
-SmartPlayer::SmartPlayer() : _playerNum(-1), _rows(0), _cols(0), _pos(START_POINT),
-_finishedAttacks(false), _attack({ -1,-1 }), _attacking_state(Routine), _x_directionFailed(false), _y_directionFailed(false)
+SmartPlayer::SmartPlayer() : _attacking_state(Routine), _finishedAttacks(false), _playerNum(-1), _attack({ -1,-1 }),
+_pos(START_POINT), _rows(0), _cols(0), _y_directionFailed(false), _x_directionFailed(false)
 {
 }
 
