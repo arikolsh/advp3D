@@ -1,6 +1,5 @@
 #include <locale>
 #include "Ship.h"
-#include <iostream>
 #define RUB_LEN 1; //number of blocks for each ship
 #define ROC_LEN 2;
 #define SUB_LEN 3;
