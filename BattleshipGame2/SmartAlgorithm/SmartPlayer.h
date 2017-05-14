@@ -28,9 +28,6 @@ public:
 
 	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override;	// notify on last move result
 
-	static void TEST_PLAYER();
-
-
 private:
 
 	enum AttackingState { Routine, Hunting_x, Hunting_y };
