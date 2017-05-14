@@ -30,9 +30,9 @@
 
 
 
-int GameUtils::getInputFiles(vector<string> & inputFiles, vector<string> & messages, vector<string> & DLLNames, string searchDir)
+int GameUtils::getInputFiles(vector<string> & inputFiles, vector<string> & messages, string searchDir)
 {
-	int op_res = fetchInputFiles(inputFiles, messages, DLLNames, searchDir);
+	int op_res = fetchInputFiles(inputFiles, messages, searchDir);
 	if (op_res == FAILURE)
 	{
 		cout << "Error: failed to fetch input files from super-file container" << endl;
@@ -89,14 +89,14 @@ int GameUtils::execCmd(char const * cmd, string & shellRes)
 	return exitCode;
 }
 
-int GameUtils::fetchInputFiles(vector<string> & inputFiles, vector<string> & messages, vector<string> & DLLNames, const string path)
+int GameUtils::fetchInputFiles(vector<string> & inputFiles, vector<string> & messages, const string path)
 {
 	int hasBoardFile = 0, hasDLL = 0, opRes;
 	size_t delimIndex;
 	const char * searchCmd;
 	string s_search_cmd, pathToFiles, line, fileExtension, shellRes;
 	ostringstream tmpSearchCmd, tmpPathToFiles, wrongPath, missingBoardFile, missingDLL, missingBAttckFile, fullPath;
-	vector<string> tmpInputFiles, tmpDLLFiles, tmpDLLNames;
+	vector<string> tmpInputFiles, tmpDLLFiles;
 
 	if (path.empty() == true)
 	{
@@ -159,7 +159,7 @@ int GameUtils::fetchInputFiles(vector<string> & inputFiles, vector<string> & mes
 	istringstream  inputFilesContainer(shellRes); // declaration must to be dynamic 
 	while (getline(inputFilesContainer, line))
 	{
-		delimIndex = line.find('.');
+		delimIndex = line.find_last_of('.');
 		if (delimIndex == string::npos) {	//string::npos returns when '.' was not found
 			continue;
 		}
@@ -185,8 +185,6 @@ int GameUtils::fetchInputFiles(vector<string> & inputFiles, vector<string> & mes
 		}
 		if (line.substr(delimIndex + 1).compare(DLL_EXTENSION) == 0)
 		{
-			//push dll name only to tmpDLLNames array
-			tmpDLLNames.push_back(line.substr(0, delimIndex));
 			// if we read from the working directory
 			if (path.empty() == true)
 			{
@@ -219,14 +217,9 @@ int GameUtils::fetchInputFiles(vector<string> & inputFiles, vector<string> & mes
 		inputFiles[FIRST] = tmpInputFiles[FIRST];
 		//lexicographic order of the dll's full path
 		sort(tmpDLLFiles.begin(), tmpDLLFiles.end());
-		//lexicographic order of the dll's names only
-		sort(tmpDLLNames.begin(), tmpDLLNames.end());
 		//fill the rest of the vector with the DLLS full path
 		inputFiles[SECOND] = tmpDLLFiles[FIRST];
 		inputFiles[THIRD] = tmpDLLFiles[SECOND];
-		//fill the DLLNames with names only
-		DLLNames[FIRST] = tmpDLLNames[FIRST];
-		DLLNames[SECOND] = tmpDLLNames[SECOND];
 	}
 	return SUCCESS;
 }

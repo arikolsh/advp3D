@@ -334,7 +334,7 @@ int PredictedPlayer::fetchInputFiles(vector<string> & attackFiles, vector<string
 	istringstream  inputFilesContainer(shellRes); // declaration must to be dynamic 
 	while (getline(inputFilesContainer, line))
 	{
-		delimIndex = line.find('.');
+		delimIndex = line.find_last_of('.');
 		if (delimIndex == string::npos) {	//string::npos returns when '.' was not found
 			continue;
 		}

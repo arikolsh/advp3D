@@ -25,7 +25,6 @@ int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hD
 int main(int argc, char* argv[])
 {
 	vector<string> inputFiles = { "", "", "" }; //[battle board, dll 1, dll 2]
-	vector<string> dllNames = { "", "" };
 	vector<string> messages;
 	bool isQuiet = false; //default
 	int delay = 1000; //default, milliseconds
@@ -36,7 +35,7 @@ int main(int argc, char* argv[])
 	getArgs(argc, argv, isQuiet, delay, searchDir);
 
 	/* get DLLs and board file */
-	int err = GameUtils::getInputFiles(inputFiles, messages, dllNames, searchDir);
+	int err = GameUtils::getInputFiles(inputFiles, messages, searchDir);
 	if (err) { return EXIT_FAILURE; }
 
 	/* init game board data structure */

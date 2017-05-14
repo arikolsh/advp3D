@@ -15,7 +15,7 @@ public:
 	* pos0 = battle board
 	* pos1 = a attack board
 	* pos2 = b attack board	*/
-	static int getInputFiles(vector<string>& inputFiles, vector<string>& messages, vector<string>& DLLNames, string searchDir);
+	static int getInputFiles(vector<string>& inputFiles, vector<string>& messages, string searchDir);
 	/* print 2d char array for debug purposes */
 	static void print2DCharArray(char**arr, int rows, int cols);
 
@@ -29,6 +29,6 @@ private:
 
 	/* remove ships with wrong shape or size from board. returns -1 if there are invalid ships and prints proper
 	* messages */
-	static int fetchInputFiles(vector<string> & inputFiles, vector<string> & messages, vector<string> & DLLNames, const string path);
+	static int fetchInputFiles(vector<string> & inputFiles, vector<string> & messages, const string path);
 
 };
