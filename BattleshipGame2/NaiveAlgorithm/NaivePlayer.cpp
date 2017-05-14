@@ -43,7 +43,7 @@ bool NaivePlayer::isIsolated(int row, int col)
 bool NaivePlayer::init(const std::string & path)
 {
 	int i = 1, j = 1;
-	while (i < _rows + 1) // go from (1,1) until (11, 11) inclusive for both
+	while (i < _rows + 1) // go from (1,1) until (10, 10) inclusive for both
 	{
 		j = 1;
 		while (j < _cols + 1)
@@ -61,7 +61,7 @@ bool NaivePlayer::init(const std::string & path)
 
 pair<int, int> NaivePlayer::attack()
 {
-	if (_attackPosition == _playerAttacks.size() - 1)
+	if (_attackPosition == _playerAttacks.size())
 	{
 		return pair<int, int>(-1, -1);
 	}

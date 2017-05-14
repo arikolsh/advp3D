@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	vector<string> dllNames = { "", "" };
 	vector<string> messages;
 	bool isQuiet = false; //default
-	int delay = 100; //default, milliseconds
+	int delay = 1000; //default, milliseconds
 	string searchDir = ""; //default
 	char **playerBoardA, **playerBoardB;
 

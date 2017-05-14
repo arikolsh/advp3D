@@ -83,7 +83,6 @@ int GameUtils::execCmd(char const * cmd, string & shellRes)
 	while (fgets(shellTmpRes, sizeof(shellTmpRes), pPipe))
 	{
 		shellRes += string(shellTmpRes);
-		shellRes += "\n"; // add EOL
 	}
 	/* Close pipe and get shelexit code */
 	exitCode = _pclose(pPipe); // returns -1 in case of a _popen failure otherwise returns the shell exit code
@@ -141,7 +140,7 @@ int GameUtils::fetchInputFiles(vector<string> & inputFiles, vector<string> & mes
 			// build the new dir command: with arguments /b /a. if also this command fail(op res == 1) than it's a wrong path
 			shellRes.clear(); // clear the shellcmd content
 			tmpSearchCmd.str("");
-			tmpSearchCmd << "dir " << path << " /b /a 2> nul";
+			tmpSearchCmd << "dir \"" << path << "\" /b /a 2> nul";
 			s_search_cmd = tmpSearchCmd.str();
 			searchCmd = s_search_cmd.c_str();
 			opRes = execCmd(searchCmd, shellRes);
