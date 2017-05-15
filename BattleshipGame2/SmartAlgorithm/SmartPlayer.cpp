@@ -34,7 +34,7 @@ SmartPlayer::SmartPlayer()
 	_cols = 0;
 	_pos = START_POINT;
 	_finishedAttacks = false;
-	_attack = {-1,-1};
+	_attack = { -1,-1 };
 	_attacking_state = Routine;
 	_x_directionFailed = false;
 	_y_directionFailed = false;
@@ -112,9 +112,9 @@ void SmartPlayer::markPotentialHits()
 //check the cell itself and in addition check :down, up, left, right, upper left, upper right, down left, down right
 bool SmartPlayer::potentialHit(int row, int col)
 {
-	for (int i = -1; i < 2; i++)
+	for (int i = -1; i <= 1; i++)
 	{
-		for (int j = -1; j < 2; j++)
+		for (int j = -1; j <= 1; j++)
 		{
 			if (abs(i) == abs(j) && i != 0) { continue; } //Skip the diagonals
 			if (_board[row + i][col + j] != EMPTY_CELL
@@ -299,50 +299,34 @@ void SmartPlayer::notifyOnAttackResult(int player, int row, int col, AttackResul
 			case Hunting_x: // Found ship direction to be X --> attack until sink
 				_x_directionFailed = false;
 				_y_directionFailed = true; // Ship isn't in Y direction
-				//clear surrounding cells in y direction
-				if (print_mode)
-				{
-					cout << "player " << _playerNum << " clearing surrounding cells in Y direction" << endl;
-				}
-				emptySurroundingCells(row, col, 1, 0);
-				//update last attack to be the current hit:
+										   //update last attack to be the current hit:
 				_lastAttack = { row, col , result , player };
-				//_attacking_state = Hunting_x;
+				_attacking_state = Hunting_x;
 				break;
 			case Hunting_y: // Found ship direction to be Y --> attack until sink
 				_x_directionFailed = true; // Ship isn't in X direction
 				_y_directionFailed = false;
-				//clear surrounding cells in x direction:
-				if (print_mode)
-				{
-					cout << "player " << _playerNum << " clearing surrounding cells in X direction" << endl;
-				}
-				emptySurroundingCells(row, col, 0, 1);
 				//update last attack to be the current hit:
 				_lastAttack = { row, col , result , player };
-				//_attacking_state = Hunting_y;
+				_attacking_state = Hunting_y;
 				break;
 			}
 			break;
 
 		case AttackResult::Sink:
-			if (print_mode)
-			{
-				cout << "player " << _playerNum << " clearing surrounding cells after a 'Sink'" << endl;
-			}
-			emptySurroundingCells(row, col, 1, 1); // Avoid attacking cells in the surroundings of (row,col)
+			emptySurroundingCells(row, col, -1, 1, -1, 1); // Avoid attacking cells in the surroundings of (row,col)
 			switch (_attacking_state)
 			{
 			case Routine: // Keep attacking in Routine state until next 'Hit'
 				break;
 			case Hunting_x: // Succeeded to sink ship on X direction --> return to Routine state
-				//clear cells arround previous hit
-				emptySurroundingCells(row, col - 1, 1, 1); // Avoid attacking surrounding cells
+							//clear cells arround previous hit
+				emptySurroundingCells(row, col - 1, -1, 1, -1, 1); // Avoid attacking surrounding cells
 				_attacking_state = Routine;
 				break;
 			case Hunting_y: // Succeeded to sink ship on Y direction --> return to Routine state
-				//clear cells arround previous hit
-				emptySurroundingCells(row - 1, col, 1, 1); // Avoid attacking surrounding cells
+							//clear cells arround previous hit
+				emptySurroundingCells(row - 1, col, -1, 1, -1, 1); // Avoid attacking surrounding cells
 				_attacking_state = Routine;
 				break;
 			}
@@ -380,11 +364,17 @@ bool SmartPlayer::isOpponentOwnGoal(int row, int col, int player) const
 }
 
 
-void SmartPlayer::emptySurroundingCells(int row, int col, int y_limit, int x_limit)
+void SmartPlayer::emptySurroundingCells(int row, int col, int y_start, int y_limit, int x_start, int x_limit)
 {
-	for (int i = -1; i <= y_limit; i++)
+	// Set the boundaries for cleaning surrounding cells:
+	y_start = row > 0 ? y_start : 0;
+	y_limit = row <= _rows ? y_limit : 0;
+	x_start = col > 0 ? x_start : 0;
+	x_limit = col <= _cols ? x_limit : 0;
+
+	for (int i = y_start; i <= y_limit; i++)
 	{
-		for (int j = -1; j <= x_limit; j++)
+		for (int j = x_start; j <= x_limit; j++)
 		{
 			//Skip the center and diagonals, and empty cells that were marked for attack
 			if (abs(i) != abs(j) && _board[row + i][col + j] == MARKED_CELL)

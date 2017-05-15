@@ -17,8 +17,8 @@ public:
 	~SmartPlayer();
 
 	/* Called once to allow init from files if needed
-	 * returns whether the init succeeded or failed 
-	 * Empty implementation for smart player (returns true) */
+	* returns whether the init succeeded or failed
+	* Empty implementation for smart player (returns true) */
 	bool init(const std::string& path) override;
 
 	// called once to notify player on his board
@@ -36,7 +36,7 @@ private:
 	// Smart player attacks according to a DFA with these 3 states:
 	enum AttackingState { Routine, Hunting_x, Hunting_y };
 	AttackingState _attacking_state;
-	
+
 	/* 1) When DFA is in Routine state, smart player attacks in predefined order
 	*    according to his position in the matrix that represents the board
 	*    with all potential hit cells marked with 'X'.
@@ -44,11 +44,11 @@ private:
 	*    and if that doesn't work, switches to Hunting_Y state.
 	*    After each 'Sink', player returns back to Routine state searching for the next 'Hit' */
 	pair<int, int> attackRoutine();
-	
+
 	/* 2) When DFA is in Hunting_X state, smart player attacks in X direction
 	*    until 'Sink' (return to Routine state) or 'Miss' (move to Y direction): */
 	pair<int, int> attackHuntingX();
-	
+
 	/* 3) When DFA is in Hunting_Y state, smart player attacks in Y direction
 	*    until 'Sink' or 'Miss' (return to Routine state): */
 	pair<int, int> attackHuntingY();
@@ -64,13 +64,13 @@ private:
 	vector<string> _board; // Holds all player's ships + 'x' mark for every cell that shouldn't be attacked
 	int _rows, _cols; // The given board dimensions
 
-	// Private functions:
+					  // Private functions:
 	void copyBoard(const char** board);
 	void markPotentialHits(); // Go over the player's board (matrix) and mark all Potential cells with 'X'
 	bool potentialHit(int row, int col); // Check cell and it's surroundings to decide if it's a potential hit
 	void updatePosition(int i, int j); // update position in the attacking matrix for routine state attacks
 	bool isOpponentOwnGoal(int row, int col, int player) const; // return true if opponent just hit his own ship
-	void emptySurroundingCells(int row, int col, int y_limit, int x_limit); // Clean surrounding cells after attacks
+	void emptySurroundingCells(int row, int col, int y_start, int y_limit, int x_start, int x_limit); // Clean surrounding cells after attacks
 	static bool shipBelongsToPlayer(char c, int player); // return true iff c is a ship that belongs to given player
 	void printBoard(bool fullPrint) const;
 };
