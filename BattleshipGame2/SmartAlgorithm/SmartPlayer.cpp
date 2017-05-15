@@ -23,12 +23,15 @@ bool print_mode = false;
 
 IBattleshipGameAlgo* GetAlgorithm()
 {
-	return new SmartPlayer();			// Return last instance
+	return new SmartPlayer(); // Return a smart player instance
 }
 
 //Constructor
-SmartPlayer::SmartPlayer(): _playerNum(-1), _rows(0), _cols(0)
+SmartPlayer::SmartPlayer()
 {
+	_playerNum = -1;
+	_rows = 0;
+	_cols = 0;
 	_pos = START_POINT;
 	_finishedAttacks = false;
 	_attack = {-1,-1};
@@ -296,7 +299,7 @@ void SmartPlayer::notifyOnAttackResult(int player, int row, int col, AttackResul
 			case Hunting_x: // Found ship direction to be X --> attack until sink
 				_x_directionFailed = false;
 				_y_directionFailed = true; // Ship isn't in Y direction
-										   //clear surrounding cells in y direction
+				//clear surrounding cells in y direction
 				if (print_mode)
 				{
 					cout << "player " << _playerNum << " clearing surrounding cells in Y direction" << endl;
@@ -333,12 +336,12 @@ void SmartPlayer::notifyOnAttackResult(int player, int row, int col, AttackResul
 			case Routine: // Keep attacking in Routine state until next 'Hit'
 				break;
 			case Hunting_x: // Succeeded to sink ship on X direction --> return to Routine state
-							//clear cells arround previous hit
+				//clear cells arround previous hit
 				emptySurroundingCells(row, col - 1, 1, 1); // Avoid attacking surrounding cells
 				_attacking_state = Routine;
 				break;
 			case Hunting_y: // Succeeded to sink ship on Y direction --> return to Routine state
-							//clear cells arround previous hit
+				//clear cells arround previous hit
 				emptySurroundingCells(row - 1, col, 1, 1); // Avoid attacking surrounding cells
 				_attacking_state = Routine;
 				break;
@@ -349,7 +352,6 @@ void SmartPlayer::notifyOnAttackResult(int player, int row, int col, AttackResul
 
 	else { // Opponent attacked --> Only the 'Own Goal' case matters 
 		   // (If opponent miss or hit one of this player's ship, got nothing to do)
-
 		   // If opponent hit his own ship, it revealed a target that smart player will try to sink:
 		if (result == AttackResult::Hit && isOpponentOwnGoal(row, col, player))
 		{
@@ -364,22 +366,6 @@ void SmartPlayer::notifyOnAttackResult(int player, int row, int col, AttackResul
 				{
 					cout << "Opponent performed an 'Own Goal', smart player will try to sink this ship" << endl;
 				}
-
-				/* Remark:
-				* If opponent hit his ship (own goal) we want to sink it
-				* but we don’t know where it begins!!!
-				* In this solution we start only from that point right or down (and not left or up) and
-				* anyway we will get to the other cells on the future routine attacks
-				* We can think of a new function: attackAfterOwnGoal() that will first attack x and then y,
-				* but will identify the direction and attack until sinking */
-				//return;
-			}
-			else  //_attacking_state = Hunting_x or Hunting_y
-			{
-
-				//Player is already busy hunting another ship
-
-				//In this case we can save point to a queue and attack it later
 			}
 		}
 	}
