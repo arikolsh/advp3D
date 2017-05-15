@@ -53,7 +53,7 @@ bool PredictedPlayer::init(const std::string& path)
 	SetAttackFilePath(_playerNum, path);
 	if (_attackFilePath == EMPTY)
 	{
-		cout << "Predicted player failed to init" << endl;
+		cout << "Error: Predicted player failed to init" << endl;
 		return false; // Failed to get an attack file
 	}
 	getAttacksFromFile(); // Fill _playerAttacks vector with all his attacks
