@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <random>
 
-bool print_mode = true;
+bool print_mode = false;
 
 // Return a smart player instance
 IBattleshipGameAlgo* GetAlgorithm() { return new SmartPlayer(); }
