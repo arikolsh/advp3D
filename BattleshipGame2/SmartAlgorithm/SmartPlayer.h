@@ -1,76 +1,131 @@
 #pragma once
-
 #include "IBattleshipGameAlgo.h"
 #include <vector>
-#include <tuple>
+
+#define INVALID_COORDINATE  { -1 , -1, -1 }
+#define EMPTY_CELL '-'
+#define MARKED_CELL 'x'
+#define A_NUM 0
+#define B_NUM 1
+#define  NUM_SHIP_TYPES 4
 
 using namespace std;
 
 class SmartPlayer : public IBattleshipGameAlgo
 {
 public:
-
 	// Class constructor
 	explicit SmartPlayer();
 
 	// Class distructor
 	~SmartPlayer();
 
-	/* Called once to allow init from files if needed
-	* returns whether the init succeeded or failed
-	* Empty implementation for smart player (returns true) */
-	bool init(const std::string& path) override;
+	// called every time the player changes his order
+	void setPlayer(int player) override;
 
-	// called once to notify player on his board
-	void setBoard(int player, const char** board, int numRows, int numCols) override;
+	// called once at the beginning of each new game
+	void setBoard(const BoardData& board) override;
 
 	// ask player for his move
-	std::pair<int, int> attack() override;
+	Coordinate attack() override;
 
 	// notify on last move result
-	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override;
+	void notifyOnAttackResult(int player, Coordinate move, AttackResult result) override;
 
+	class SmartBoard
+	{
+	public:
+		virtual ~SmartBoard() = default;
+		int rows = 0;
+		int cols = 0;
+		int depth = 0;
+		vector<vector<string>> internalBoard; // Holds all player's ships + 'X' mark for every cell that shouldn't be attacked
+		void SetDimentions(int Rows, int Cols, int Depth) { rows = Rows, cols = Cols, depth = Depth; }
+		void initialize();
+		// Overloading operator[] for safely accessing _board
+		char& operator[](Coordinate coor) { return internalBoard[coor.row][coor.col][coor.depth]; }
+		const char& operator[](Coordinate coor) const { return internalBoard[coor.row][coor.col][coor.depth]; }
+		char& At(int Row, int Col, int Depth) { return internalBoard[Row][Col][Depth]; }
+		const char& At(int Row, int Col, int Depth) const { return internalBoard[Row][Col][Depth]; }
+	};
 
 private:
 
-	// Smart player attacks according to a DFA with these 3 states:
-	enum AttackingState { Routine, Hunting_x, Hunting_y };
-	AttackingState _attacking_state;
-
-	/* 1) When DFA is in Routine state, smart player attacks in predefined order
-	*    according to his position in the matrix that represents the board
-	*    with all potential hit cells marked with 'X'.
-	*    Once succeeded to 'Hit', player moves to Hunting_X state in order to sink the ship,
-	*    and if that doesn't work, switches to Hunting_Y state.
-	*    After each 'Sink', player returns back to Routine state searching for the next 'Hit' */
-	pair<int, int> attackRoutine();
-
-	/* 2) When DFA is in Hunting_X state, smart player attacks in X direction
-	*    until 'Sink' (return to Routine state) or 'Miss' (move to Y direction): */
-	pair<int, int> attackHuntingX();
-
-	/* 3) When DFA is in Hunting_Y state, smart player attacks in Y direction
-	*    until 'Sink' or 'Miss' (return to Routine state): */
-	pair<int, int> attackHuntingY();
-
-	// First attack in x direction and if it fails attack y direction and after that return to routine state
-	bool _y_directionFailed, _x_directionFailed;
-
-	tuple<int, int, AttackResult, int> _lastAttack; // { row, col, result , player };
-	bool _finishedAttacks;
 	int _playerNum;
-	pair<int, int> _attack; // Next point to attack
-	pair<int, int> _pos; // Points on player's board
-	vector<string> _board; // Holds all player's ships + 'x' mark for every cell that shouldn't be attacked
-	int _rows, _cols; // The given board dimensions
+	SmartBoard _board;
+	vector<Coordinate> _potentialAttacks; // Container for all points marked ('X') as potential hits
+	Coordinate _attackPoint; // Next point to attack
+	Coordinate _lastAttack; // Remember last attack (row, col, depth)
+	Coordinate _firstHit; // Remember the position when starting to hunt a direction - 
+						  //(helps when switching forwards to backwords + helps cleaning surrounding cells)
+	bool _cleanedFirstHit;
 
-					  // Private functions:
-	void copyBoard(const char** board);
-	void markPotentialHits(); // Go over the player's board (matrix) and mark all Potential cells with 'X'
-	bool potentialHit(int row, int col); // Check cell and it's surroundings to decide if it's a potential hit
-	void updatePosition(int i, int j); // update position in the attacking matrix for routine state attacks
-	bool isOpponentOwnGoal(int row, int col, int player) const; // return true if opponent just hit his own ship
-	void emptySurroundingCells(int row, int col, int y_start, int y_limit, int x_start, int x_limit); // Clean surrounding cells after attacks
-	static bool shipBelongsToPlayer(char c, int player); // return true iff c is a ship that belongs to given player
-	void printBoard(bool fullPrint) const;
+	// Copy all player's ships to _board (which is initialized with EMPTY_CELLs)
+	void copyPlayerShips(const BoardData& board);
+
+	// Smart player attacks according to a DFA with these 3 states:
+	enum AttackingState
+	{
+		Routine,
+		Hunting_x_forwards, Hunting_x_backwards,
+		Hunting_y_forwards, Hunting_y_backwards,
+		Hunting_z_forwards, Hunting_z_backwards
+	};
+	AttackingState _attackingState;
+	const vector<AttackingState> _attackingDirections = { Hunting_x_forwards, Hunting_y_forwards, Hunting_z_forwards };
+
+	/* ChooseHuntingState: randomly sets the next _attackingState from _attackingDirections - using
+	* _validDirections vector to skip directions that were set to "false" (meaning we already failed while trying them) */
+	void setRandomHuntingState();
+
+	/* This vector serves ChooseHuntingState() to randomly pick the next hunting direction -
+	* while skipping directions that were set to "false" (meaning we already failed while trying them) */
+	vector<bool> _validDirections = { true, true, true }; // mark x_direction, y_direction, z_direction as valid
+	void updateDirections(bool x, bool y, bool z);
+
+	/* 1) When DFA is in Routine state, smart player attacks potential cells in random order
+	*    Once succeeded to 'Hit', player randomly chooses the hunting direction.
+	*    If needed (upon "Miss") player switches his hunting direction until succeeding to "Sink".
+	*    After each 'Sink', player returns back to Routine state searching for the next 'Hit' */
+	Coordinate attackRoutine();
+
+	/* 2) When DFA is in Hunting_x_forwards state, smart player attacks in forward X direction
+	*    until 'Sink' (return to Routine state) or 'Miss' (move to Hunting_x_backwards) */
+	Coordinate attack_x_forwards();
+
+	/* 3) When DFA is in Hunting_x_backwards state, smart player attacks in backwords X direction
+	*    until 'Sink' or 'Miss' (go to ChooseHuntingState to randomly pick next hunting directions): */
+	Coordinate attack_x_backwards();
+
+	/* 4) When DFA is in Hunting_y_forwards state, smart player attacks in forward Y direction
+	*    until 'Sink' (return to Routine state) or 'Miss' (move to Hunting_y_backwards) */
+	Coordinate attack_y_forwards();
+
+	/* 5) When DFA is in Hunting_y_backwards state, smart player attacks in backwords Y direction
+	*    until 'Sink' or 'Miss' (go to ChooseHuntingState to randomly pick next hunting directions): */
+	Coordinate attack_y_backwards();
+
+	/* 6) When DFA is in Hunting_z_forwards state, smart player attacks in forward Z direction
+	*    until 'Sink' (return to Routine state) or 'Miss' (move to Hunting_z_backwards) */
+	Coordinate attack_z_forwards();
+
+	/* 7) When DFA is in Hunting_z_backwards state, smart player attacks in backwords Z direction
+	*    until 'Sink' or 'Miss' (go to ChooseHuntingState to randomly pick next hunting directions): */
+	Coordinate attack_z_backwards();
+
+	// Some more Private functions:
+	bool isPotentialHit(Coordinate coordinate); // Check cell and it's surroundings to decide if it's a potential hit
+	void getAllPotentialHits(); // Go over the player's board to find all Potential cells and mark them with 'X'
+
+	bool shipBelongsToPlayer(char c) const; // return true iff c is a ship that belongs to given player
+	const char shipTypesA[NUM_SHIP_TYPES] = { 'B', 'P', 'M', 'D' };
+	const char shipTypesB[NUM_SHIP_TYPES] = { 'b', 'p', 'm', 'd' };
+
+	void clearSurroundingsAfterSink(Coordinate sink); // Clean surrounding cells after Sink
+	void clearSurroundingsAfterHit(Coordinate hit); // Clean surrounding cells after Hits
+	void clearSurroundingsAfterHit_X(Coordinate hit);
+	void clearSurroundingsAfterHit_Y(Coordinate hit);
+	void clearSurroundingsAfterHit_Z(Coordinate hit);
+
+	void print_3D_board(bool includePadding) const;
 };

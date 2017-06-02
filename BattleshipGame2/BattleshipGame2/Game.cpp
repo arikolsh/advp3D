@@ -15,7 +15,28 @@ int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hD
 int main(int argc, char* argv[])
 {
 
+	string boardPath = "good_board.sboard";
+	vector<vector<string>> board3d;
+	
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
 
 int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hDll)
 { //todo: guarantee player is converted to ptr
