@@ -1,21 +1,31 @@
 #include <vector>
 #include <filesystem>
-#include "GameManager.h"
 #include <iostream>
 #include <windows.h>
+//#include "IBattleshipGameAlgo.h"
 #include <fstream>
 #include <sstream>
 #include "GameBoard.h"
+#include "Ship.h"
 #define MIN(a, b) ((a < b) ? (a) : (b))
-#define EMPTY_CELL '-'
+#define EMPTY_CELL '-' //todo: eventually should be ' ' (space)
+#define VISITED_CELL 'v'
 #define PADDING 2
-#define DIM_DELIMITER 'X'
+#define DIM_DELIMITER 'X' //according to this token we split the first line in every board file
+#define RIGHT 0
+#define DOWN 1
+#define DEEP 2
+#define MAX_NUM_SHIPS 5 //max number of ships per player
+
 
 using namespace std;
 
 void getArgs(int argc, char** argv, int& threads, string& searchDir);
 int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hDll);
-
+/*
+ * split string into vector of substrings according to delimiter.
+ * example: "hi:how:are:you" => [hi,how,are,you] with delimiter ':' .
+ */
 void split(string line, vector<string>& splitLine, char delimiter)
 {
 	stringstream lineStream(line);
@@ -26,7 +36,9 @@ void split(string line, vector<string>& splitLine, char delimiter)
 		splitLine.push_back(part);
 	}
 }
-
+/*
+ * fill board3d with ships according to ships positioned in file.
+ */
 bool fill3DBoardWithShipsFromFile(vector<vector<string>>& board3d, ifstream& file, string path, int rows, int cols, int depth)
 {
 	//// fill 3d board with ships ////
@@ -52,7 +64,12 @@ bool fill3DBoardWithShipsFromFile(vector<vector<string>>& board3d, ifstream& fil
 	}
 	return true;
 }
-
+/*
+ * return new padded vector of vector of string with the given dimensions.
+ * newBoard.size() will be the depth +PADDING (number of matrices)
+ * newBoard[0].size() will be the number of rows +PADDING (in each matrix)
+ * newBoard[0][0].size() will be the number of colums +PADDING (in each matrix).
+ */
 vector<vector<string>> getNew3DBoard(int depth, int rows, int cols)
 {
 	vector<vector<string>> board3d(depth + PADDING);
@@ -74,12 +91,14 @@ vector<vector<string>> getNew3DBoard(int depth, int rows, int cols)
 	}
 	return board3d;
 }
-
-bool get3DBoardFromFile(vector<vector<string>> &board3d, string path)
+/*
+ * fill board3d with the board in given path, and put in depth, rows and cols its dimensions.
+ * return true if successful and false otherwise.
+ */
+bool get3DBoardFromFile(vector<vector<string>> &board3d, string path, int& depth, int& rows, int& cols)
 {
 	string line;
 	ifstream file(path);
-	int rows, cols, depth;
 	if (!file.is_open()) {
 		cout << "Error: failed to open file " << path << endl;
 		return false;
@@ -113,7 +132,9 @@ bool get3DBoardFromFile(vector<vector<string>> &board3d, string path)
 	// fill board with ships from file
 	return fill3DBoardWithShipsFromFile(board3d, file, path, rows, cols, depth);
 }
-
+/*
+ * print vector<vector<string>> to console.
+ */
 void print3DBoard(vector<vector<string>> board3d, bool printPadding)
 {
 	//// print 3d board ////
@@ -130,25 +151,181 @@ void print3DBoard(vector<vector<string>> board3d, bool printPadding)
 		}
 	}
 }
+/*
+ * check for a given ship ,in a certain direction, on the board its surroundings, and return true
+ * iff they are empty.
+ */
+bool isEmptySurroundings(vector<vector<string>>& board, int direction, int depth, int row, int col, int shipLen)
+{
+	bool valid = true;
+	if (direction == RIGHT)
+	{
+		for (int i = 0; i < shipLen; i++) //general direction to the right
+		{	//check one cell deep, one cell out
+			valid &= board[depth + 1][row][col + i] == EMPTY_CELL;
+			valid &= board[depth - 1][row][col + i] == EMPTY_CELL;
+			//check one cell up, one cell down
+			valid &= board[depth][row + 1][col + i] == EMPTY_CELL;
+			valid &= board[depth][row - 1][col + i] == EMPTY_CELL;
+
+			if (!valid)
+			{
+				return false;
+			}
+		}
+	}
+	else if (direction == DOWN)
+	{
+		for (int i = 0; i < shipLen; i++) //general direction down
+		{	//check one cell deep, one cell out
+			valid &= board[depth + 1][row + i][col] == EMPTY_CELL;
+			valid &= board[depth - 1][row + i][col] == EMPTY_CELL;
+			//check one cell right, one cell left
+			valid &= board[depth][row + i][col + 1] == EMPTY_CELL;
+			valid &= board[depth][row + i][col - 1] == EMPTY_CELL;
+			if (!valid)
+			{
+				return false;
+			}
+		}
+	}
+	else if (direction == DEEP)
+	{
+		for (int i = 0; i < shipLen; i++) //general direction in depth
+		{	//check one cell right, one cell left
+			valid &= board[depth + i][row][col + 1] == EMPTY_CELL;
+			valid &= board[depth + i][row][col - 1] == EMPTY_CELL;
+			//check one cell up, one cell down
+			valid &= board[depth + i][row + 1][col] == EMPTY_CELL;
+			valid &= board[depth + i][row - 1][col] == EMPTY_CELL;
+			if (!valid)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+/*
+ * for a specifc ship on the board in a certain direction, mark its cells and return its length.
+ */
+int markCellsAndGetLen(vector<vector<string>>& board, char ship, int direction, int depth, int row, int col)
+{
+	int k = 1;
+	int shipLen = 1;
+	if (direction == RIGHT) {
+		while (board[depth][row][col + k] == ship) {
+			board[depth][row][col + k] = VISITED_CELL;
+			shipLen++;
+			k++;
+		}
+	}
+	else if (direction == DOWN) {
+		while (board[depth][row + k][col] == ship) {
+			board[depth][row + k][col] = VISITED_CELL;
+			shipLen++;
+			k++;
+		}
+	}
+	else if (direction == DEEP) {
+		while (board[depth + k][row][col] == ship) {
+			board[depth + k][row][col] = VISITED_CELL;
+			shipLen++;
+			k++;
+		}
+	}
+	return shipLen;
+}
+/*
+ * for a specifc cell which contains a ship type char, return its direction. can be RIGHT,DOWN,DEEP.
+ */
+int findShipDirection(vector<vector<string>> board, int depth, int row, int col, char ship)
+{
+	if (ship == board[depth][row][col + 1])
+	{
+		return RIGHT;
+	}
+	if (ship == board[depth][row + 1][col])
+	{
+		return DOWN;
+	}
+	// else if (ship == board[d + 1][row][col])
+	return DEEP;
+
+}
+/*
+ * check if valid board and put number of ships for each player in numShips[]
+ * return true iff no adjacent ships, no invalid shapes, number of ships is MAX_NUM_SHIPS.
+ */
+bool isValidBoard(vector<vector<string>> board, int depth, int rows, int cols, int numShips[])
+{
+	auto playerNum = [](char c) {return tolower(c) == c ? 1 : 0; };
+	for (int d = 1; d <= depth; d++)
+	{
+		cout << "in depth: " << d << endl;
+		for (int row = 1; row <= rows; row++)
+		{
+			cout << "in row: " << row << endl;
+			for (int col = 1; col <= cols; col++)
+			{
+				cout << "in col: " << col << endl;
+				cout << "cell is: " << board[d][row][col] << endl;
+				if (!Ship::isShip(board[d][row][col]))
+				{ //not a ship skip to next iteration
+					continue;
+				}
+				// encountered first cell of certain ship
+				char ship = board[d][row][col];
+				// mark first cell
+				board[d][row][col] = VISITED_CELL;
+				// find the general direction of the ship
+				int direction = findShipDirection(board, d, row, col, ship);
+				// mark ship's cells and get the length of ship
+				int shipLen = markCellsAndGetLen(board, ship, direction, d, row, col);
+				// check if size of ship is valid
+				if (shipLen != Ship::getShipLenByType(ship))
+				{
+					return false;
+				}
+				// traverse surroundings to check invalid shape or adjacent ships
+				if (!isEmptySurroundings(board, direction, d, row, col, shipLen)) {
+					return false;
+				}
+				numShips[playerNum(ship)]++;
+			}
+		}
+	}
+	//print3DBoard(board, true);
+	return true;
+}
 
 int main(int argc, char* argv[])
 {
 	string path = "good_board.sboard";
 	vector<vector<string>> board;
-	get3DBoardFromFile(board, path);
-	///////// validate 3d board /////////
-
-
-
-
-
+	int depth, rows, cols;
+	// get3d board from file
+	if (!get3DBoardFromFile(board, path, depth, rows, cols))
+	{
+		return false;
+	}
+	// validate board
+	int numShips[] = { 0,0 };
+	if (!isValidBoard(board, depth, rows, cols, numShips)) {
+		cout << "Warning: invalid board in file " << path << endl;
+		return false; //todo: skip to next board
+	}
+	if (numShips[0] != numShips[1])
+	{
+		cout << "Warning: board not balanced in file " << path << endl;
+	}
 
 
 
 
 	///////// init gameboard /////////
-	GameBoard gameBoard(board);
-	gameBoard.print(false);
+	//GameBoard gameBoard(board);
+	//gameBoard.print(false);
 }
 
 
