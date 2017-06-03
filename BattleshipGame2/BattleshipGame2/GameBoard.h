@@ -17,6 +17,4 @@ public:
 	void print(bool includePadding) const;
 private:
 	vector<vector<string>> _board; // Holds all ships
-	static vector<vector<string>> getNewEmptyBoard(int rows, int cols, int depth);
-	static vector<vector<string>> getBoardCopy(const vector<vector<string>> board);
 };

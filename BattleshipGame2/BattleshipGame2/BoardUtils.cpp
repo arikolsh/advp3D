@@ -46,7 +46,7 @@ bool BoardUtils::fillBoardWithShipsFromFile(vector<vector<string>>& board3d, ifs
 			int m = MIN(cols, (int)line.length());
 			for (int col = 1; col <= m; col++) { //1,2,3,...,cols-1,cols
 				if (Ship::isShip(line[col - 1])) { //check if valid ship char
-					board3d[boardCount][row][col] = line[col - 1];
+					board3d[row][col][boardCount] = line[col - 1];
 				}
 			}
 			row++;
@@ -68,16 +68,16 @@ bool BoardUtils::fillBoardWithShipsFromFile(vector<vector<string>>& board3d, ifs
 */
 vector<vector<string>> BoardUtils::getNewEmptyBoard(int depth, int rows, int cols)
 {
-	vector<vector<string>> board3d(depth);
+	vector<vector<string>> board3d(rows);
 	//construct string of empty cells
-	string  emptyCellStr(cols, EMPTY_CELL);
+	string  emptyCellStr(depth, EMPTY_CELL);
 	//fill 3d board with empty cells
-	for (int d = 0; d < depth; d++)
+	for (int row = 0; row < rows; row++)
 	{
-		board3d[d] = vector<string>();
-		for (int row = 0; row < rows; row++)
+		board3d[row] = vector<string>();
+		for (int col = 0; col < cols; col++)
 		{
-			board3d[d].push_back(emptyCellStr);
+			board3d[row].push_back(emptyCellStr);
 		}
 	}
 	return board3d;
@@ -130,17 +130,23 @@ void BoardUtils::printBoard(vector<vector<string>> board3d, bool printPadding)
 {
 	//// print 3d board ////
 	size_t start = printPadding ? 0 : 1;
-	size_t depthEnd = printPadding ? board3d.size() - 1 : board3d.size() - PADDING;
-	size_t rowsEnd = printPadding ? board3d[0].size() - 1 : board3d[0].size() - PADDING;
-	size_t colsEnd = printPadding ? board3d[0][0].size() - 1 : board3d[0][0].size() - PADDING;
+	size_t rowsEnd = printPadding ? board3d.size() - 1 : board3d.size() - PADDING;
+	size_t colsEnd = printPadding ? board3d[0].size() - 1 : board3d[0].size() - PADDING;
+	size_t depthEnd = printPadding ? board3d[0][0].size() - 1 : board3d[0][0].size() - PADDING;
+
 	for (size_t depth = start; depth <= depthEnd; depth++)
 	{
 		cout << endl;
 		for (size_t row = start; row <= rowsEnd; row++)
 		{
-			cout << board3d[depth][row].substr(start, colsEnd) << endl;
+			for (size_t col = start; col < colsEnd; col++) {
+				cout << board3d[row][col][depth];
+			}
+			cout << endl;
 		}
+		cout << endl;
 	}
+	cout << endl;
 }
 /*
 * check for a given ship ,in a certain direction, on the board its surroundings, and return true
@@ -149,16 +155,31 @@ void BoardUtils::printBoard(vector<vector<string>> board3d, bool printPadding)
 bool BoardUtils::isEmptySurroundings(vector<vector<string>>& board, int direction, int depth, int row, int col, int shipLen)
 {
 	bool valid = true;
-	if (direction == RIGHT)
+	if (direction == DEEP)
+	{
+		for (int i = 0; i < shipLen; i++) //general direction in depth
+		{	//check one cell deep, one cell out
+			valid &= board[row + 1][col][depth + i] == EMPTY_CELL;
+			valid &= board[row - 1][col][depth + i] == EMPTY_CELL;
+			//check one cell up, one cell down
+			valid &= board[row][col + 1][depth + i] == EMPTY_CELL;
+			valid &= board[row][col - 1][depth + i] == EMPTY_CELL;
+
+			if (!valid)
+			{
+				return false;
+			}
+		}
+	}
+	else if (direction == RIGHT)
 	{
 		for (int i = 0; i < shipLen; i++) //general direction to the right
 		{	//check one cell deep, one cell out
-			valid &= board[depth + 1][row][col + i] == EMPTY_CELL;
-			valid &= board[depth - 1][row][col + i] == EMPTY_CELL;
-			//check one cell up, one cell down
-			valid &= board[depth][row + 1][col + i] == EMPTY_CELL;
-			valid &= board[depth][row - 1][col + i] == EMPTY_CELL;
-
+			valid &= board[row + 1][col + i][depth] == EMPTY_CELL;
+			valid &= board[row - 1][col + i][depth] == EMPTY_CELL;
+			//check one cell right, one cell left
+			valid &= board[row][col + i][depth + 1] == EMPTY_CELL;
+			valid &= board[row][col + i][depth - 1] == EMPTY_CELL;
 			if (!valid)
 			{
 				return false;
@@ -168,27 +189,12 @@ bool BoardUtils::isEmptySurroundings(vector<vector<string>>& board, int directio
 	else if (direction == DOWN)
 	{
 		for (int i = 0; i < shipLen; i++) //general direction down
-		{	//check one cell deep, one cell out
-			valid &= board[depth + 1][row + i][col] == EMPTY_CELL;
-			valid &= board[depth - 1][row + i][col] == EMPTY_CELL;
-			//check one cell right, one cell left
-			valid &= board[depth][row + i][col + 1] == EMPTY_CELL;
-			valid &= board[depth][row + i][col - 1] == EMPTY_CELL;
-			if (!valid)
-			{
-				return false;
-			}
-		}
-	}
-	else if (direction == DEEP)
-	{
-		for (int i = 0; i < shipLen; i++) //general direction in depth
 		{	//check one cell right, one cell left
-			valid &= board[depth + i][row][col + 1] == EMPTY_CELL;
-			valid &= board[depth + i][row][col - 1] == EMPTY_CELL;
+			valid &= board[row + i][col][depth + 1] == EMPTY_CELL;
+			valid &= board[row + i][col][depth - 1] == EMPTY_CELL;
 			//check one cell up, one cell down
-			valid &= board[depth + i][row + 1][col] == EMPTY_CELL;
-			valid &= board[depth + i][row - 1][col] == EMPTY_CELL;
+			valid &= board[row + i][col + 1][depth] == EMPTY_CELL;
+			valid &= board[row + i][col - 1][depth] == EMPTY_CELL;
 			if (!valid)
 			{
 				return false;
@@ -204,23 +210,23 @@ int BoardUtils::markCellsAndGetLen(vector<vector<string>>& board, char ship, int
 {
 	int k = 1;
 	int shipLen = 1;
-	if (direction == RIGHT) {
-		while (board[depth][row][col + k] == ship) {
-			board[depth][row][col + k] = VISITED_CELL;
+	if (direction == DEEP) {
+		while (board[row][col][depth + k] == ship) {
+			board[row][col][depth + k] = VISITED_CELL;
+			shipLen++;
+			k++;
+		}
+	}
+	else if (direction == RIGHT) {
+		while (board[row][col + k][depth] == ship) {
+			board[row][col + k][depth] = VISITED_CELL;
 			shipLen++;
 			k++;
 		}
 	}
 	else if (direction == DOWN) {
-		while (board[depth][row + k][col] == ship) {
-			board[depth][row + k][col] = VISITED_CELL;
-			shipLen++;
-			k++;
-		}
-	}
-	else if (direction == DEEP) {
-		while (board[depth + k][row][col] == ship) {
-			board[depth + k][row][col] = VISITED_CELL;
+		while (board[row + k][col][depth] == ship) {
+			board[row + k][col][depth] = VISITED_CELL;
 			shipLen++;
 			k++;
 		}
@@ -232,16 +238,15 @@ int BoardUtils::markCellsAndGetLen(vector<vector<string>>& board, char ship, int
 */
 int BoardUtils::findShipDirection(vector<vector<string>> board, int depth, int row, int col, char ship)
 {
-	if (ship == board[depth][row][col + 1])
+	if (ship == board[row][col][depth + 1])
+	{
+		return DEEP;
+	}
+	if (ship == board[row][col + 1][depth])
 	{
 		return RIGHT;
 	}
-	if (ship == board[depth][row + 1][col])
-	{
-		return DOWN;
-	}
-	// else if (ship == board[d + 1][row][col])
-	return DEEP;
+	return DOWN;
 
 }
 /*
@@ -261,14 +266,14 @@ bool BoardUtils::isValidBoard(vector<vector<string>> board, int depth, int rows,
 			{
 				//cout << "in col: " << col << endl;
 				//cout << "cell is: " << board[d][row][col] << endl;
-				if (!Ship::isShip(board[d][row][col]))
+				if (!Ship::isShip(board[row][col][d]))
 				{ //not a ship skip to next iteration
 					continue;
 				}
 				// encountered first cell of certain ship
-				char ship = board[d][row][col];
+				char ship = board[row][col][d];
 				// mark first cell
-				board[d][row][col] = VISITED_CELL;
+				board[row][col][d] = VISITED_CELL;
 				// find the general direction of the ship
 				int direction = findShipDirection(board, d, row, col, ship);
 				// mark ship's cells and get the length of ship
@@ -287,4 +292,18 @@ bool BoardUtils::isValidBoard(vector<vector<string>> board, int depth, int rows,
 		}
 	}
 	return true;
+}
+
+vector<vector<string>> BoardUtils::getBoardCopy(const vector<vector<string>> board)
+{
+	vector<vector<string>> copy(board.size());
+	for (int row = 0; row < board.size(); row++)
+	{
+		copy[row] = vector<string>();
+		for (int col = 0; col < board[0].size(); col++)
+		{
+			copy[row].push_back(board[row][col]);
+		}
+	}
+	return copy;
 }
