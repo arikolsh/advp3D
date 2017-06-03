@@ -53,6 +53,25 @@ int main(int argc, char* argv[])
 	gameBoard.print(false);
 	GameBoard g2 = gameBoard; //copy ctor test
 	g2.print(false);
+
+	/*
+	IBattleshipGameAlgo* players[2];
+	players[0] = new SmartPlayer();
+	players[0]->setPlayer(0);
+	players[0]->setBoard(gameBoard);
+	players[1] = new SmartPlayer();
+	players[1]->setPlayer(1);
+	players[1]->setBoard(gameBoard);
+
+	MatchManager matchManager(gameBoard);
+	//matchManager.printShipsMap();
+	int winner = matchManager.runGame(players);
+	matchManager.gameOver(winner);
+
+	// freeing resources
+	delete players[A_NUM];
+	delete players[B_NUM];
+	*/
 }
 
 

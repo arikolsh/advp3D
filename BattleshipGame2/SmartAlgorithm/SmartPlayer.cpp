@@ -5,12 +5,12 @@
 #include <algorithm>
 #include <random>
 
-bool print_mode = false;
+bool print_mode = true;
 
 // Return a smart player instance
 IBattleshipGameAlgo* GetAlgorithm() { return new SmartPlayer(); }
 
-SmartPlayer::SmartPlayer() : _playerNum(-1), _attackPoint(INVALID_COORDINATE), 
+SmartPlayer::SmartPlayer() : _playerNum(-1), _attackPoint(INVALID_COORDINATE),
 _lastAttack(INVALID_COORDINATE), _firstHit(INVALID_COORDINATE), _cleanedFirstHit(false), _attackingState(Routine) {}
 
 SmartPlayer::~SmartPlayer() {}
@@ -24,6 +24,8 @@ void SmartPlayer::setBoard(const BoardData& board)
 	_board.copyPlayerShips(board, _playerNum); // Copy all player's ships to the private _board
 	getAllPotentialHits(); // Fills the _potentialAttacks vector with all points marked ('X') as potential hits
 	updateDirections(true, true, true); // Initialize all directions as valid for attack
+
+	_board.print_3D_board(false, _playerNum);
 }
 
 /* Compute and return the next smart attack according to the _attacking_state (of our DFA).
@@ -59,124 +61,112 @@ Coordinate SmartPlayer::attack()
 void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult result)
 {
 	// Unmark the attacked cell (to avoid attacking it again):
-	if (_board[move] == MARKED_CELL) { _board[move] = EMPTY_CELL; }
+	if (_board.charAt(move) == MARKED_CELL) { _board.At(move) = EMPTY_CELL; }
 
 	if (player == _playerNum) // This player attacked
 	{
-		// Remember this move (used when hunting a ship):
-		if (result == AttackResult::Hit) { _lastAttack = move; }
-		if (result == AttackResult::Sink)
+		switch (result)
 		{
+		case AttackResult::Hit:
+			_lastAttack = move; // Remember this move (used when hunting a ship)
+			if (_attackingState != Routine)
+			{
+				//clear surrounding cells directions according to ship direction (including arround the _firstHit in Routine state)
+				clearSurroundingsAfterHit(move);
+			}
+			break;
+		case AttackResult::Miss:
+			if (_attackingState != Routine)
+			{
+				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack in a different direction
+			}
+			break;
+		case AttackResult::Sink:
 			clearSurroundingsAfterSink(move); // On 'Sink' unmark all Surroundings cells
 			_attackingState = Routine; // Good job, back to Routine until next 'Hit'
+			break;
 		}
 
 		switch (_attackingState)
 		{
 		case Routine:
-			switch (result)
+			if (result == AttackResult::Hit)
 			{
-			case AttackResult::Hit:
 				setRandomHuntingState(); // Randomly choose the hunting direction for next attack
 				_firstHit = move; // Remember this move (for cleaning and in case we switch hunting direction)
 				_cleanedFirstHit = false; // Remember to clear _firstHit surrounding cells (once we find the direction)
-			case AttackResult::Miss: break; // Keep attacking in Routine state until next 'Hit'
-			case AttackResult::Sink: break; // Sank a 'b' ship! Keep attacking in Routine state until next 'Hit'
 			}
-			break;
+			break; // If 'Miss' or 'Sink' ('b' ship) --> Keep attacking in Routine state until next 'Hit'
 
 		case Hunting_x_forwards:
-			switch (result)
+			if (result == AttackResult::Miss)
 			{
-			case AttackResult::Miss:
 				_attackingState = Hunting_x_backwards; // Try attacking in the opposite direction
-				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack opposite direction
-				break;
-			case AttackResult::Hit:
-				updateDirections(true, false, false); // Found the direction to be X
-													  //clear surrounding cells in y and z directions (including arround the _startPosition)
-				break;
-			case AttackResult::Sink: break; // Return to Routine_state until next 'Hit'
 			}
-			break;
+			else if (result == AttackResult::Hit)
+			{
+				updateDirections(true, false, false); // Found the direction to be X
+			}
+			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
 
 		case Hunting_x_backwards:
-			switch (result)
+			if (result == AttackResult::Miss)
 			{
-			case AttackResult::Miss:
 				_validDirections[0] = false; // Mark X direction as a failure
 				setRandomHuntingState(); // Randomly switch to a different hunting direction (Y or Z)
-				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack in next direction
-				break;
-			case AttackResult::Hit:
-				updateDirections(true, false, false); // Found the direction to be X
-													  //clear surrounding cells in y and z directions (including arround the _startPosition)
-				break;
-			case AttackResult::Sink: break; // Return to Routine_state until next 'Hit'
 			}
-			break;
+			else if (result == AttackResult::Hit)
+			{
+				updateDirections(true, false, false); // Found the direction to be X
+			}
+			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
+
 
 		case Hunting_y_forwards:
-			switch (result)
+			if (result == AttackResult::Miss)
 			{
-			case AttackResult::Miss:
 				_attackingState = Hunting_y_backwards; // Try attacking in the opposite direction
-				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack opposite direction
-				break;
-			case AttackResult::Hit:
-				updateDirections(false, true, false); // Found the direction to be Y
-													  //clear surrounding cells in x and z directions (including arround the _startPosition)
-				break;
-			case AttackResult::Sink: break; // Return to Routine_state until next 'Hit'
 			}
-			break;
+			else if (result == AttackResult::Hit)
+			{
+				updateDirections(false, true, false); // Found the direction to be Y
+			}
+			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
 
 		case Hunting_y_backwards:
-			switch (result)
+			if (result == AttackResult::Miss)
 			{
-			case AttackResult::Miss:
 				_validDirections[1] = false; // Mark Y direction as a failure
 				setRandomHuntingState(); // Randomly switch to a different hunting direction (X or Z)
-				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack in next direction
-				break;
-			case AttackResult::Hit:
-				updateDirections(false, true, false); // Found the direction to be Y
-													  //clear surrounding cells in x and z directions (including arround the _startPosition)
-				break;
-			case AttackResult::Sink: break; // Return to Routine_state until next 'Hit'
 			}
-			break;
+			else if (result == AttackResult::Hit)
+			{
+				updateDirections(false, true, false); // Found the direction to be Y
+			}
+			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
 
 		case Hunting_z_forwards:
-			switch (result)
+			if (result == AttackResult::Miss)
 			{
-			case AttackResult::Miss:
 				_attackingState = Hunting_z_backwards; // Try attacking in the opposite direction
-				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack opposite direction
-				break;
-			case AttackResult::Hit:
-				updateDirections(false, false, true); // Found the direction to be Z
-													  //clear surrounding cells in x and y directions (including arround the _startPosition)
-				break;
-			case AttackResult::Sink: break; // Return to Routine_state until next 'Hit'
 			}
-			break;
+			else if (result == AttackResult::Hit)
+			{
+				updateDirections(false, false, true); // Found the direction to be Z
+			}
+			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
 
 		case Hunting_z_backwards:
-			switch (result)
+			if (result == AttackResult::Miss)
 			{
-			case AttackResult::Miss:
 				_validDirections[2] = false; // Mark Z direction as a failure
 				setRandomHuntingState(); // Randomly switch to a different hunting direction (X or Z)
-				_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack in next direction
-				break;
-			case AttackResult::Hit:
-				updateDirections(false, false, true); // Found the direction to be Z
-													  //clear surrounding cells in x and y directions (including arround the _startPosition)
-				break;
-			case AttackResult::Sink: break; // Return to Routine_state until next 'Hit'
 			}
-			break;
+			else if (result == AttackResult::Hit)
+			{
+				updateDirections(false, false, true); // Found the direction to be Z
+			}
+			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
 		}
 	}
 	/* If opponent was the one to attack:
@@ -208,12 +198,15 @@ void SmartPlayer::setRandomHuntingState()
 
 Coordinate SmartPlayer::attackRoutine()
 {
+	if (print_mode) {
+		cout << "Player " << _playerNum << " is in attackRoutine" << endl;
+	}
 	auto foundAttack = false;
 	while (!_potentialAttacks.empty()) // Still got more potential attacks
 	{
 		_attackPoint = _potentialAttacks.back();
 		_potentialAttacks.pop_back(); // Delete attack so we won't attack same spot twice 
-		if (_board[_attackPoint] == MARKED_CELL) // Make sure this cell is still marked for attack
+		if (_board.At(_attackPoint) == MARKED_CELL) // Make sure this cell is still marked for attack
 		{
 			foundAttack = true;
 			break;
@@ -229,8 +222,10 @@ Coordinate SmartPlayer::attack_x_forwards()
 		cout << "Player " << _playerNum << " is in attack_x_forwards" << endl;
 	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
-	if (col >= _board.cols) // Can't attack forwards
+	if (col >= _board.cols() || _board.At(row, col + 1, depth) != MARKED_CELL) // Can't attack forwards
 	{
+		_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack backwards
+		_attackingState = Hunting_x_backwards;
 		return attack_x_backwards(); // Try attacking backwards
 	}
 	return Coordinate(row, col + 1, depth); // Attack in forwards X direction (next cell to the right)
@@ -242,10 +237,11 @@ Coordinate SmartPlayer::attack_x_backwards()
 		cout << "Player " << _playerNum << " is in attack_x_backwards" << endl;
 	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
-	if (col <= 1) // Can't attack backwards
+	if (col <= 1 || _board.At(row, col - 1, depth) != MARKED_CELL) // Can't attack backwards
 	{
 		_validDirections[0] = false; // Mark direction as invalid for attack
 		setRandomHuntingState(); // randomly switch to a different direction
+		_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack a different direction
 		return attack(); // Start over (to get next attack move)
 	}
 	return Coordinate(row, col - 1, depth); // Attack in backwards X direction (next cell to the left)
@@ -257,8 +253,11 @@ Coordinate SmartPlayer::attack_y_forwards()
 		cout << "Player " << _playerNum << " is in attack_y_forwards" << endl;
 	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
-	if (row >= _board.rows) // Can't attack forwards
+	if (row >= _board.rows() || _board.At(row + 1, col, depth) != MARKED_CELL) // Can't attack forwards
 	{
+		//cout << "_board.At " << row << "," << col << "," << depth << " is " << _board.At(row + 1, col, depth) << endl;
+		_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack backwards
+		_attackingState = Hunting_y_backwards;
 		return attack_y_backwards(); // Try attacking backwards
 	}
 	return Coordinate(row + 1, col, depth); // Attack in forwards Y direction
@@ -270,10 +269,11 @@ Coordinate SmartPlayer::attack_y_backwards()
 		cout << "Player " << _playerNum << " is in attack_y_backwards" << endl;
 	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
-	if (row <= 1) // Can't attack backwards
+	if (row <= 1 || _board.At(row - 1, col, depth) != MARKED_CELL) // Can't attack backwards
 	{
 		_validDirections[1] = false; // Mark direction as invalid for attack
 		setRandomHuntingState(); // randomly switch to a different direction
+		_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack a different direction
 		return attack(); // Start over (to get next attack move)	
 	}
 	return Coordinate(row - 1, col, depth); // Attack in backwards Y direction
@@ -285,8 +285,10 @@ Coordinate SmartPlayer::attack_z_forwards()
 		cout << "Player " << _playerNum << " is in attack_z_forwards" << endl;
 	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
-	if (depth >= _board.depth) // Can't attack forwards
+	if (depth >= _board.depth() || _board.At(row, col, depth + 1) != MARKED_CELL) // Can't attack forwards
 	{
+		_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack backwards
+		_attackingState = Hunting_z_backwards;
 		return attack_z_backwards(); // Try attacking backwards
 	}
 	return Coordinate(row, col, depth + 1); // Attack in forwards Z direction
@@ -298,10 +300,11 @@ Coordinate SmartPlayer::attack_z_backwards()
 		cout << "Player " << _playerNum << " is in attack_z_backwards" << endl;
 	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
-	if (depth <= 1) // Can't attack backwards
+	if (depth <= 1 || _board.At(row, col, depth - 1) != MARKED_CELL) // Can't attack backwards
 	{
 		_validDirections[2] = false; // Mark direction as invalid for attack
 		setRandomHuntingState(); // randomly switch to a different direction
+		_lastAttack = _firstHit; // "Go back" to first 'Hit' position and attack a different direction
 		return attack(); // Start over (to get next attack move)
 	}
 	return Coordinate(row, col, depth - 1); // Attack in backwards X direction (next cell to the left)
@@ -311,16 +314,16 @@ void SmartPlayer::getAllPotentialHits()
 {
 	auto engine = default_random_engine{};
 	Coordinate coordinate(INVALID_COORDINATE);
-	for (int i = 1; i < _board.rows + 1; i++)
+	for (int i = 1; i < _board.rows() + 1; i++)
 	{
-		for (int j = 1; j < _board.cols + 1; j++)
+		for (int j = 1; j < _board.cols() + 1; j++)
 		{
-			for (int k = 1; k < _board.depth + 1; k++)
+			for (int k = 1; k < _board.depth() + 1; k++)
 			{
 				coordinate.row = i, coordinate.col = j, coordinate.depth = k;
 				if (isPotentialHit(coordinate))
 				{
-					_board[coordinate] = MARKED_CELL;
+					_board.At(coordinate) = MARKED_CELL;
 					_potentialAttacks.push_back(coordinate);
 				}
 			}
@@ -430,4 +433,13 @@ void SmartPlayer::clearSurroundingsAfterHit_Z(Coordinate hit)
 	_board.At(hit.row - 1, hit.col, hit.depth) = EMPTY_CELL;
 	_board.At(hit.row, hit.col + 1, hit.depth) = EMPTY_CELL;
 	_board.At(hit.row, hit.col - 1, hit.depth) = EMPTY_CELL;
+}
+
+void SmartPlayer::printPotentialAttack()
+{
+	cout << "Printing potential attacks for player " << _playerNum << endl;
+	for (auto c : _potentialAttacks)
+	{
+		cout << c.row << "," << c.col << "," << c.depth << endl;
+	}
 }

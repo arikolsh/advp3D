@@ -20,7 +20,7 @@
 #define EMPTY_CELL '-'
 #define VISITED 'x'
 
-bool printAttacks = false; //debug purposes
+bool printAttacks = true; //debug purposes
 bool printMaps = false; //debug purposes
 
 MatchManager::MatchManager(GameBoard &gameBoard)
@@ -28,7 +28,6 @@ MatchManager::MatchManager(GameBoard &gameBoard)
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
 	_playerScores = { 0, 0 };
 	_currentPlayer = A_NUM; //player A starts the game
-	//_gameBoard = GameBoard::getGameBoardCopy(gameBoard); // Copy the given board
 	_gameBoard = GameBoard(gameBoard); // Copy the given board
 	fillMapWithShips();
 }
@@ -67,18 +66,19 @@ MatchManager::ShipDirection MatchManager::findShipDirection(struct Coordinate c,
 }
 
 /* create the ship object and then find the ship orientation (VERTICAL / HORIZONTAL / Depth)
- * and add all cells which belong to the current ship to _shipsMap */
+* and add all cells which belong to the current ship to _shipsMap */
 void MatchManager::insertShipToMap(Coordinate c, char ship_char)
 {
 	int shipLen, direction;
-	vector<int> insPoint = {-1, -1, -1};
+	vector<int> insPoint = { -1, -1, -1 };
 	Coordinate coor(INVALID_COORDINATE);
 	pair<shared_ptr<Ship>, bool> shipAndHit;
-	shared_ptr<Ship> ship = make_shared<Ship>(ship_char); //create the ship object
+	//create the ship object:
+	shared_ptr<Ship> ship = make_shared<Ship>(ship_char);
 	shipLen = ship->getLife();
 	shipAndHit = { ship , false };
 	//Find the ship orientation (VERTICAL / HORIZONTAL / Depth):
-	direction = findShipDirection(coor, ship_char);
+	direction = findShipDirection(c, ship_char);
 	//Find all cells which belong to the current ship and add them to _shipsMap:
 	for (int m = 0; m < shipLen; m++)
 	{
@@ -298,5 +298,3 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 	}
 	return winner;
 }
-
-

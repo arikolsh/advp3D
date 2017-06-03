@@ -6,6 +6,7 @@
 #define INVALID_COORDINATE  { -1 , -1, -1 }
 #define EMPTY_CELL '-'
 #define MARKED_CELL 'x'
+#define SURROUNDING_SHIP_CELL '0'
 #define A_NUM 0
 #define B_NUM 1
 #define  NUM_SHIP_TYPES 4
@@ -42,7 +43,7 @@ private:
 	Coordinate _firstHit; // Remember the position when starting to hunt a direction - 
 	bool _cleanedFirstHit; //(helps when switching forwards to backwords + helps cleaning surrounding cells)
 
-	// Smart player attacks according to a DFA with these 3 states:
+						   // Smart player attacks according to a DFA with these 3 states:
 	enum AttackingState
 	{
 		Routine,
@@ -97,10 +98,12 @@ private:
 	void getAllPotentialHits(); // Go over the player's board to find all Potential cells and mark them with 'X'
 
 	void clearSurroundingsAfterSink(Coordinate sink); // Clean surrounding cells after Sink
-	
-	// Clean surrounding cells after Hits:
+
+													  // Clean surrounding cells after Hits:
 	void clearSurroundingsAfterHit(Coordinate hit);
 	void clearSurroundingsAfterHit_X(Coordinate hit);
 	void clearSurroundingsAfterHit_Y(Coordinate hit);
 	void clearSurroundingsAfterHit_Z(Coordinate hit);
+
+	void printPotentialAttack();
 };
