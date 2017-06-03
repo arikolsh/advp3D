@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
 		cout << "Error: failed to read board from file " << path << endl;
 		return false;
 	}
+
 	// validate board
 	int numShips[] = { 0,0 };
 	if (!BoardUtils::isValidBoard(board, depth, rows, cols, numShips)) {
