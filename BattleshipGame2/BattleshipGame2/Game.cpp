@@ -39,7 +39,7 @@ void split(string line, vector<string>& splitLine, char delimiter)
 /*
  * fill board3d with ships according to ships positioned in file.
  */
-bool fill3DBoardWithShipsFromFile(vector<vector<string>>& board3d, ifstream& file, string path, int rows, int cols, int depth)
+bool fillBoardWithShipsFromFile(vector<vector<string>>& board3d, ifstream& file, string path, int rows, int cols, int depth)
 {
 	//// fill 3d board with ships ////
 	string line;
@@ -70,21 +70,16 @@ bool fill3DBoardWithShipsFromFile(vector<vector<string>>& board3d, ifstream& fil
  * newBoard[0].size() will be the number of rows +PADDING (in each matrix)
  * newBoard[0][0].size() will be the number of colums +PADDING (in each matrix).
  */
-vector<vector<string>> getNew3DBoard(int depth, int rows, int cols)
+vector<vector<string>> getNewEmptyBoard(int depth, int rows, int cols)
 {
-	vector<vector<string>> board3d(depth + PADDING);
+	vector<vector<string>> board3d(depth);
 	//construct string of empty cells
-	ostringstream stringStream;
-	for (int col = 0; col < cols + PADDING; col++)
-	{
-		stringStream << EMPTY_CELL;
-	}
-	string  emptyCellStr = stringStream.str();
+	string  emptyCellStr(cols, EMPTY_CELL);
 	//fill 3d board with empty cells
-	for (int d = 0; d < depth + PADDING; d++)
+	for (int d = 0; d < depth; d++)
 	{
 		board3d[d] = vector<string>();
-		for (int row = 0; row < rows + PADDING; row++)
+		for (int row = 0; row < rows; row++)
 		{
 			board3d[d].push_back(emptyCellStr);
 		}
@@ -95,7 +90,7 @@ vector<vector<string>> getNew3DBoard(int depth, int rows, int cols)
  * fill board3d with the board in given path, and put in depth, rows and cols its dimensions.
  * return true if successful and false otherwise.
  */
-bool get3DBoardFromFile(vector<vector<string>> &board3d, string path, int& depth, int& rows, int& cols)
+bool getBoardFromFile(vector<vector<string>> &board3d, string path, int& depth, int& rows, int& cols)
 {
 	string line;
 	ifstream file(path);
@@ -128,9 +123,9 @@ bool get3DBoardFromFile(vector<vector<string>> &board3d, string path, int& depth
 		return false;
 	}
 	// init 3d board with padding
-	board3d = getNew3DBoard(depth, rows, cols);
+	board3d = getNewEmptyBoard(depth + PADDING, rows + PADDING, cols + PADDING);
 	// fill board with ships from file
-	return fill3DBoardWithShipsFromFile(board3d, file, path, rows, cols, depth);
+	return fillBoardWithShipsFromFile(board3d, file, path, rows, cols, depth);
 }
 /*
  * print vector<vector<string>> to console.
@@ -262,14 +257,14 @@ bool isValidBoard(vector<vector<string>> board, int depth, int rows, int cols, i
 	auto playerNum = [](char c) {return tolower(c) == c ? 1 : 0; };
 	for (int d = 1; d <= depth; d++)
 	{
-		cout << "in depth: " << d << endl;
+		//cout << "in depth: " << d << endl;
 		for (int row = 1; row <= rows; row++)
 		{
-			cout << "in row: " << row << endl;
+			//cout << "in row: " << row << endl;
 			for (int col = 1; col <= cols; col++)
 			{
-				cout << "in col: " << col << endl;
-				cout << "cell is: " << board[d][row][col] << endl;
+				//cout << "in col: " << col << endl;
+				//cout << "cell is: " << board[d][row][col] << endl;
 				if (!Ship::isShip(board[d][row][col]))
 				{ //not a ship skip to next iteration
 					continue;
@@ -295,7 +290,6 @@ bool isValidBoard(vector<vector<string>> board, int depth, int rows, int cols, i
 			}
 		}
 	}
-	//print3DBoard(board, true);
 	return true;
 }
 
@@ -305,7 +299,7 @@ int main(int argc, char* argv[])
 	vector<vector<string>> board;
 	int depth, rows, cols;
 	// get3d board from file
-	if (!get3DBoardFromFile(board, path, depth, rows, cols))
+	if (!getBoardFromFile(board, path, depth, rows, cols))
 	{
 		return false;
 	}
@@ -319,9 +313,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "Warning: board not balanced in file " << path << endl;
 	}
-
-
-
+	print3DBoard(board, false);
 
 	///////// init gameboard /////////
 	//GameBoard gameBoard(board);
