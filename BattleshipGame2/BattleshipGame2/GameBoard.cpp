@@ -13,8 +13,7 @@ GameBoard::GameBoard(vector<vector<string>> board, int rows, int cols, int depth
 	_depth = depth;
 	_rows = rows;
 	_cols = cols;
-	// get a copy of given board 
-	_board = getBoardCopy(board);
+	_board = getBoardCopy(board); // get a copy of given board
 }
 
 char GameBoard::charAt(Coordinate c) const
@@ -67,4 +66,12 @@ vector<vector<string>> GameBoard::getBoardCopy(const vector<vector<string>> boar
 		}
 	}
 	return copy;
+}
+
+GameBoard GameBoard::getGameBoardCopy(const GameBoard board)
+{
+	//GameBoard copy = GameBoard(board._board, board._rows, board._cols, board._depth);
+	//copy._rows = board._rows, copy._cols = board._cols, copy._depth = board._depth;
+	//copy._board = getBoardCopy(board._board);
+	return  GameBoard(board._board, board._rows, board._cols, board._depth);
 }

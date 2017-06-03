@@ -1,13 +1,16 @@
 #pragma once
 #include "GameBoard.h"
+#include "IBattleshipGameAlgo.h"
 #include <map>
 #include <memory>
 #include "Ship.h"
+
 #define NUM_PLAYERS 2
+#define INVALID_COORDINATE  { -1 , -1, -1 }
 
 class MatchManager {
 public:
-	explicit MatchManager(GameBoard* gameBoard);
+	explicit MatchManager(GameBoard gameBoard);
 	int getPlayerScore(int player) const;
 	bool isPlayerDefeated(int player) const;
 	void printShipsMap();
@@ -30,10 +33,10 @@ public:
 	*/
 	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS]);
 private:
-	map<Coordinate, pair<shared_ptr<Ship>, bool>> _shipsMap;
+	map<int[3], pair<shared_ptr<Ship>, bool>> _shipsMap;
 	MatchManager() = delete;
 	MatchManager(const MatchManager& that) = delete;
-	GameBoard* _gameBoard;
+	GameBoard _gameBoard;
 	/*player data: first is A, second is B*/
 	pair<int, int> _playerScores;
 	pair<int, int> _playersNumActiveShips;

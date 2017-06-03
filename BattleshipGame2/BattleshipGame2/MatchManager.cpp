@@ -1,4 +1,7 @@
 #include "MatchManager.h"
+#include "IBattleshipGameAlgo.h"
+#include "GameBoard.h"
+#include "Ship.h"
 #include <iostream>
 #define NUM_SHIP_TYPES 4
 #define NUM_PLAYERS 2
@@ -21,21 +24,59 @@
 bool printAttacks = false; //debug purposes
 bool printMaps = false; //debug purposes
 
-MatchManager::MatchManager(GameBoard* gameBoard) //todo: get some kind of ptr, unique?
+MatchManager::MatchManager(GameBoard gameBoard)
 {
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
 	_playerScores = { 0, 0 };
 	_currentPlayer = A_NUM; //player A starts the game
-	_gameBoard = gameBoard; //todo: do we need this?
+	_gameBoard = GameBoard::getGameBoardCopy(gameBoard); // Copt the given board
 	fillMapWithShips();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-// ReSharper disable CppMemberFunctionMayBeConst
 void MatchManager::fillMapWithShips()
-// ReSharper restore CppMemberFunctionMayBeConst
 {
-	//todo: fill map with ships
+	int i, j, k, m, shipLen, direction;
+	int rows = _gameBoard.rows(), cols = _gameBoard.cols(), depth = _gameBoard.depth();
+	Coordinate coordinate(INVALID_COORDINATE);
+	Coordinate tmpCoordinate(INVALID_COORDINATE);
+	pair<shared_ptr<Ship>, bool> shipAndHit;
+	char visited = 'x';
+	char cell;
+	for (i = 1; i < rows + 1; i++)
+	{
+		for (j = 1; j < cols + 1; j++)
+		{
+			for (k = 1; k < depth + 1; k++)
+			{
+				coordinate = Coordinate(i, j, k);
+				cell = _gameBoard.charAt(coordinate);
+				if (!Ship::isShip(cell)) { continue; } // Skip non-ship cells
+				_gameBoard.setAt(coordinate) = visited; // Mark coordinate as visited 'x'
+				shared_ptr<Ship> ship = make_shared<Ship>(cell); //create the ship object
+				//Find all cells which belong to the current ship and add them to _shipsMap:
+				//shipLen = ship.getLife();
+				//direction = (boardCpy[i][j + 1] == cell) ? HORIZONTAL : VERTICAL;
+				m = 0;
+				while (k < shipLen)
+				{
+					if (direction == HORIZONTAL)
+					{
+						//xy = { i, j + m };
+						//boardCpy[i][j + m] = visited;
+					}
+					else if (direction == VERTICAL)
+					{
+						//xy = { i + m, j };
+						//boardCpy[i + m][j] = visited;
+
+					}
+					shipAndHit = { ship , false };
+					//_shipsMap.insert(make_pair(xy, shipAndHit));
+					m++;
+				}
+			}
+		}
+	}
 }
 
 int MatchManager::getPlayerScore(int player) const
@@ -54,10 +95,10 @@ void MatchManager::printShipsMap()
 	int count = 1;
 	for (auto iter = _shipsMap.begin(); iter != _shipsMap.end(); ++iter)
 	{
-		Coordinate coordinate = iter->first;
+		auto coordinate = iter->first;
 		auto ship = iter->second.first;
 		cout << "Map entry " << count << " is:";
-		cout << "(" << coordinate.row << "," << coordinate.col << "," << coordinate.depth << ")";
+		cout << "(" << coordinate[0] << "," << coordinate[1] << "," << coordinate[2] << ")";
 		cout << " shipType: " << ship->getType();
 		cout << " shipLife: " << ship->getLife() << endl;
 		count++;
@@ -78,8 +119,7 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 			<< attack.row << "," << attack.col << "," << attack.depth << endl;
 		cout << "Result: ";
 	}
-
-	auto found = _shipsMap.find(attack);
+	auto found = _shipsMap.find({ attack.row, attack.col, attack.depth });
 	if (found == _shipsMap.end()) //attack point not in map --> Miss
 	{
 		if (printAttacks)
@@ -187,7 +227,7 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 	int winner = -1;
 	//finishedAttacks[i] is true iff players[i] finished all his attacks
 	bool finishedAttacks[NUM_PLAYERS] = { false,false };
-	Coordinate attackPoint;
+	Coordinate attackPoint(INVALID_COORDINATE);
 	AttackResult attackResult;
 	int attacker;
 	while (true)
