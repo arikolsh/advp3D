@@ -36,7 +36,7 @@ GameBoard::GameBoard(vector<vector<string>> board)
 
 char GameBoard::charAt(Coordinate c) const
 {
-	return _board[c.row][c.col][c.depth];
+	return _board[c.depth][c.row][c.col];
 }
 
 void GameBoard::print(bool includePadding) const
