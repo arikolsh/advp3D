@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
 		cout << "Error: failed to read board from file " << path << endl;
 		return false;
 	}
+
 	// validate board
 	int numShips[] = { 0,0 };
 	if (!BoardUtils::isValidBoard(board, depth, rows, cols, numShips)) {
@@ -48,8 +49,10 @@ int main(int argc, char* argv[])
 	BoardUtils::printBoard(board, false);
 
 	///////// init gameboard /////////
-	//GameBoard gameBoard(board,rows,cols,depth);
-	//gameBoard.print(false);
+	GameBoard gameBoard(board, rows, cols, depth);
+	gameBoard.print(false);
+	GameBoard g2 = gameBoard; //copy ctor test
+	g2.print(false);
 }
 
 

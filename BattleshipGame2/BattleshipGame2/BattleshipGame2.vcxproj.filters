@@ -36,9 +36,6 @@
     <ClInclude Include="BoardUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatchManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -60,9 +57,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoardUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MatchManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

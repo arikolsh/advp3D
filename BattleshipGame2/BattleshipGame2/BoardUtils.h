@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+/*
+ * common utility functions for vector<vecotr<string>>
+ */
 class BoardUtils {
 	BoardUtils() = delete; //disallow creating instance of class
 	~BoardUtils() = delete; //disallow destructor
@@ -47,4 +50,8 @@ public:
 	* print vector<vector<string>> to console.
 	*/
 	static void printBoard(std::vector<std::vector<std::string>> board3d, bool printPadding);
+	/*
+	* get a copy of board.
+	*/
+	static std::vector<std::vector<std::basic_string<char>>> getBoardCopy(const std::vector<std::vector<std::string>> board);
 };
