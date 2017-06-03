@@ -18,64 +18,85 @@
 #define SUCCESS 0
 #define FAILURE -1
 #define EMPTY_CELL '-'
-#define HORIZONTAL 1
-#define VERTICAL 0
+#define VISITED 'x'
 
 bool printAttacks = false; //debug purposes
 bool printMaps = false; //debug purposes
 
-MatchManager::MatchManager(GameBoard gameBoard)
+MatchManager::MatchManager(GameBoard &gameBoard)
 {
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
 	_playerScores = { 0, 0 };
 	_currentPlayer = A_NUM; //player A starts the game
-	_gameBoard = GameBoard::getGameBoardCopy(gameBoard); // Copt the given board
+	//_gameBoard = GameBoard::getGameBoardCopy(gameBoard); // Copy the given board
+	_gameBoard = GameBoard(gameBoard); // Copy the given board
 	fillMapWithShips();
 }
 
 void MatchManager::fillMapWithShips()
 {
-	int i, j, k, m, shipLen, direction;
-	int rows = _gameBoard.rows(), cols = _gameBoard.cols(), depth = _gameBoard.depth();
 	Coordinate coordinate(INVALID_COORDINATE);
-	Coordinate tmpCoordinate(INVALID_COORDINATE);
-	pair<shared_ptr<Ship>, bool> shipAndHit;
-	char visited = 'x';
 	char cell;
-	for (i = 1; i < rows + 1; i++)
+	for (int i = 1; i < _gameBoard.rows() + 1; i++)
 	{
-		for (j = 1; j < cols + 1; j++)
+		for (int j = 1; j < _gameBoard.cols() + 1; j++)
 		{
-			for (k = 1; k < depth + 1; k++)
+			for (int k = 1; k < _gameBoard.depth() + 1; k++)
 			{
 				coordinate = Coordinate(i, j, k);
 				cell = _gameBoard.charAt(coordinate);
 				if (!Ship::isShip(cell)) { continue; } // Skip non-ship cells
-				_gameBoard.setAt(coordinate) = visited; // Mark coordinate as visited 'x'
-				shared_ptr<Ship> ship = make_shared<Ship>(cell); //create the ship object
-				//Find all cells which belong to the current ship and add them to _shipsMap:
-				//shipLen = ship.getLife();
-				//direction = (boardCpy[i][j + 1] == cell) ? HORIZONTAL : VERTICAL;
-				m = 0;
-				while (k < shipLen)
-				{
-					if (direction == HORIZONTAL)
-					{
-						//xy = { i, j + m };
-						//boardCpy[i][j + m] = visited;
-					}
-					else if (direction == VERTICAL)
-					{
-						//xy = { i + m, j };
-						//boardCpy[i + m][j] = visited;
-
-					}
-					shipAndHit = { ship , false };
-					//_shipsMap.insert(make_pair(xy, shipAndHit));
-					m++;
-				}
+				_gameBoard.setAt(coordinate) = VISITED; // Mark coordinate as visited
+				insertShipToMap(coordinate, cell);
 			}
 		}
+	}
+}
+
+MatchManager::ShipDirection MatchManager::findShipDirection(struct Coordinate c, char ship) const
+{
+	if (_gameBoard.charAt(Coordinate(c.row + 1, c.col, c.depth)) == ship)
+	{
+		return VERTICAL;
+	}
+	if (_gameBoard.charAt(Coordinate(c.row, c.col + 1, c.depth)) == ship)
+	{
+		return HORIZONTAL;
+	}
+	return DEPTH; // Default also for single-cell ships ('b' / 'B')
+}
+
+/* create the ship object and then find the ship orientation (VERTICAL / HORIZONTAL / Depth)
+ * and add all cells which belong to the current ship to _shipsMap */
+void MatchManager::insertShipToMap(Coordinate c, char ship_char)
+{
+	int shipLen, direction;
+	vector<int> insPoint = {-1, -1, -1};
+	Coordinate coor(INVALID_COORDINATE);
+	pair<shared_ptr<Ship>, bool> shipAndHit;
+	shared_ptr<Ship> ship = make_shared<Ship>(ship_char); //create the ship object
+	shipLen = ship->getLife();
+	shipAndHit = { ship , false };
+	//Find the ship orientation (VERTICAL / HORIZONTAL / Depth):
+	direction = findShipDirection(coor, ship_char);
+	//Find all cells which belong to the current ship and add them to _shipsMap:
+	for (int m = 0; m < shipLen; m++)
+	{
+		switch (direction)
+		{
+		case VERTICAL:
+			coor = Coordinate(c.row + m, c.col, c.depth);
+			break;
+		case HORIZONTAL:
+			coor = Coordinate(c.row, c.col + m, c.depth);
+			break;
+		case DEPTH:
+			coor = Coordinate(c.row, c.col, c.depth + m);
+			break;
+		default: break;
+		}
+		_gameBoard.setAt(coor) = VISITED;
+		_shipsMap[{coor.row, coor.col, coor.depth}] = shipAndHit;
 	}
 }
 

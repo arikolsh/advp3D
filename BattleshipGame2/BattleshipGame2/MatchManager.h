@@ -10,7 +10,7 @@
 
 class MatchManager {
 public:
-	explicit MatchManager(GameBoard gameBoard);
+	explicit MatchManager(GameBoard &gameBoard);
 	int getPlayerScore(int player) const;
 	bool isPlayerDefeated(int player) const;
 	void printShipsMap();
@@ -33,7 +33,6 @@ public:
 	*/
 	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS]);
 private:
-	map<int[3], pair<shared_ptr<Ship>, bool>> _shipsMap;
 	MatchManager() = delete;
 	MatchManager(const MatchManager& that) = delete;
 	GameBoard _gameBoard;
@@ -42,10 +41,20 @@ private:
 	pair<int, int> _playersNumActiveShips;
 	/*who is the next player to attack*/
 	int _currentPlayer;
+
+	map<vector<int>, pair<shared_ptr<Ship>, bool>> _shipsMap;
+
 	/* Each player board is prepared in advance and hidden from the opponent!
 	* fillPlayerBoard gets the full board with both players ships,
 	* and fills the given player's board with his ships only. */
 	void fillMapWithShips();
+
+	enum ShipDirection { VERTICAL = 0, HORIZONTAL = 1, DEPTH = 2 };
+
+	ShipDirection findShipDirection(Coordinate c, char ship) const;
+
+	void insertShipToMap(Coordinate c, char ship_char);
+
 	/*return true if own goal*/
 	static bool isOwnGoal(int attackedPlayerNum, char shipType);
 };
