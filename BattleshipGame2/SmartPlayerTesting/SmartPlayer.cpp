@@ -28,15 +28,13 @@ void SmartPlayer::setBoard(const BoardData& board)
 //Create a padded board of size (rows+2 X cols+2 X depth+2) filled with EMPTY_CELLs:
 void SmartPlayer::SmartBoard::initialize()
 {
-	auto empty_line = std::string(depth + 2, EMPTY_CELL); //empty_line
-	vector<string> cols_vec;
-	for (int j = 0; j < cols + 2; j++)
-	{
-		cols_vec.push_back(empty_line);
-	}
+	auto empty_line = string(depth + 2, EMPTY_CELL); //empty_line = "----...----"
 	for (int i = 0; i < rows + 2; i++)
 	{
-		internalBoard.push_back(cols_vec);
+		for (int j = 0; j < cols; j++)
+		{
+			internalBoard[i].push_back(empty_line);
+		}
 	}
 }
 
