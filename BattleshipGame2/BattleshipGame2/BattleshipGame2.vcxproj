@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoardUtils.h" />
     <ClInclude Include="GameBoardOld.h" />
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="GameManager.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoardUtils.cpp" />
     <ClCompile Include="Game.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

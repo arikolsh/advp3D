@@ -27,9 +27,9 @@ GameBoard::GameBoard(int rows, int cols, int depth)
 
 GameBoard::GameBoard(vector<vector<string>> board)
 {
-	_depth = board.size() - PADDING;
-	_rows = board[0].size() - PADDING;
-	_cols = board[0][0].size() - PADDING;
+	_depth = int(board.size()) - PADDING;
+	_rows = int(board[0].size()) - PADDING;
+	_cols = int(board[0][0].size()) - PADDING;
 	// get a copy of given board 
 	_board = getBoardCopy(board);
 }
@@ -41,14 +41,14 @@ char GameBoard::charAt(Coordinate c) const
 
 void GameBoard::print(bool includePadding) const
 {
-	int start = includePadding ? 0 : 1;
-	int depthEnd = includePadding ? _board.size() - 1 : _board.size() - PADDING;
-	int rowsEnd = includePadding ? _board[0].size() - 1 : _board[0].size() - PADDING;
-	int colsEnd = includePadding ? _board[0][0].size() - 1 : _board[0][0].size() - PADDING;
-	for (int depth = start; depth <= depthEnd; depth++)
+	size_t start = includePadding ? 0 : 1;
+	size_t depthEnd = includePadding ? _board.size() - 1 : _board.size() - PADDING;
+	size_t rowsEnd = includePadding ? _board[0].size() - 1 : _board[0].size() - PADDING;
+	size_t colsEnd = includePadding ? _board[0][0].size() - 1 : _board[0][0].size() - PADDING;
+	for (size_t depth = start; depth <= depthEnd; depth++)
 	{
 		cout << endl;
-		for (int row = start; row <= rowsEnd; row++)
+		for (size_t row = start; row <= rowsEnd; row++)
 		{
 			cout << _board[depth][row].substr(start, colsEnd) << endl;
 		}
