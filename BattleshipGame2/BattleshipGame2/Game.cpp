@@ -49,8 +49,8 @@ int main(int argc, char* argv[])
 	BoardUtils::printBoard(board, false);
 
 	///////// init gameboard /////////
-	//GameBoard gameBoard(board,rows,cols,depth);
-	//gameBoard.print(false);
+	GameBoard gameBoard(board,rows,cols,depth);
+	gameBoard.print(false);
 }
 
 

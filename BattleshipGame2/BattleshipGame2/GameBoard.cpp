@@ -4,13 +4,13 @@
 #define PADDING 2
 #define EMPTY_CELL '-'
 // expect getting a board with padding
-GameBoard::GameBoard(vector<vector<string>> board, int rows, int cols, int depth)
+GameBoard::GameBoard(vector<vector<string>>& board, int rows, int cols, int depth)
 {
 	_depth = depth;
 	_rows = rows;
 	_cols = cols;
 	// get a copy of given board 
-	_board = BoardUtils::getBoardCopy(board);
+	_board = board;
 }
 
 char GameBoard::charAt(Coordinate c) const
