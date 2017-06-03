@@ -1,5 +1,6 @@
 #include "SmartPlayer.h"
 #include "IBattleshipGameAlgo.h"
+#include "SmartBoard.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -9,7 +10,7 @@ bool print_mode = false;
 // Return a smart player instance
 IBattleshipGameAlgo* GetAlgorithm() { return new SmartPlayer(); }
 
-SmartPlayer::SmartPlayer() : _playerNum(-1), _attackPoint(INVALID_COORDINATE),
+SmartPlayer::SmartPlayer() : _playerNum(-1), _attackPoint(INVALID_COORDINATE), 
 _lastAttack(INVALID_COORDINATE), _firstHit(INVALID_COORDINATE), _cleanedFirstHit(false), _attackingState(Routine) {}
 
 SmartPlayer::~SmartPlayer() {}
@@ -20,42 +21,9 @@ void SmartPlayer::setBoard(const BoardData& board)
 {
 	_board.SetDimentions(board.rows(), board.cols(), board.depth());
 	_board.initialize(); // Initialize an empty board with paddings
-	copyPlayerShips(board); // Copy all player's ships to the private _board
+	_board.copyPlayerShips(board, _playerNum); // Copy all player's ships to the private _board
 	getAllPotentialHits(); // Fills the _potentialAttacks vector with all points marked ('X') as potential hits
 	updateDirections(true, true, true); // Initialize all directions as valid for attack
-}
-
-//Create a padded board of size (rows+2 X cols+2 X depth+2) filled with EMPTY_CELLs:
-void SmartPlayer::SmartBoard::initialize()
-{
-	auto empty_line = std::string(depth + 2, EMPTY_CELL); //empty_line
-	vector<string> cols_vec;
-	for (int j = 0; j < cols + 2; j++)
-	{
-		cols_vec.push_back(empty_line);
-	}
-	for (int i = 0; i < rows + 2; i++)
-	{
-		internalBoard.push_back(cols_vec);
-	}
-}
-
-// Copy all player's ships to _board (which is initialized with EMPTY_CELLs)
-void SmartPlayer::copyPlayerShips(const BoardData& board)
-{
-	char cell;
-	for (int i = 1; i < _board.rows + 1; i++)
-	{
-		for (int j = 1; j < _board.cols + 1; j++)
-		{
-			for (int k = 1; k < _board.depth + 1; k++)
-			{
-				cell = board.charAt(Coordinate(i, j, k));
-				if (!shipBelongsToPlayer(cell)) { continue; } // Skip non-ship cells
-				_board.At(i, j, k) = cell; // Copy valid ship char
-			}
-		}
-	}
 }
 
 /* Compute and return the next smart attack according to the _attacking_state (of our DFA).
@@ -383,17 +351,6 @@ void SmartPlayer::updateDirections(bool x, bool y, bool z)
 	_validDirections[2] = z;
 }
 
-bool SmartPlayer::shipBelongsToPlayer(char c) const
-{
-	for (int i = 0; i < NUM_SHIP_TYPES; i++) {
-		if ((_playerNum == A_NUM && c == shipTypesA[i]) || (_playerNum == B_NUM && c == shipTypesA[i]))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 void SmartPlayer::clearSurroundingsAfterSink(Coordinate sink)
 {
 	auto row = sink.row, col = sink.col, depth = sink.depth;
@@ -473,38 +430,4 @@ void SmartPlayer::clearSurroundingsAfterHit_Z(Coordinate hit)
 	_board.At(hit.row - 1, hit.col, hit.depth) = EMPTY_CELL;
 	_board.At(hit.row, hit.col + 1, hit.depth) = EMPTY_CELL;
 	_board.At(hit.row, hit.col - 1, hit.depth) = EMPTY_CELL;
-}
-
-void SmartPlayer::print_3D_board(bool includePadding) const
-{
-	int i, j, k, start, last_row, last_col, last_depth;
-	start = includePadding ? 0 : 1;
-	last_row = includePadding ? _board.rows + 2 : _board.rows + 1;
-	last_col = includePadding ? _board.cols + 2 : _board.cols + 1;
-	last_depth = includePadding ? _board.depth + 2 : _board.depth + 1;
-
-	cout << "SmartPlayer's board: X-Y dimentions" << endl;
-	for (i = start; i < last_row; i++) {
-		for (j = start; j < last_col; j++) {
-			cout << _board.At(i, j, 0);
-		}
-		cout << endl;
-	}
-
-	cout << "SmartPlayer's board: X-Z dimentions" << endl;
-	for (j = start; j < last_col; j++) {
-		for (k = start; k < last_depth; k++) {
-			cout << _board.At(0, j, k);
-		}
-		cout << endl;
-	}
-
-	cout << "SmartPlayer's board: Y-Z dimentions" << endl;
-	for (i = start; i < last_row; i++) {
-		for (k = start; k < last_depth; k++) {
-			cout << _board.At(i, 0, k);
-		}
-		cout << endl;
-	}
-	cout << endl;
 }

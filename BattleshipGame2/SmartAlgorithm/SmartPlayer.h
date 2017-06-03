@@ -1,5 +1,6 @@
 #pragma once
 #include "IBattleshipGameAlgo.h"
+#include "SmartBoard.h"
 #include <vector>
 
 #define INVALID_COORDINATE  { -1 , -1, -1 }
@@ -32,36 +33,14 @@ public:
 	// notify on last move result
 	void notifyOnAttackResult(int player, Coordinate move, AttackResult result) override;
 
-	class SmartBoard
-	{
-	public:
-		virtual ~SmartBoard() = default;
-		int rows = 0;
-		int cols = 0;
-		int depth = 0;
-		vector<vector<string>> internalBoard; // Holds all player's ships + 'X' mark for every cell that shouldn't be attacked
-		void SetDimentions(int Rows, int Cols, int Depth) { rows = Rows, cols = Cols, depth = Depth; }
-		void initialize();
-		// Overloading operator[] for safely accessing _board
-		char& operator[](Coordinate coor) { return internalBoard[coor.row][coor.col][coor.depth]; }
-		const char& operator[](Coordinate coor) const { return internalBoard[coor.row][coor.col][coor.depth]; }
-		char& At(int Row, int Col, int Depth) { return internalBoard[Row][Col][Depth]; }
-		const char& At(int Row, int Col, int Depth) const { return internalBoard[Row][Col][Depth]; }
-	};
-
 private:
-
 	int _playerNum;
 	SmartBoard _board;
 	vector<Coordinate> _potentialAttacks; // Container for all points marked ('X') as potential hits
 	Coordinate _attackPoint; // Next point to attack
 	Coordinate _lastAttack; // Remember last attack (row, col, depth)
 	Coordinate _firstHit; // Remember the position when starting to hunt a direction - 
-						  //(helps when switching forwards to backwords + helps cleaning surrounding cells)
-	bool _cleanedFirstHit;
-
-	// Copy all player's ships to _board (which is initialized with EMPTY_CELLs)
-	void copyPlayerShips(const BoardData& board);
+	bool _cleanedFirstHit; //(helps when switching forwards to backwords + helps cleaning surrounding cells)
 
 	// Smart player attacks according to a DFA with these 3 states:
 	enum AttackingState
@@ -117,15 +96,9 @@ private:
 	bool isPotentialHit(Coordinate coordinate); // Check cell and it's surroundings to decide if it's a potential hit
 	void getAllPotentialHits(); // Go over the player's board to find all Potential cells and mark them with 'X'
 
-	bool shipBelongsToPlayer(char c) const; // return true iff c is a ship that belongs to given player
-	const char shipTypesA[NUM_SHIP_TYPES] = { 'B', 'P', 'M', 'D' };
-	const char shipTypesB[NUM_SHIP_TYPES] = { 'b', 'p', 'm', 'd' };
-
 	void clearSurroundingsAfterSink(Coordinate sink); // Clean surrounding cells after Sink
 	void clearSurroundingsAfterHit(Coordinate hit); // Clean surrounding cells after Hits
 	void clearSurroundingsAfterHit_X(Coordinate hit);
 	void clearSurroundingsAfterHit_Y(Coordinate hit);
 	void clearSurroundingsAfterHit_Z(Coordinate hit);
-
-	void print_3D_board(bool includePadding) const;
 };
