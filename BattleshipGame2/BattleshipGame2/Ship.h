@@ -15,6 +15,7 @@ public:
 	int getSinkPoints() const; //returns number of points for sinking
 
 	void hit(); //Takes one off the ship's life
+	static int getShipLenByType(char ship);
 
 	static bool isShip(char c); //return true if c is a ship
 

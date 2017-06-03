@@ -57,6 +57,22 @@ void Ship::hit()
 	life--;
 }
 
+int Ship::getShipLenByType(char shipType)
+{
+	switch (tolower(shipType)) {
+	case RUBBER_BOAT:
+		return RUB_LEN;
+	case ROCKET_SHIP:
+		return ROC_LEN;
+	case SUBMARINE:
+		return SUB_LEN;
+	case DESTROYER:
+		return DES_LEN;
+	default:;
+		return -1;
+	}
+}
+
 bool Ship::isShip(char c)
 {
 	char shipType[NUM_SHIP_TYPES] = { SUBMARINE, DESTROYER, RUBBER_BOAT, ROCKET_SHIP }; //types of ships

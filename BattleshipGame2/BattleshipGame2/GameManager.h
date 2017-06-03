@@ -1,7 +1,5 @@
 #pragma once
-#include "GameBoard.h"
-#define NUM_PLAYERS 2
-
+#include "GameManager.h"
 class GameManager {
 
 };

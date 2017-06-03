@@ -1,11 +1,21 @@
-#include "GameUtils.h"
 #include <vector>
 #include <filesystem>
-#include "GameBoard.h"
-#include "GameManager.h"
 #include <iostream>
 #include <windows.h>
-#include "IBattleshipGameAlgo.h"
+//#include "IBattleshipGameAlgo.h"
+#include <sstream>
+#include "GameBoard.h"
+#include "BoardUtils.h"
+#define MIN(a, b) ((a < b) ? (a) : (b))
+#define EMPTY_CELL '-' //todo: eventually should be ' ' (space)
+#define VISITED_CELL 'v'
+#define PADDING 2
+#define DIM_DELIMITER 'X' //according to this token we split the first line in every board file
+#define RIGHT 0
+#define DOWN 1
+#define DEEP 2
+#define MAX_NUM_SHIPS 5 //max number of ships per player
+
 
 using namespace std;
 
@@ -15,22 +25,32 @@ int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hD
 int main(int argc, char* argv[])
 {
 
-	string boardPath = "good_board.sboard";
-	vector<vector<string>> board3d;
-	
+	////// to put in manager //////
+	string path = "good_board.sboard";
+	vector<vector<string>> board;
+	int depth, rows, cols;
+	// get3d board from file
+	if (!BoardUtils::getBoardFromFile(board, path, depth, rows, cols))
+	{
+		cout << "Error: failed to read board from file " << path << endl;
+		return false;
+	}
+	// validate board
+	int numShips[] = { 0,0 };
+	if (!BoardUtils::isValidBoard(board, depth, rows, cols, numShips)) {
+		cout << "Warning: invalid board in file " << path << endl;
+		return false; //todo: skip to next board
+	}
+	if (numShips[0] != numShips[1])
+	{
+		cout << "Warning: board not balanced in file " << path << endl;
+	}
+	BoardUtils::printBoard(board, false);
 
-
-
-
-
-
-
-
+	///////// init gameboard /////////
+	//GameBoard gameBoard(board);
+	//gameBoard.print(false);
 }
-
-
-
-
 
 
 
