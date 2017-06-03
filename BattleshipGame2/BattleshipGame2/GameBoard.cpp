@@ -3,11 +3,12 @@
 #include "BoardUtils.h"
 #define PADDING 2
 #define EMPTY_CELL '-'
-GameBoard::GameBoard(vector<vector<string>> board)
+// expect getting a board with padding
+GameBoard::GameBoard(vector<vector<string>> board, int rows, int cols, int depth)
 {
-	_rows = int(board.size()) - PADDING;
-	_cols = int(board[0].size()) - PADDING;
-	_depth = int(board[0][0].size()) - PADDING;
+	_depth = depth;
+	_rows = rows;
+	_cols = cols;
 	// get a copy of given board 
 	_board = BoardUtils::getBoardCopy(board);
 }

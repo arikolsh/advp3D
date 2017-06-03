@@ -9,7 +9,8 @@ using namespace std;
 class GameBoard : public BoardData
 {
 public:
-	explicit GameBoard(vector<vector<string>> board);
+	GameBoard() = delete;
+	explicit GameBoard(vector<vector<string>> board, int rows, int cols, int depth);
 	GameBoard(const GameBoard& that) = delete;
 	char charAt(Coordinate c) const override; //returns only selected players' chars
 	void print(bool includePadding) const;
