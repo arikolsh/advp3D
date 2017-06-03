@@ -9,8 +9,6 @@ using namespace std;
 class GameBoard : public BoardData
 {
 public:
-	GameBoard();
-	GameBoard(int rows, int cols, int depth);
 	explicit GameBoard(vector<vector<string>> board);
 	GameBoard(const GameBoard& that) = delete;
 	char charAt(Coordinate c) const override; //returns only selected players' chars

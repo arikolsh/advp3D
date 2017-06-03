@@ -1,29 +1,8 @@
-#include <iostream>
 #include "GameBoard.h"
 #include "IBattleshipGameAlgo.h"
-#include <sstream>
 #include "BoardUtils.h"
 #define PADDING 2
 #define EMPTY_CELL '-'
-
-
-////// global functions //////
-
-
-GameBoard::GameBoard()
-{
-}
-
-GameBoard::GameBoard(int rows, int cols, int depth)
-{
-	// dimensions without padding 
-	_rows = rows;
-	_cols = cols;
-	_depth = depth;
-	// get a 3d board with padding 
-	_board = BoardUtils::getNewEmptyBoard(_rows + PADDING, _cols + PADDING, _depth + PADDING);
-}
-
 GameBoard::GameBoard(vector<vector<string>> board)
 {
 	_rows = int(board.size()) - PADDING;
