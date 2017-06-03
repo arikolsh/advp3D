@@ -33,26 +33,14 @@ void NewGameBoard::print_3D_board(bool includePadding) const
 	last_col = includePadding ? _cols + 2 : _cols + 1;
 	last_depth = includePadding ? _depth + 2 : _depth + 1;
 
-	cout << "SmartPlayer's board: X-Y dimentions" << endl;
-	for (i = start; i < last_row; i++) {
-		for (j = start; j < last_col; j++) {
-			cout << _board[i][j][0];
-		}
-		cout << endl;
-	}
-
-	cout << "SmartPlayer's board: X-Z dimentions" << endl;
-	for (j = start; j < last_col; j++) {
-		for (k = start; k < last_depth; k++) {
-			cout << _board[0][j][k];
-		}
-		cout << endl;
-	}
-
-	cout << "SmartPlayer's board: Y-Z dimentions" << endl;
-	for (i = start; i < last_row; i++) {
-		for (k = start; k < last_depth; k++) {
-			cout << _board[i][0][k];
+	//Print row-col cuts for depth index start...last_depth:
+	for (k = start; k < last_depth; k++) {
+		cout << "SmartPlayer's board: row-col cut for depth " << k << endl;
+		for (i = start; i < last_row; i++) {
+			for (j = start; j < last_col; j++) {
+				cout << _board[i][j][k];
+			}
+			cout << endl;
 		}
 		cout << endl;
 	}
