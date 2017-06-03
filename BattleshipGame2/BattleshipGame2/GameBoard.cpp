@@ -7,29 +7,12 @@
 
 
 ////// global functions //////
-//split string to vector using a delimiter
-void split(string line, vector<string>& splitLine, char delimiter);
-//////
-
-GameBoard::GameBoard()
+// expect getting a board with padding
+GameBoard::GameBoard(vector<vector<string>> board, int rows, int cols, int depth)
 {
-}
-
-GameBoard::GameBoard(int rows, int cols, int depth)
-{
-	// dimensions without padding 
+	_depth = depth;
 	_rows = rows;
 	_cols = cols;
-	_depth = depth;
-	// get a 3d board with padding 
-	_board = getNewEmptyBoard(_rows + PADDING, _cols + PADDING, _depth + PADDING);
-}
-
-GameBoard::GameBoard(vector<vector<string>> board)
-{
-	_depth = int(board.size()) - PADDING;
-	_rows = int(board[0].size()) - PADDING;
-	_cols = int(board[0][0].size()) - PADDING;
 	// get a copy of given board 
 	_board = getBoardCopy(board);
 }
