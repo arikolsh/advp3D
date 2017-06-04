@@ -1,6 +1,7 @@
 #pragma once
 #include "IBattleshipGameAlgo.h"
 #include "SmartBoard.h"
+#include "SmartLogger.h"
 #include <vector>
 
 #define INVALID_COORDINATE  { -1 , -1, -1 }
@@ -43,8 +44,11 @@ private:
 	Coordinate _firstHit; // Remember the position when starting to hunt a direction - 
 	bool _cleanedFirstHit; //(helps when switching forwards to backwords + helps cleaning surrounding cells)
 
-						   // Smart player attacks according to a DFA with these 3 states:
-	enum AttackingState
+	SmartLogger _logger;
+	void initLogger(bool shouldLog);
+	void notifyOnAttackToLogger(int player, Coordinate move, AttackResult result, bool bothPlayers);
+
+	enum AttackingState // Smart player attacks according to a DFA with these 3 states:
 	{
 		Routine,
 		Hunting_x_forwards, Hunting_x_backwards,
@@ -104,6 +108,4 @@ private:
 	void clearSurroundingsAfterHit_X(Coordinate hit);
 	void clearSurroundingsAfterHit_Y(Coordinate hit);
 	void clearSurroundingsAfterHit_Z(Coordinate hit);
-
-	void printPotentialAttack();
 };

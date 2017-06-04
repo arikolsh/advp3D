@@ -148,10 +148,12 @@
   <ItemGroup>
     <ClInclude Include="IBattleshipGameAlgo.h" />
     <ClInclude Include="SmartBoard.h" />
+    <ClInclude Include="SmartLogger.h" />
     <ClInclude Include="SmartPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SmartBoard.cpp" />
+    <ClCompile Include="SmartLogger.cpp" />
     <ClCompile Include="SmartPlayer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

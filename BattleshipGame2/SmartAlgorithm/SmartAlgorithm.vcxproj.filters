@@ -24,12 +24,18 @@
     <ClInclude Include="SmartBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SmartLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SmartPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SmartBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

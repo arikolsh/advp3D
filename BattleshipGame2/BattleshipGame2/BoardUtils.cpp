@@ -139,7 +139,7 @@ void BoardUtils::printBoard(vector<vector<string>> board3d, bool printPadding)
 		cout << endl;
 		for (size_t row = start; row <= rowsEnd; row++)
 		{
-			for (size_t col = start; col < colsEnd; col++) {
+			for (size_t col = start; col <= colsEnd; col++) {
 				cout << board3d[row][col][depth];
 			}
 			cout << endl;
