@@ -2,12 +2,13 @@
 #include <filesystem>
 #include <iostream>
 #include <windows.h>
-//#include "IBattleshipGameAlgo.h"
+#include "IBattleshipGameAlgo.h"
 #include <sstream>
 #include "GameBoard.h"
 #include "BoardUtils.h"
+#include "MatchManager.h"
 #define MIN(a, b) ((a < b) ? (a) : (b))
-#define EMPTY_CELL '-' //todo: eventually should be ' ' (space)
+#define EMPTY_CELL '-' //TODO: eventually should be ' ' (space)
 #define VISITED_CELL 'v'
 #define PADDING 2
 #define DIM_DELIMITER 'X' //according to this token we split the first line in every board file
@@ -16,15 +17,16 @@
 #define DEEP 2
 #define MAX_NUM_SHIPS 5 //max number of ships per player
 
-/*
+
 using namespace std;
 
 void getArgs(int argc, char** argv, int& threads, string& searchDir);
 int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hDll);
 
-int main333333333333333333(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 
+	// gamemanger.init() -> build boards vector and player vector -> run matches => new match manager (player2,player1,map)
 	////// to put in manager //////
 	string path = "good_board.sboard";
 	vector<vector<string>> board;
@@ -46,14 +48,47 @@ int main333333333333333333(int argc, char* argv[])
 	{
 		cout << "Warning: board not balanced in file " << path << endl;
 	}
-	BoardUtils::printBoard(board, false);
+	//BoardUtils::printBoard(board, false);
 
 	///////// init gameboard /////////
 	GameBoard gameBoard(board, rows, cols, depth);
-	gameBoard.print(false);
-	GameBoard g2 = gameBoard; //copy ctor test
-	g2.print(false);
+	//gameBoard.print(false);
+
+	IBattleshipGameAlgo* players[2];
 	
+	/* get DLLs and board file */
+	//int err = GameUtils::getInputFiles(inputFiles, messages, searchDir);
+	//if (err) { return EXIT_FAILURE; }
+
+	/* load player A from dll */
+	HINSTANCE hDllA;
+	int err = getPlayerFromDll("smartalgorithm.dll", players[0], hDllA);
+	if (err)
+	{
+		delete players[0];
+		return EXIT_FAILURE;
+	}
+
+	err = getPlayerFromDll("smartalgorithm.dll", players[1], hDllA);
+	if (err)
+	{
+		delete players[1];
+		return EXIT_FAILURE;
+	}
+
+	players[0]->setPlayer(0);
+	players[0]->setBoard(gameBoard);
+	players[1]->setPlayer(1);
+	players[1]->setBoard(gameBoard);
+
+	MatchManager matchManager(gameBoard); //todo: add arguments:player1,player2 &result
+	//matchManager.printShipsMap();
+	int winner = matchManager.runGame(players);
+	matchManager.gameOver(winner);
+
+	/* freeing resources */
+	delete players[0];
+	delete players[1];
 }
 
 
@@ -64,7 +99,7 @@ int main333333333333333333(int argc, char* argv[])
 
 int getPlayerFromDll(string dllPath, IBattleshipGameAlgo* &player, HINSTANCE& hDll)
 { //todo: guarantee player is converted to ptr
-	// define function of the type we expect
+  // define function of the type we expect
 	typedef IBattleshipGameAlgo *(*GetAlgoType)();
 	GetAlgoType getAlgo;
 
@@ -108,5 +143,3 @@ void getArgs(int argc, char** argv, int& threads, string& searchDir)
 		i++;
 	}
 }
-
-*/

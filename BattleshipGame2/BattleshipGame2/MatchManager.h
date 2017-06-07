@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include "Ship.h"
+#include <fstream>
 
 #define NUM_PLAYERS 2
 #define INVALID_COORDINATE  { -1 , -1, -1 }
@@ -13,7 +14,7 @@ public:
 	explicit MatchManager(GameBoard &gameBoard);
 	int getPlayerScore(int player) const;
 	bool isPlayerDefeated(int player) const;
-	void printShipsMap();
+	void logShipsMap();
 	/* Search for the attack point in shipsMap:
 	* If attack point is not in map --> it's a Miss!
 	* Else, hit the ship in map by taking one off the ship life counter
@@ -21,7 +22,7 @@ public:
 	* If ship life has now become 0 --> it's a Sink!
 	* Else, return Hit. */
 	AttackResult executeAttack(int attackedPlayerNum, Coordinate attack);
-	void gameOver(int winner) const;
+	void gameOver(int winner);
 	/*
 	* Each player declares his next attack.
 	* Then, his enemy executes the attack and returns the AttackResult.
@@ -57,4 +58,6 @@ private:
 
 	/*return true if own goal*/
 	static bool isOwnGoal(int attackedPlayerNum, char shipType);
+
+	ofstream _logFile;
 };

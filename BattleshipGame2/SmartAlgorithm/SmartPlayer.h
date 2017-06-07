@@ -100,12 +100,8 @@ private:
 	// Some more Private functions:
 	bool isPotentialHit(Coordinate coordinate); // Check cell and it's surroundings to decide if it's a potential hit
 	void getAllPotentialHits(); // Go over the player's board to find all Potential cells and mark them with 'X'
-
-	void clearSurroundingsAfterSink(Coordinate sink); // Clean surrounding cells after Sink
-
-													  // Clean surrounding cells after Hits:
-	void clearSurroundingsAfterHit(Coordinate hit);
-	void clearSurroundingsAfterHit_X(Coordinate hit);
-	void clearSurroundingsAfterHit_Y(Coordinate hit);
-	void clearSurroundingsAfterHit_Z(Coordinate hit);
+													  
+	void clearSurroundings(Coordinate hit, AttackResult result); // Clean surrounding cells after Hit/Sink according to hunting direction
+	void clearCellsInBoard(Coordinate hit, int r, int c, int d); // Do the cleaning in board
+	void logAfterCleaning(Coordinate hit, int r, int c, int d);
 };

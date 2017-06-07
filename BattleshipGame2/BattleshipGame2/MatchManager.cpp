@@ -20,9 +20,6 @@
 #define EMPTY_CELL '-'
 #define VISITED 'x'
 
-bool printAttacks = true; //debug purposes
-bool printMaps = false; //debug purposes
-
 MatchManager::MatchManager(GameBoard &gameBoard)
 {
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
@@ -30,6 +27,7 @@ MatchManager::MatchManager(GameBoard &gameBoard)
 	_currentPlayer = A_NUM; //player A starts the game
 	_gameBoard = GameBoard(gameBoard); // Copy the given board
 	fillMapWithShips();
+	_logFile.open("MatchManagerLog.txt");
 }
 
 void MatchManager::fillMapWithShips()
@@ -111,17 +109,17 @@ bool MatchManager::isPlayerDefeated(int player) const
 		: _playersNumActiveShips.second <= 0;
 }
 
-void MatchManager::printShipsMap()
+void MatchManager::logShipsMap()
 {
 	int count = 1;
 	for (auto iter = _shipsMap.begin(); iter != _shipsMap.end(); ++iter)
 	{
 		auto coordinate = iter->first;
 		auto ship = iter->second.first;
-		cout << "Map entry " << count << " is:";
-		cout << "(" << coordinate[0] << "," << coordinate[1] << "," << coordinate[2] << ")";
-		cout << " shipType: " << ship->getType();
-		cout << " shipLife: " << ship->getLife() << endl;
+		_logFile << "Map entry " << count << " is:";
+		_logFile << "(" << coordinate[0] << "," << coordinate[1] << "," << coordinate[2] << ")";
+		_logFile << " shipType: " << ship->getType();
+		_logFile << " shipLife: " << ship->getLife() << endl;
 		count++;
 	}
 }
@@ -134,19 +132,11 @@ void MatchManager::printShipsMap()
 * Else, return Hit. */
 AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attack)
 {
-	if (printAttacks)
-	{
-		cout << "player " << 1 - attackedPlayerNum << " is attacking "
-			<< attack.row << "," << attack.col << "," << attack.depth << endl;
-		cout << "Result: ";
-	}
+	_logFile << "\nplayer " << 1 - attackedPlayerNum << " is attacking " << attack.row << "," << attack.col << "," << attack.depth << "\nResult: ";
 	auto found = _shipsMap.find({ attack.row, attack.col, attack.depth });
 	if (found == _shipsMap.end()) //attack point not in map --> Miss
 	{
-		if (printAttacks)
-		{
-			cout << "Miss" << endl;
-		}
+		_logFile << "Miss" << endl;
 		_currentPlayer = attackedPlayerNum;
 		return AttackResult::Miss;
 	}
@@ -159,32 +149,20 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 		_currentPlayer = attackedPlayerNum;
 		if (ship->getLife() == 0) //ship already sank.. Miss
 		{
-			if (printAttacks)
-			{
-				cout << "Miss (hit a sunken ship)" << endl;
-			}
+			_logFile << "Miss (hit a sunken ship)" << endl;
 			return AttackResult::Miss;
 		}
-		if (printAttacks)
-		{
-			cout << "Hit (ship was already hit before but still has'nt sunk..)" << endl;
-		}
+		_logFile << "Hit (ship was already hit before but still has'nt sunk..)" << endl;
 		return AttackResult::Hit; //you don't get another turn if cell was already hit
 	}
 
 	ship->hit(); //Hit the ship (Take one off the ship life)
 	found->second.second = true; //Mark cell as a 'Hit'
-	if (printAttacks)
-	{
-		cout << "Hit ship " << ship->getType() << endl;
-	}
+	_logFile << "H I T ship type: " << ship->getType() << endl;
 	int shipType = ship->getType();
 	if (isOwnGoal(attackedPlayerNum, shipType))
 	{
-		if (printAttacks)
-		{
-			cout << "own goal! player " << 1 - attackedPlayerNum << " hit his own ship" << endl;
-		}
+		_logFile << "own goal! player " << 1 - attackedPlayerNum << " hit his own ship" << endl;
 		//in case of own goal pass turn to opponent
 		_currentPlayer = attackedPlayerNum;
 	}
@@ -211,10 +189,7 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 		{
 			_playerScores.second += ship->getSinkPoints();
 		}
-		if (printAttacks)
-		{
-			cout << "Sink! Score: " << ship->getSinkPoints() << endl;
-		}
+		_logFile << "S i n k !    S c o r e:    " << ship->getSinkPoints() << endl;
 		return AttackResult::Sink;
 	}
 	return AttackResult::Hit; //Hit
@@ -226,31 +201,32 @@ bool MatchManager::isOwnGoal(int attackedPlayerNum, char shipType)
 		|| attackedPlayerNum == B_NUM && shipType != tolower(shipType);
 }
 
-void MatchManager::gameOver(int winner) const
+void MatchManager::gameOver(int winner)
 {
 	if (winner != -1) //We have a winner
 	{
 		cout << "Player " << (winner == A_NUM ? "A" : "B") << " won" << endl;
+		_logFile << "\nPlayer " << (winner == A_NUM ? "A" : "B") << " won";
 	}
 	cout << "Points:" << endl;
 	cout << "Player A: " << _playerScores.first << endl;
 	cout << "Player B: " << _playerScores.second << endl;
+	_logFile << "\nPoints:\n" << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
+	_logFile << "\nShips Map At The End:" << endl;
+	logShipsMap();
+	_logFile.close();
 }
 
 int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 {
-	if (printMaps)
-	{
-		cout << "Ships Map at start point: " << endl;
-		printShipsMap();
-	}
-
 	int winner = -1;
 	//finishedAttacks[i] is true iff players[i] finished all his attacks
 	bool finishedAttacks[NUM_PLAYERS] = { false,false };
 	Coordinate attackPoint(INVALID_COORDINATE);
 	AttackResult attackResult;
 	int attacker;
+	_logFile << "\nShips Map At The Start:" << endl;
+	logShipsMap();
 	while (true)
 	{
 		attacker = _currentPlayer;
@@ -269,12 +245,6 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 		}
 
 		attackResult = executeAttack(1 - _currentPlayer, attackPoint);
-		/*if (printAttacks)
-		{
-		cout << "notifyOnAttackResult: Player " << attacker << " attacked "
-		<< attackPoint.first << "," << attackPoint.second << " Result is "
-		<< static_cast<int>(attackResult) <<endl << endl;
-		}*/
 		players[A_NUM]->notifyOnAttackResult(attacker, attackPoint, attackResult);
 		players[B_NUM]->notifyOnAttackResult(attacker, attackPoint, attackResult);
 		//check for defeated players
@@ -290,11 +260,6 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 			winner = 1 - _currentPlayer; //winner is the opponent
 			break;
 		}
-	}
-	if (printMaps)
-	{
-		cout << "Ships Map at Finish point: " << endl;
-		printShipsMap();
 	}
 	return winner;
 }

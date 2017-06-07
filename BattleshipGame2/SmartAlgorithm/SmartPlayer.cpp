@@ -3,10 +3,9 @@
 #include "SmartBoard.h"
 #include <iostream>
 #include <algorithm>
-#include <random>
 #include <sstream>
-
-bool print_mode = false;
+#include <stdlib.h>
+#include <time.h>
 
 // Return a smart player instance
 IBattleshipGameAlgo* GetAlgorithm() { return new SmartPlayer(); }
@@ -14,21 +13,21 @@ IBattleshipGameAlgo* GetAlgorithm() { return new SmartPlayer(); }
 SmartPlayer::SmartPlayer() : _playerNum(-1), _attackPoint(INVALID_COORDINATE),
 _lastAttack(INVALID_COORDINATE), _firstHit(INVALID_COORDINATE), _cleanedFirstHit(false), _attackingState(Routine) {}
 
-void SmartPlayer::initLogger(bool shouldLog)
-{
-	ostringstream stringStream;
-	stringStream << "SmartLogger_" << _playerNum << ".txt";
-	_logger = SmartLogger(stringStream.str(), _playerNum, shouldLog);
-	_logger.createLog();
-	_logger.log("Starting log...");
-}
-
 SmartPlayer::~SmartPlayer() {}
 
 void SmartPlayer::setPlayer(int player)
 {
 	_playerNum = player;
 	initLogger(true);
+}
+
+void SmartPlayer::initLogger(bool shouldLog)
+{
+	ostringstream stringStream;
+	stringStream << "SmartLogger_" << _playerNum << ".txt";
+	_logger = SmartLogger(stringStream.str(), _playerNum, shouldLog);
+	_logger.createLog();
+	_logger.log("Starting logger...");
 }
 
 void SmartPlayer::setBoard(const BoardData& board)
@@ -43,41 +42,11 @@ void SmartPlayer::setBoard(const BoardData& board)
 	//_board.print_3D_board(false, _playerNum);
 }
 
-/* Compute and return the next smart attack according to the _attacking_state (of our DFA).
-* If Finished attacking all potential points, the Coordinate(-1,-1,-1) is returned. */
-Coordinate SmartPlayer::attack()
-{
-	switch (_attackingState)
-	{
-	case Routine:
-		return attackRoutine();
-
-	case Hunting_x_forwards:
-		return attack_x_forwards();
-
-	case Hunting_x_backwards:
-		return attack_x_backwards();
-
-	case Hunting_y_forwards:
-		return attack_y_forwards();
-
-	case Hunting_y_backwards:
-		return attack_y_backwards();
-
-	case Hunting_z_forwards:
-		return attack_z_forwards();
-
-	case Hunting_z_backwards:
-		return attack_z_backwards();
-	}
-	return attackRoutine();
-}
-
 void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult result)
 {
-	// Log all important info from notifyOnAttackResult:
+	// Log important info from notifyOnAttackResult to SmartLogger.txt:
 	notifyOnAttackToLogger(player, move, result, true);
-
+	
 	// Unmark the attacked cell (to avoid attacking it again):
 	if (_board.charAt(move) == MARKED_CELL) { _board.At(move) = EMPTY_CELL; }
 
@@ -90,7 +59,7 @@ void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult
 			if (_attackingState != Routine)
 			{
 				//clear surrounding cells directions according to ship direction (including arround the _firstHit in Routine state)
-				clearSurroundingsAfterHit(move);
+				clearSurroundings(move, AttackResult::Hit);
 			}
 			break;
 		case AttackResult::Miss:
@@ -100,7 +69,7 @@ void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult
 			}
 			break;
 		case AttackResult::Sink:
-			clearSurroundingsAfterSink(move); // On 'Sink' unmark all Surroundings cells
+			clearSurroundings(move, AttackResult::Sink); // On 'Sink' unmark all Surroundings cells
 			_attackingState = Routine; // Good job, back to Routine until next 'Hit'
 			break;
 		}
@@ -187,10 +156,8 @@ void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult
 			break;  // On 'Sink' --> return to Routine_state until next 'Hit'
 		}
 	}
-	/* If opponent was the one to attack:
-	* We care only about self hits (own goals),
-	* But since we know the opponent is a smart player (won't hit himself),
-	* it's not relevant for this exercise.. */
+	/* If opponent was the one to attack: We care only about self hits (own goals),
+	* But since we know the opponent is a smart player (won't hit himself), it's not relevant for this exercise.. */
 }
 
 
@@ -245,50 +212,70 @@ void SmartPlayer::notifyOnAttackToLogger(int player, Coordinate move, AttackResu
 // Get a valid random attacking direction X/Y/Z
 void SmartPlayer::setRandomHuntingState()
 {
-	_logger.log("Randomizing next Hunting direction");
-	_attackingState = Routine; // Default
 	int rand_direction;
-	random_device rd; // initialise the random seed
-	mt19937 rng(rd()); // Mersenne-Twister random engine
-	uniform_int_distribution<int> uni(0, 2);
+	_attackingState = Routine; // Default
+	_logger.log("\nPlayer " + to_string(_playerNum) + " Randomizing next Hunting direction");
 	// Just in case player already failed attacking in all directions:
 	if (!_validDirections[0] && !_validDirections[1] && !_validDirections[2]) { return; }
 	while (true) // Iterate until getting a random attacking direction X/Y/Z that is valid (hasn't fail yet)
 	{
-		rand_direction = uni(rng); // rand_direction = 0, 1 or 2 (x, y or z) with "equal probability"
+		rand_direction = rand() % (3); // rand_direction = 0, 1 or 2 (x, y or z)
 		if (_validDirections[rand_direction])
 		{
 			_attackingState = _attackingDirections[rand_direction];
-			break; // Found a valid random attacking direction
+			return; // Found a valid random attacking direction
 		}
 	}
 }
 
+/* Compute and return the next smart attack according to the _attacking_state (of our DFA).
+* If Finished attacking all potential points, the Coordinate(-1,-1,-1) is returned. */
+Coordinate SmartPlayer::attack()
+{
+	switch (_attackingState)
+	{
+	case Routine:
+		return attackRoutine();
+
+	case Hunting_x_forwards:
+		return attack_x_forwards();
+
+	case Hunting_x_backwards:
+		return attack_x_backwards();
+
+	case Hunting_y_forwards:
+		return attack_y_forwards();
+
+	case Hunting_y_backwards:
+		return attack_y_backwards();
+
+	case Hunting_z_forwards:
+		return attack_z_forwards();
+
+	case Hunting_z_backwards:
+		return attack_z_backwards();
+	}
+	return attackRoutine();
+}
+
 Coordinate SmartPlayer::attackRoutine()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attackRoutine" << endl;
-	}
-	auto foundAttack = false;
+	updateDirections(true, true, true); // Mark all directions as valid for hunting in case of 'Hit'
 	while (!_potentialAttacks.empty()) // Still got more potential attacks
 	{
 		_attackPoint = _potentialAttacks.back();
 		_potentialAttacks.pop_back(); // Delete attack so we won't attack same spot twice 
 		if (_board.At(_attackPoint) == MARKED_CELL) // Make sure this cell is still marked for attack
 		{
-			foundAttack = true;
-			break;
+			return _attackPoint;
 		}
 	}
-	updateDirections(true, true, true); // Mark all directions as valid for hunting in case of 'Hit'
-	return foundAttack ? _attackPoint : Coordinate(INVALID_COORDINATE);
+	_logger.log("\n# Player Finished all his possible smart attacks...\n");
+	return Coordinate(INVALID_COORDINATE);
 }
 
 Coordinate SmartPlayer::attack_x_forwards()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attack_x_forwards" << endl;
-	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
 	if (col >= _board.cols() || _board.At(row, col + 1, depth) != MARKED_CELL) // Can't attack forwards
 	{
@@ -301,9 +288,6 @@ Coordinate SmartPlayer::attack_x_forwards()
 
 Coordinate SmartPlayer::attack_x_backwards()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attack_x_backwards" << endl;
-	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
 	if (col <= 1 || _board.At(row, col - 1, depth) != MARKED_CELL) // Can't attack backwards
 	{
@@ -317,9 +301,6 @@ Coordinate SmartPlayer::attack_x_backwards()
 
 Coordinate SmartPlayer::attack_y_forwards()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attack_y_forwards" << endl;
-	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
 	if (row >= _board.rows() || _board.At(row + 1, col, depth) != MARKED_CELL) // Can't attack forwards
 	{
@@ -332,9 +313,6 @@ Coordinate SmartPlayer::attack_y_forwards()
 
 Coordinate SmartPlayer::attack_y_backwards()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attack_y_backwards" << endl;
-	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
 	if (row <= 1 || _board.At(row - 1, col, depth) != MARKED_CELL) // Can't attack backwards
 	{
@@ -348,9 +326,6 @@ Coordinate SmartPlayer::attack_y_backwards()
 
 Coordinate SmartPlayer::attack_z_forwards()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attack_z_forwards" << endl;
-	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
 	if (depth >= _board.depth() || _board.At(row, col, depth + 1) != MARKED_CELL) // Can't attack forwards
 	{
@@ -363,9 +338,6 @@ Coordinate SmartPlayer::attack_z_forwards()
 
 Coordinate SmartPlayer::attack_z_backwards()
 {
-	if (print_mode) {
-		cout << "Player " << _playerNum << " is in attack_z_backwards" << endl;
-	}
 	auto row = _lastAttack.row, col = _lastAttack.col, depth = _lastAttack.depth;
 	if (depth <= 1 || _board.At(row, col, depth - 1) != MARKED_CELL) // Can't attack backwards
 	{
@@ -379,7 +351,6 @@ Coordinate SmartPlayer::attack_z_backwards()
 
 void SmartPlayer::getAllPotentialHits()
 {
-	auto engine = default_random_engine{};
 	Coordinate coordinate(INVALID_COORDINATE);
 	for (int i = 1; i < _board.rows() + 1; i++)
 	{
@@ -397,7 +368,10 @@ void SmartPlayer::getAllPotentialHits()
 		}
 	}
 	// Shuffle _potentialAttacks vector so we generate random attacks in Routine_state:
-	shuffle(begin(_potentialAttacks), end(_potentialAttacks), engine);
+	int seed = int(time(nullptr));
+	srand(seed);
+	random_shuffle(_potentialAttacks.begin(), _potentialAttacks.end());
+	_logger.log("Randomization seed is: " + to_string(seed)); // Log the seed to file so we can restore and debug this match
 }
 
 // Return true if the given coordinate and it's neighbors (down, up, left, right) are EMPTY_CELLs
@@ -421,93 +395,86 @@ void SmartPlayer::updateDirections(bool x, bool y, bool z)
 	_validDirections[2] = z;
 }
 
-void SmartPlayer::clearSurroundingsAfterSink(Coordinate sink)
-{
-	_logger.log("clearing Surroundings After Sink");
-	auto row = sink.row, col = sink.col, depth = sink.depth;
-	if (_board.At(row + 1, col, depth) == MARKED_CELL)
-		_board.At(row + 1, col, depth) = EMPTY_CELL;
-	if (_board.At(row - 1, col, depth) == MARKED_CELL)
-		_board.At(row - 1, col, depth) = EMPTY_CELL;
-	if (_board.At(row, col + 1, depth) == MARKED_CELL)
-		_board.At(row, col + 1, depth) = EMPTY_CELL;
-	if (_board.At(row, col - 1, depth) == MARKED_CELL)
-		_board.At(row, col - 1, depth) = EMPTY_CELL;
-	if (_board.At(row, col, depth + 1) == MARKED_CELL)
-		_board.At(row, col, depth + 1) = EMPTY_CELL;
-	if (_board.At(row, col, depth - 1) == MARKED_CELL)
-		_board.At(row, col, depth - 1) = EMPTY_CELL;
-	if (!_cleanedFirstHit)
-	{
-		// First 'Hit' was in Routine_state when the direction was unknown - now it's time to clean arround it
-		clearSurroundingsAfterHit(_firstHit);
-	}
-}
-
 /* Mark the Surrounding cells arround the 'Hit' Coordinate as EMPTY_CELLs
 * according to the _attackingState.
 * First 'Hit' was in Routine_state when the direction was unknown - now it's time to clean arround it: */
-void SmartPlayer::clearSurroundingsAfterHit(Coordinate hit)
+void SmartPlayer::clearSurroundings(Coordinate hit, AttackResult result)
 {
+	int r = 0, c = 0, d = 0; // Indicate directions to clean (rows, cols, depth)
+
+	// 1) Hunting Y direction: clear Surrounding cells in y and z directions:
+	if (_attackingState == Hunting_y_forwards || _attackingState == Hunting_y_backwards)
+	{
+		r = 0, c = 1, d = 1; // Y direction = Rows direction
+	}
+	// 2) Hunting X direction: clear Surrounding cells in y and z directions:
+	else if (_attackingState == Hunting_x_forwards || _attackingState == Hunting_x_backwards)
+	{
+		r = 1, c = 0, d = 1; // X direction = Cols direction
+	}
+	// 3) Hunting Z direction: clear Surrounding cells in x and y directions
+	else if (_attackingState == Hunting_z_forwards || _attackingState == Hunting_z_backwards)
+	{
+		r = 1, c = 1, d = 0; // Z direction = Depth direction
+	}
+
+	if (result == AttackResult::Hit) // clear Surrounding cells in the right directions according to r, c, d
+	{
+		clearCellsInBoard(hit, r, c, d);
+	}
+
+	else if (result == AttackResult::Sink) // Clear surrounding cells in all directions
+	{
+		clearCellsInBoard(hit, 1, 1, 1);
+	}
+
 	if (!_cleanedFirstHit)
 	{
 		_logger.log("First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:");
-	}
-	// 1) Hunting X direction: clear Surrounding cells in y and z directions:
-	if (_attackingState == Hunting_x_forwards || _attackingState == Hunting_x_backwards)
-	{
-		if (!_cleanedFirstHit)
-		{
-			clearSurroundingsAfterHit_X(_firstHit);
-			_cleanedFirstHit = true; // Mark cell as cleaned so we won't clean more than once..
-		}
-		clearSurroundingsAfterHit_X(hit);
-	}
-	// 2) Hunting Y direction: clear Surrounding cells in y and z directions:
-	else if (_attackingState == Hunting_y_forwards || _attackingState == Hunting_y_backwards)
-	{
-		if (!_cleanedFirstHit)
-		{
-			clearSurroundingsAfterHit_Y(_firstHit);
-			_cleanedFirstHit = true; // Mark cell as cleaned so we won't clean more than once..
-		}
-		clearSurroundingsAfterHit_Y(hit);
-	}
-	// 3) Hunting Z direction: clear Surrounding cells in y and z directions
-	else if (_attackingState == Hunting_z_forwards || _attackingState == Hunting_z_backwards)
-	{
-		if (!_cleanedFirstHit)
-		{
-			clearSurroundingsAfterHit_Z(_firstHit);
-			_cleanedFirstHit = true; // Mark cell as cleaned so we won't clean more than once..
-		}
-		clearSurroundingsAfterHit_Z(hit);
+		clearCellsInBoard(_firstHit, r, c, d);
+		_cleanedFirstHit = true; // Mark cell as cleaned so we won't clean more than once..
 	}
 }
 
-void SmartPlayer::clearSurroundingsAfterHit_X(Coordinate hit)
+void SmartPlayer::clearCellsInBoard(Coordinate hit, int r, int c, int d)
 {
-	_logger.log("Hunting X direction: clear Surrounding cells in y and z directions");
-	_board.At(hit.row + 1, hit.col, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row - 1, hit.col, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row, hit.col + 1, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row, hit.col - 1, hit.depth) = EMPTY_CELL;
+	if (r > 0 && _board.At(hit.row + r, hit.col, hit.depth) == MARKED_CELL)
+		_board.At(hit.row + r, hit.col, hit.depth) = EMPTY_CELL;
+	if (r > 0 && _board.At(hit.row - r, hit.col, hit.depth) == MARKED_CELL)
+		_board.At(hit.row - r, hit.col, hit.depth) = EMPTY_CELL;
+	if (c > 0 && _board.At(hit.row, hit.col + c, hit.depth) == MARKED_CELL)
+		_board.At(hit.row, hit.col + c, hit.depth) = EMPTY_CELL;
+	if (c > 0 && _board.At(hit.row, hit.col - c, hit.depth) == MARKED_CELL)
+		_board.At(hit.row, hit.col - c, hit.depth) = EMPTY_CELL;
+	if (d > 0 && _board.At(hit.row, hit.col, hit.depth + d) == MARKED_CELL)
+		_board.At(hit.row, hit.col, hit.depth + d) = EMPTY_CELL;
+	if (d > 0 && _board.At(hit.row, hit.col, hit.depth - d) == MARKED_CELL)
+		_board.At(hit.row, hit.col, hit.depth - d) = EMPTY_CELL;
+	logAfterCleaning(hit, r, c, d);
 }
 
-void SmartPlayer::clearSurroundingsAfterHit_Y(Coordinate hit)
+void SmartPlayer::logAfterCleaning(Coordinate hit, int r, int c, int d)
 {
-	_logger.log("Hunting Y direction: clear Surrounding cells in x and z directions");
-	_board.At(hit.row, hit.col + 1, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row, hit.col - 1, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row, hit.col, hit.depth + 1) = EMPTY_CELL;
-	_board.At(hit.row, hit.col, hit.depth - 1) = EMPTY_CELL;
-}
-
-void SmartPlayer::clearSurroundingsAfterHit_Z(Coordinate hit)
-{
-	_logger.log("Hunting Z direction: clear Surrounding cells in x and y directions");
-	_board.At(hit.row + 1, hit.col, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row - 1, hit.col, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row, hit.col + 1, hit.depth) = EMPTY_CELL;
-	_board.At(hit.row, hit.col - 1, hit.depth) = EMPTY_CELL;
+	ostringstream msg;
+	msg << "cleared Surrounding cells arround hit point: " << hit.row << "," << hit.col << "," << hit.depth;
+	if (r > 0 && r > 0 && r > 0)
+	{
+		msg << " After Sink!";
+		_logger.log(msg.str());
+		return;
+	}
+	msg << " In Hunting direction: " << r << "," << c << "," << d;
+	if (r == 0)
+	{
+		msg << " (Hunting Y axis)";
+	}
+	if (c == 0)
+	{
+		msg << " (Hunting X axis)";
+	}
+	if (d == 0)
+	{
+		msg << " (Hunting Z axis)";
+	}
+	_logger.log(msg.str());
 }
