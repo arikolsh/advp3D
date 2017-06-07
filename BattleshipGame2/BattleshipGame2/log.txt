@@ -1,0 +1,3 @@
+Program execution started...
+Wed Jun  7 14:31:16 2017	Test message	ERROR
+Wed Jun  7 14:31:16 2017	Test message2	ERROR

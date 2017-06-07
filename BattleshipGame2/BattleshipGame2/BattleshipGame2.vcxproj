@@ -26,6 +26,7 @@
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="IBattleshipGameAlgo.h" />
     <ClInclude Include="MatchManager.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +52,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MatchManager.cpp" />
     <ClCompile Include="Ship.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
