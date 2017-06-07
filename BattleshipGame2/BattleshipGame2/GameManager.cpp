@@ -11,7 +11,7 @@
 
 using namespace std;
 
-GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _threads(0)
+GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _threads(threads)
 {
 }
 
