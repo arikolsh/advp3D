@@ -10,6 +10,15 @@ vector<vector<string>> GameBoard::board() const
 	return _board;
 }
 
+GameBoard::GameBoard(int rows, int cols, int depth)
+{
+	_rows = rows;
+	_cols = cols;
+	_depth = depth;
+	_board = BoardUtils::getNewEmptyBoard(depth + PADDING, rows + PADDING, cols + PADDING);
+
+}
+
 // expect getting a board with padding
 GameBoard::GameBoard(vector<vector<string>>& board, int rows, int cols, int depth)
 {

@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 	GameUtils::getArgs(argc, argv, threads, searchDir);
 	///check logger//
 	Logger* logger = Logger::getInstance();
-	//logger_ptr->init(path, "DEBUG");
+	logger->init("arik.txt", "DEBUG");
 	//logger_ptr->log("Test message", "ERROR");
 	//logger_ptr->log("Test message2", "ERROR");
 	//logger_ptr->destroy();
@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 	{
 		return EXIT_FAILURE;
 	}
+	gameManager.runGame();
 	return EXIT_SUCCESS;
 
 }

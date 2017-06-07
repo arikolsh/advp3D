@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 
+mutex _mutex;
 
 #define START "Program execution started..."
 #define TAB '\t'
@@ -33,6 +34,7 @@ void Logger::init(const string path, const string mode)
 }
 void Logger::log(const string messgae, const string severity)
 {
+	unique_lock<mutex> lock(_mutex);
 	ostringstream b;
 	char currTime[SIZE];
 	time_t now = time(0);
