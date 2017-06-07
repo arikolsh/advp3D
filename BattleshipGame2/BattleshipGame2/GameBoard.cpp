@@ -1,16 +1,31 @@
 #include "GameBoard.h"
 #include "IBattleshipGameAlgo.h"
 #include "BoardUtils.h"
+#include <iostream>
 #define PADDING 2
 #define EMPTY_CELL '-'
+
+vector<vector<string>> GameBoard::board() const
+{
+	return _board;
+}
+
 // expect getting a board with padding
-GameBoard::GameBoard(vector<vector<string>> board, int rows, int cols, int depth)
+GameBoard::GameBoard(vector<vector<string>>& board, int rows, int cols, int depth)
 {
 	_depth = depth;
 	_rows = rows;
 	_cols = cols;
 	// get a copy of given board 
-	_board = BoardUtils::getBoardCopy(board);
+	_board = board;
+}
+
+GameBoard::GameBoard(const GameBoard& that)
+{
+	_depth = that.depth();
+	_rows = that.rows();
+	_cols = that.cols();
+	_board = that.board();
 }
 
 char GameBoard::charAt(Coordinate c) const
