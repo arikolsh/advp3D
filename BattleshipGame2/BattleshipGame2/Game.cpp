@@ -18,6 +18,11 @@ int main(int argc, char* argv[])
 	//logger_ptr->destroy();
 	string path = "";
 	GameManager gameManager(path, 2);
-	gameManager.init();
+	bool isStarted =gameManager.init();
+	if(!isStarted)
+	{
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 
 }
