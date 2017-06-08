@@ -25,4 +25,5 @@ private:
 	vector<GetAlgoType> _playersGet;
 	// additional result container for carry player in case of odd num of players
 	void runMatch(pair<int, int> playersPair, int boardNum);
+	void printResultsForPlayers();
 };
