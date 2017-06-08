@@ -34,6 +34,7 @@ void GameUtils::getArgs(int argc, char** argv, int& threads, string& searchDir)
 	vector<string> argsVector(argv, argv + argc);
 	int i = 1;
 	threads = 4;
+	searchDir = "";
 	while (i < argc)
 	{
 		if (argsVector[i] == "-threads")
