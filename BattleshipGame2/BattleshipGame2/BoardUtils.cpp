@@ -10,7 +10,7 @@
 #define EMPTY_CELL ' '
 #define VISITED_CELL 'v'
 #define PADDING 2
-#define DIM_DELIMITER 'X' //according to this token we split the first line in every board file
+#define DIM_DELIMITER 'x' //according to this token we split the first line in every board file
 #define RIGHT 0
 #define DOWN 1
 #define DEEP 2
