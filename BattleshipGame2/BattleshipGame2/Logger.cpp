@@ -17,7 +17,7 @@ ofstream Logger::_log;
 
 Logger* Logger::getInstance() {
 	if (!_instance) {
-		_instance = new Logger(); //TODO: change to unique ptr
+		_instance = new Logger();
 	}
 	return _instance;
 }

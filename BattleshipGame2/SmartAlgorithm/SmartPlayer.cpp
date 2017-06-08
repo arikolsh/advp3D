@@ -45,7 +45,7 @@ void SmartPlayer::setBoard(const BoardData& board)
 void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult result)
 {
 	// Log important info from notifyOnAttackResult to SmartLogger.txt:
-	notifyOnAttackToLogger(player, move, result, true);
+	notifyOnAttackToLogger(player, move, result, false);
 	
 	// Unmark the attacked cell (to avoid attacking it again):
 	if (_board.charAt(move) == MARKED_CELL) { _board.At(move) = EMPTY_CELL; }
@@ -457,7 +457,7 @@ void SmartPlayer::logAfterCleaning(Coordinate hit, int r, int c, int d)
 {
 	ostringstream msg;
 	msg << "cleared Surrounding cells arround hit point: " << hit.row << "," << hit.col << "," << hit.depth;
-	if (r > 0 && r > 0 && r > 0)
+	if (r > 0 && c > 0 && d > 0)
 	{
 		msg << " After Sink!";
 		_logger.log(msg.str());

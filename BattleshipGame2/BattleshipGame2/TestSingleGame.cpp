@@ -3,7 +3,6 @@
 #include <iostream>
 #include <windows.h>
 #include "IBattleshipGameAlgo.h"
-#include <sstream>
 #include "GameBoard.h"
 #include "BoardUtils.h"
 #include "MatchManager.h"
@@ -17,7 +16,7 @@
 #define DEEP 2
 #define MAX_NUM_SHIPS 5 //max number of ships per player
 
-/*
+///*
 
 using namespace std;
 
@@ -142,4 +141,4 @@ void getArgs(int argc, char** argv, int& threads, string& searchDir)
 	}
 }
 
-*/
+//*/
