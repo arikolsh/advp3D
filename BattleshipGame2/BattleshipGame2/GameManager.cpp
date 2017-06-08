@@ -104,22 +104,16 @@ void GameManager::runGame()
 
 void GameManager::printResultsForPlayers()
 {
-	cout << left << setfill(' ')
-		<< setw(5) << "#"
-		<< setw(_maxNameLength + 5) << "Player Name"
-		<< setw(20) << "Total Wins"
-		<< setw(20) << "Total Losses"
-		<< setw(10) << "%"
-		<< setw(15) << "Pts For"
-		<< setw(15) << "Pts Against" << endl;
-
-	cout << setfill('-') << setw(115) << "-" << endl;
-	cout << setfill(' ');
+	ostringstream stream;
+	stream << left << setfill(' ') << setw(5) << "#" << setw(_maxNameLength + 5) << "Player Name"
+		<< setw(20) << "Total Wins"	<< setw(20) << "Total Losses" << setw(10) << "%" << setw(15) 
+		<< "Pts For" << setw(15) << "Pts Against" << endl;
+	stream << setfill('-') << setw(115) << "-" << endl << setfill(' ');
 	vector<PlayerResult> sortedResults(_playerResults.begin(), _playerResults.end());
 	sort(sortedResults.begin(), sortedResults.end(), PlayerResult::cmd);
 	for (int i = 0; i < sortedResults.size(); i++)
 	{
-		cout << setw(5) << to_string(i + 1).append(".")
+		stream << setw(5) << to_string(i + 1).append(".")
 			<< setw(_maxNameLength + 5) << sortedResults[i]._name
 			<< setw(20) << sortedResults[i]._totalNumWins
 			<< setw(20) << (sortedResults[i]._totalNumLosses)
@@ -127,7 +121,7 @@ void GameManager::printResultsForPlayers()
 			<< setw(15) << sortedResults[i]._totalNumPointsFor
 			<< setw(15) << sortedResults[i]._totalNumPointsAgainst << endl;
 	}
-	cout << endl;
+	cout << stream.str() << endl;
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
