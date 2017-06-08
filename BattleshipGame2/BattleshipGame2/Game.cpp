@@ -4,7 +4,7 @@
 #include "GameUtils.h"
 
 using namespace std;
-
+///*
 int main(int argc, char* argv[])
 {
 	int threads;
@@ -27,3 +27,4 @@ int main(int argc, char* argv[])
 	return EXIT_SUCCESS;
 
 }
+//*/

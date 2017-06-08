@@ -23,25 +23,34 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
-	ostringstream  s;
-	s << "I AM IN THREAD !!!" << "players: " << playersPair.first << "," << playersPair.second << endl;
-	std::cout << s.str();
+	//unique_lock<mutex> lock(matchMutex);
+	cout << "\n################### Next Match #######################################\n";
+	cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;//"   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
+	//Logger* logger = Logger::getInstance();
+	//logger->log("hi how are you", "ERROR");
 
-	Logger* logger = Logger::getInstance();
-	logger->log("hi how are you", "ERROR");
+	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
+	
+	// Set boards for both players:
 	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
-	// copy players
-	unique_ptr<IBattleshipGameAlgo> player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());;
-	unique_ptr<IBattleshipGameAlgo> player2 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.second]());;
+	
+	// Set both players:
+	auto player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());
+	player1->setPlayer(playersPair.first);
 	player1->setBoard(board1);
+	auto player2 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.second]());
+	player2->setPlayer(playersPair.second);
 	player2->setBoard(board2);
-	///from here up everything is good
+
+	// Run this match:
 	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
-	//matchManager.runGame(players, result1, result2); //todo: uncomment
-	//todo: run game need to get result by reference and update them
+	int winner = matchManager.runGame(players);
+	
+	// Update PlayerResult for each player:
+	matchManager.gameOver(winner, playersPair, result1, result2);
 }
 
 void GameManager::runGame()

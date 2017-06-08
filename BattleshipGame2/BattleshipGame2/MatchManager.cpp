@@ -3,6 +3,7 @@
 #include "GameBoard.h"
 #include "Ship.h"
 #include <iostream>
+#include <mutex>
 #define NUM_SHIP_TYPES 4
 #define NUM_PLAYERS 2
 #define A_NUM 0
@@ -20,6 +21,8 @@
 #define EMPTY_CELL '-'
 #define VISITED 'x'
 
+bool debugMode = true;
+
 MatchManager::MatchManager(GameBoard &gameBoard)
 {
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
@@ -28,6 +31,11 @@ MatchManager::MatchManager(GameBoard &gameBoard)
 	_gameBoard = GameBoard(gameBoard); // Copy the given board
 	fillMapWithShips();
 	_logFile.open("MatchManagerLog.txt");
+}
+
+MatchManager::~MatchManager()
+{
+	_logFile.close();
 }
 
 void MatchManager::fillMapWithShips()
@@ -208,13 +216,53 @@ void MatchManager::gameOver(int winner)
 		cout << "Player " << (winner == A_NUM ? "A" : "B") << " won" << endl;
 		_logFile << "\nPlayer " << (winner == A_NUM ? "A" : "B") << " won";
 	}
-	cout << "Points:" << endl;
-	cout << "Player A: " << _playerScores.first << endl;
-	cout << "Player B: " << _playerScores.second << endl;
+	cout << "Points:" << endl << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
 	_logFile << "\nPoints:\n" << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
 	_logFile << "\nShips Map At The End:" << endl;
 	logShipsMap();
-	_logFile.close();
+}
+
+void MatchManager::gameOver(int winner, pair<int,int> playersPair, PlayerResult& resA, PlayerResult& resB) const
+{
+	// Updates results for players:
+	resA._totalNumPointsFor += _playerScores.first;
+	resA._totalNumPointsAgainst += _playerScores.second;
+	resB._totalNumPointsFor += _playerScores.second;
+	resB._totalNumPointsAgainst += _playerScores.first;
+	if (winner == A_NUM)
+	{
+		resA._totalNumWins += 1;
+		resB._totalNumLosses += 1;
+	}
+	else if (winner == B_NUM)
+	{
+		resA._totalNumLosses += 1;
+		resB._totalNumWins += 1;
+	}
+	//else: Winner == -1 which means no winner..
+
+	if (debugMode)
+	{
+		// Print out match results:
+		if (winner != -1) //We have a winner
+		{
+			cout << "Player " << (winner == A_NUM ? playersPair.first : playersPair.second) << " won" << endl;
+		}
+		cout << "Points:" << endl << "Player " << playersPair.first << ": " << _playerScores.first << endl;
+		cout << "Player " << playersPair.second << ": " << _playerScores.second << endl;
+		// Player A total results:
+		cout << "\nPlayer " << playersPair.first <<" results so far:" << endl;
+		cout << "Number of victories: " << resA._totalNumWins << endl;
+		cout << "Total score for player (so far): " << resA._totalNumPointsFor << endl;
+		cout << "Number of losses: " << resA._totalNumLosses << endl;
+		cout << "Total score against (so far): " << resA._totalNumPointsAgainst << endl;
+		// Player B total results:
+		cout << "\nPlayer " << playersPair.second << " results so far:" << endl;
+		cout << "Number of victories: " << resB._totalNumWins << endl;
+		cout << "Total score for player (so far): " << resB._totalNumPointsFor << endl;
+		cout << "Number of losses: " << resB._totalNumLosses << endl;
+		cout << "Total score against (so far): " << resB._totalNumPointsAgainst << endl;
+	}
 }
 
 int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
