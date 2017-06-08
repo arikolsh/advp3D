@@ -222,9 +222,8 @@ void MatchManager::gameOver(int winner)
 	logShipsMap();
 }
 
-void MatchManager::gameOver(int winner, PlayerResult& resA, PlayerResult& resB, mutex &Mutex)
+void MatchManager::gameOver(int winner, pair<int,int> playersPair, PlayerResult& resA, PlayerResult& resB) const
 {
-	unique_lock<mutex> lock(Mutex);
 	// Updates results for players:
 	resA._totalNumPointsFor += _playerScores.first;
 	resA._totalNumPointsAgainst += _playerScores.second;
@@ -245,15 +244,20 @@ void MatchManager::gameOver(int winner, PlayerResult& resA, PlayerResult& resB, 
 	if (debugMode)
 	{
 		// Print out match results:
-		gameOver(winner);
+		if (winner != -1) //We have a winner
+		{
+			cout << "Player " << (winner == A_NUM ? playersPair.first : playersPair.second) << " won" << endl;
+		}
+		cout << "Points:" << endl << "Player " << playersPair.first << ": " << _playerScores.first << endl;
+		cout << "Player " << playersPair.second << ": " << _playerScores.second << endl;
 		// Player A total results:
-		cout << "\nPlayer A results so far:" << endl;
+		cout << "\nPlayer " << playersPair.first <<" results so far:" << endl;
 		cout << "Number of victories: " << resA._totalNumWins << endl;
 		cout << "Total score for player (so far): " << resA._totalNumPointsFor << endl;
 		cout << "Number of losses: " << resA._totalNumLosses << endl;
 		cout << "Total score against (so far): " << resA._totalNumPointsAgainst << endl;
 		// Player B total results:
-		cout << "\nPlayer B results so far:" << endl;
+		cout << "\nPlayer " << playersPair.second << " results so far:" << endl;
 		cout << "Number of victories: " << resB._totalNumWins << endl;
 		cout << "Total score for player (so far): " << resB._totalNumPointsFor << endl;
 		cout << "Number of losses: " << resB._totalNumLosses << endl;
