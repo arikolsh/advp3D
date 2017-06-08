@@ -5,7 +5,7 @@
 using namespace std;
 
 #define INVALID_COORDINATE  { -1 , -1, -1 }
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 #define MARKED_CELL 'x'
 #define A_NUM 0
 #define B_NUM 1

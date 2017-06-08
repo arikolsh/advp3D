@@ -4,7 +4,7 @@
 #include "GameUtils.h"
 
 using namespace std;
-///*
+
 int main(int argc, char* argv[])
 {
 	int threads;
@@ -12,19 +12,17 @@ int main(int argc, char* argv[])
 	GameUtils::getArgs(argc, argv, threads, searchDir);
 	///check logger//
 	Logger* logger = Logger::getInstance();
-	logger->init("arik.txt", "DEBUG");
-	//logger_ptr->log("Test message", "ERROR");
-	//logger_ptr->log("Test message2", "ERROR");
-	//logger_ptr->destroy();
+	logger->init("game.log", "DEBUG");
 	string path = "";
-	GameManager gameManager(path, 2);
+	GameManager gameManager(path, 10);
 	bool isStarted =gameManager.init();
 	if(!isStarted)
 	{
+		logger->destroy();
 		return EXIT_FAILURE;
 	}
 	gameManager.runGame();
+	logger->destroy();
 	return EXIT_SUCCESS;
 
 }
-//*/

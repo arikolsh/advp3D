@@ -5,6 +5,7 @@
 #include <iostream>
 #include <mutex>
 #include "GameManager.h"
+#include <sstream>
 #define NUM_SHIP_TYPES 4
 #define NUM_PLAYERS 2
 #define A_NUM 0
@@ -15,11 +16,11 @@
 #define HIT_COLOR 5 //magneta
 #define HIT_SYMBOL '*'
 #define EMPTY_CELL_COLOR 8 //gray
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 #define NUM_SHIPS 5
 #define SUCCESS 0
 #define FAILURE -1
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 #define VISITED 'x'
 
 bool debugMode = false;
@@ -31,17 +32,13 @@ MatchManager::MatchManager(GameBoard &gameBoard)
 	_currentPlayer = A_NUM; //player A starts the game
 	_gameBoard = GameBoard(gameBoard); // Copy the given board
 	fillMapWithShips();
-	_logFile.open("MatchManagerLog.txt");
+	_logger = Logger::getInstance();
 }
 
-MatchManager::~MatchManager()
-{
-	_logFile.close();
-}
+MatchManager::~MatchManager() {}
 
 void MatchManager::fillMapWithShips()
 {
-	Coordinate coordinate(INVALID_COORDINATE);
 	char cell;
 	for (int i = 1; i < _gameBoard.rows() + 1; i++)
 	{
@@ -49,7 +46,7 @@ void MatchManager::fillMapWithShips()
 		{
 			for (int k = 1; k < _gameBoard.depth() + 1; k++)
 			{
-				coordinate = Coordinate(i, j, k);
+				Coordinate coordinate = Coordinate(i, j, k);
 				cell = _gameBoard.charAt(coordinate);
 				if (!Ship::isShip(cell)) { continue; } // Skip non-ship cells
 				_gameBoard.setAt(coordinate) = VISITED; // Mark coordinate as visited
@@ -125,10 +122,10 @@ void MatchManager::logShipsMap()
 	{
 		auto coordinate = iter->first;
 		auto ship = iter->second.first;
-		_logFile << "Map entry " << count << " is:";
-		_logFile << "(" << coordinate[0] << "," << coordinate[1] << "," << coordinate[2] << ")";
-		_logFile << " shipType: " << ship->getType();
-		_logFile << " shipLife: " << ship->getLife() << endl;
+		cout << "Map entry " << count << " is:";
+		cout << "(" << coordinate[0] << "," << coordinate[1] << "," << coordinate[2] << ")";
+		cout << " shipType: " << ship->getType();
+		cout << " shipLife: " << ship->getLife() << endl;
 		count++;
 	}
 }
@@ -141,11 +138,9 @@ void MatchManager::logShipsMap()
 * Else, return Hit. */
 AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attack)
 {
-	_logFile << "\nplayer " << 1 - attackedPlayerNum << " is attacking " << attack.row << "," << attack.col << "," << attack.depth << "\nResult: ";
 	auto found = _shipsMap.find({ attack.row, attack.col, attack.depth });
 	if (found == _shipsMap.end()) //attack point not in map --> Miss
 	{
-		_logFile << "Miss" << endl;
 		_currentPlayer = attackedPlayerNum;
 		return AttackResult::Miss;
 	}
@@ -158,20 +153,16 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 		_currentPlayer = attackedPlayerNum;
 		if (ship->getLife() == 0) //ship already sank.. Miss
 		{
-			_logFile << "Miss (hit a sunken ship)" << endl;
 			return AttackResult::Miss;
 		}
-		_logFile << "Hit (ship was already hit before but still has'nt sunk..)" << endl;
 		return AttackResult::Hit; //you don't get another turn if cell was already hit
 	}
 
 	ship->hit(); //Hit the ship (Take one off the ship life)
 	found->second.second = true; //Mark cell as a 'Hit'
-	_logFile << "H I T ship type: " << ship->getType() << endl;
 	int shipType = ship->getType();
 	if (isOwnGoal(attackedPlayerNum, shipType))
 	{
-		_logFile << "own goal! player " << 1 - attackedPlayerNum << " hit his own ship" << endl;
 		//in case of own goal pass turn to opponent
 		_currentPlayer = attackedPlayerNum;
 	}
@@ -198,7 +189,6 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 		{
 			_playerScores.second += ship->getSinkPoints();
 		}
-		_logFile << "S i n k !    S c o r e:    " << ship->getSinkPoints() << endl;
 		return AttackResult::Sink;
 	}
 	return AttackResult::Hit; //Hit
@@ -215,15 +205,12 @@ void MatchManager::gameOver(int winner)
 	if (winner != -1) //We have a winner
 	{
 		cout << "Player " << (winner == A_NUM ? "A" : "B") << " won" << endl;
-		_logFile << "\nPlayer " << (winner == A_NUM ? "A" : "B") << " won";
 	}
 	cout << "Points:" << endl << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
-	_logFile << "\nPoints:\n" << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
-	_logFile << "\nShips Map At The End:" << endl;
-	logShipsMap();
+	//logShipsMap();
 }
 
-void MatchManager::gameOver(int winner, pair<int,int> playersPair, PlayerResult& resA, PlayerResult& resB) const
+void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const
 {
 	// Updates results for players:
 	resA._totalNumPointsFor += _playerScores.first;
@@ -242,28 +229,31 @@ void MatchManager::gameOver(int winner, pair<int,int> playersPair, PlayerResult&
 	}
 	//else: Winner == -1 which means no winner..
 
-	if (debugMode)
+	// Debug: log all info:
+	ostringstream stream;
+	stream << "\n#### Current Match ####\n";
+	std::thread::id this_id = std::this_thread::get_id();
+	stream << "Running in thread id: " << this_id << endl;
+	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;
+	if (winner != -1) //We have a winner
 	{
-		// Print out match results:
-		if (winner != -1) //We have a winner
-		{
-			cout << "Player " << (winner == A_NUM ? playersPair.first : playersPair.second) << " won" << endl;
-		}
-		cout << "Points:" << endl << "Player " << playersPair.first << ": " << _playerScores.first << endl;
-		cout << "Player " << playersPair.second << ": " << _playerScores.second << endl;
-		// Player A total results:
-		cout << "\nPlayer " << playersPair.first <<" results so far:" << endl;
-		cout << "Number of victories: " << resA._totalNumWins << endl;
-		cout << "Total score for player (so far): " << resA._totalNumPointsFor << endl;
-		cout << "Number of losses: " << resA._totalNumLosses << endl;
-		cout << "Total score against (so far): " << resA._totalNumPointsAgainst << endl;
-		// Player B total results:
-		cout << "\nPlayer " << playersPair.second << " results so far:" << endl;
-		cout << "Number of victories: " << resB._totalNumWins << endl;
-		cout << "Total score for player (so far): " << resB._totalNumPointsFor << endl;
-		cout << "Number of losses: " << resB._totalNumLosses << endl;
-		cout << "Total score against (so far): " << resB._totalNumPointsAgainst << endl;
+		stream << "Player " << (winner == A_NUM ? playersPair.first : playersPair.second) << " won" << endl;
 	}
+	stream << "Points:" << endl << "Player " << playersPair.first << ": " << _playerScores.first << endl;
+	stream << "Player " << playersPair.second << ": " << _playerScores.second << endl;
+	// Player A total results:
+	stream << "\nPlayer " << playersPair.first << " results so far:" << endl;
+	stream << "Number of victories: " << resA._totalNumWins << endl;
+	stream << "Total score for player (so far): " << resA._totalNumPointsFor << endl;
+	stream << "Number of losses: " << resA._totalNumLosses << endl;
+	stream << "Total score against (so far): " << resA._totalNumPointsAgainst << endl;
+	// Player B total results:
+	stream << "\nPlayer " << playersPair.second << " results so far:" << endl;
+	stream << "Number of victories: " << resB._totalNumWins << endl;
+	stream << "Total score for player (so far): " << resB._totalNumPointsFor << endl;
+	stream << "Number of losses: " << resB._totalNumLosses << endl;
+	stream << "Total score against (so far): " << resB._totalNumPointsAgainst << endl;
+	_logger->log(stream.str(), "Debug");
 }
 
 int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
@@ -274,8 +264,7 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 	Coordinate attackPoint(INVALID_COORDINATE);
 	AttackResult attackResult;
 	int attacker;
-	_logFile << "\nShips Map At The Start:" << endl;
-	logShipsMap();
+	//logShipsMap();
 	while (true)
 	{
 		attacker = _currentPlayer;
@@ -315,7 +304,7 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
 void MatchManager::buildPlayerBoards(const GameBoard board, GameBoard& targetBoard1, GameBoard& targetBoard2) const
-{ //todo: check
+{
 	int rows = board.rows();
 	int cols = board.cols();
 	int depth = board.depth();

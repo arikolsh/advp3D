@@ -7,7 +7,7 @@
 #include "BoardUtils.h"
 #include "MatchManager.h"
 #define MIN(a, b) ((a < b) ? (a) : (b))
-#define EMPTY_CELL '-' //TODO: eventually should be ' ' (space)
+#define EMPTY_CELL ' ' 
 #define VISITED_CELL 'v'
 #define PADDING 2
 #define DIM_DELIMITER 'X' //according to this token we split the first line in every board file

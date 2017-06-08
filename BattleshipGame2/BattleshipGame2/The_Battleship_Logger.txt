@@ -1,0 +1,239 @@
+Program execution started...
+
+#### Current Match ####
+Running in thread id: 13328
+Running match: player 3 against player 2
+Player 3 won
+Points:
+Player 3: 24
+Player 2: 21
+
+Player 3 results so far:
+Number of victories: 1
+Total score for player (so far): 24
+Number of losses: 0
+Total score against (so far): 21
+
+Player 2 results so far:
+Number of victories: 0
+Total score for player (so far): 21
+Number of losses: 1
+Total score against (so far): 24
+
+
+#### Current Match ####
+Running in thread id: 7248
+Running match: player 1 against player 0
+Player 1 won
+Points:
+Player 1: 24
+Player 0: 13
+
+Player 1 results so far:
+Number of victories: 1
+Total score for player (so far): 24
+Number of losses: 0
+Total score against (so far): 13
+
+Player 0 results so far:
+Number of victories: 0
+Total score for player (so far): 13
+Number of losses: 1
+Total score against (so far): 24
+
+
+!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#
+Summary of player results after a full round:
+
+Player SmartAlgorithm_A results so far:
+Number of victories: 0
+Total score for player (so far): 13
+Number of losses: 1
+Total score against (so far): 24
+
+Player SmartAlgorithm_B results so far:
+Number of victories: 1
+Total score for player (so far): 24
+Number of losses: 0
+Total score against (so far): 13
+
+Player SmartAlgorithm_C results so far:
+Number of victories: 0
+Total score for player (so far): 21
+Number of losses: 1
+Total score against (so far): 24
+
+Player SmartAlgorithm_E results so far:
+Number of victories: 1
+Total score for player (so far): 24
+Number of losses: 0
+Total score against (so far): 21
+
+
+#### Current Match ####
+Running in thread id: 15004
+Running match: player 0 against player 2
+Player 2 won
+Points:
+Player 0: 21
+Player 2: 24
+
+Player 0 results so far:
+Number of victories: 0
+Total score for player (so far): 34
+Number of losses: 2
+Total score against (so far): 48
+
+Player 2 results so far:
+Number of victories: 1
+Total score for player (so far): 45
+Number of losses: 1
+Total score against (so far): 45
+
+
+#### Current Match ####
+Running in thread id: 32
+Running match: player 3 against player 1
+Player 3 won
+Points:
+Player 3: 24
+Player 1: 16
+
+Player 3 results so far:
+Number of victories: 2
+Total score for player (so far): 48
+Number of losses: 0
+Total score against (so far): 37
+
+Player 1 results so far:
+Number of victories: 1
+Total score for player (so far): 40
+Number of losses: 1
+Total score against (so far): 37
+
+
+!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#
+Summary of player results after a full round:
+
+Player SmartAlgorithm_A results so far:
+Number of victories: 0
+Total score for player (so far): 34
+Number of losses: 2
+Total score against (so far): 48
+
+Player SmartAlgorithm_B results so far:
+Number of victories: 1
+Total score for player (so far): 40
+Number of losses: 1
+Total score against (so far): 37
+
+Player SmartAlgorithm_C results so far:
+Number of victories: 1
+Total score for player (so far): 45
+Number of losses: 1
+Total score against (so far): 45
+
+Player SmartAlgorithm_E results so far:
+Number of victories: 2
+Total score for player (so far): 48
+Number of losses: 0
+Total score against (so far): 37
+
+
+#### Current Match ####
+Running in thread id: 5708
+Running match: player 2 against player 1
+Player 2 won
+Points:
+Player 2: 24
+Player 1: 16
+
+Player 2 results so far:
+Number of victories: 2
+Total score for player (so far): 69
+Number of losses: 1
+Total score against (so far): 61
+
+Player 1 results so far:
+Number of victories: 1
+Total score for player (so far): 56
+Number of losses: 2
+Total score against (so far): 61
+
+
+#### Current Match ####
+Running in thread id: 16796
+Running match: player 3 against player 0
+Player 3 won
+Points:
+Player 3: 24
+Player 0: 16
+
+Player 3 results so far:
+Number of victories: 3
+Total score for player (so far): 72
+Number of losses: 0
+Total score against (so far): 53
+
+Player 0 results so far:
+Number of victories: 0
+Total score for player (so far): 50
+Number of losses: 3
+Total score against (so far): 72
+
+
+!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#
+Summary of player results after a full round:
+
+Player SmartAlgorithm_A results so far:
+Number of victories: 0
+Total score for player (so far): 50
+Number of losses: 3
+Total score against (so far): 72
+
+Player SmartAlgorithm_B results so far:
+Number of victories: 1
+Total score for player (so far): 56
+Number of losses: 2
+Total score against (so far): 61
+
+Player SmartAlgorithm_C results so far:
+Number of victories: 2
+Total score for player (so far): 69
+Number of losses: 1
+Total score against (so far): 61
+
+Player SmartAlgorithm_E results so far:
+Number of victories: 3
+Total score for player (so far): 72
+Number of losses: 0
+Total score against (so far): 53
+
+
+!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#
+Summary of player results after a full round:
+
+Player SmartAlgorithm_A results so far:
+Number of victories: 0
+Total score for player (so far): 50
+Number of losses: 3
+Total score against (so far): 72
+
+Player SmartAlgorithm_B results so far:
+Number of victories: 1
+Total score for player (so far): 56
+Number of losses: 2
+Total score against (so far): 61
+
+Player SmartAlgorithm_C results so far:
+Number of victories: 2
+Total score for player (so far): 69
+Number of losses: 1
+Total score against (so far): 61
+
+Player SmartAlgorithm_E results so far:
+Number of victories: 3
+Total score for player (so far): 72
+Number of losses: 0
+Total score against (so far): 53
+

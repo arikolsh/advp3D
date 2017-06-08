@@ -1,6 +1,5 @@
 #pragma once
 #include <ostream>
-#include <iostream>
 
 using namespace std;
 
@@ -15,5 +14,5 @@ public:
 	int _totalNumLosses;
 	int _totalNumWins;
 	string _name;
-	void getReport() const; 
+	string getReport() const;
 };

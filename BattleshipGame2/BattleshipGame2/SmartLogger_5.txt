@@ -1,6 +1,6 @@
 Starting logger...
 Randomization seed is: 1496938052
-SmartPlayer number 3 board: row-col cut for depth 1
+SmartPlayer number 5 board: row-col cut for depth 1
 xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx
@@ -12,7 +12,7 @@ xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx
 
-SmartPlayer number 3 board: row-col cut for depth 2
+SmartPlayer number 5 board: row-col cut for depth 2
 xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx
@@ -24,7 +24,7 @@ xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx
 
-SmartPlayer number 3 board: row-col cut for depth 3
+SmartPlayer number 5 board: row-col cut for depth 3
 xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx
@@ -36,7 +36,7 @@ xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx
 
-SmartPlayer number 3 board: row-col cut for depth 4
+SmartPlayer number 5 board: row-col cut for depth 4
 xxxxxxxxxx
 xxxxxxxxxx
 xxxxxxxxxx

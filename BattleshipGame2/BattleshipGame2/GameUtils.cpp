@@ -1,4 +1,3 @@
-#include <fstream>
 #include <iostream>
 #include "GameUtils.h"
 #include <string>
@@ -34,7 +33,7 @@ void GameUtils::getArgs(int argc, char** argv, int& threads, string& searchDir)
 {
 	vector<string> argsVector(argv, argv + argc);
 	int i = 1;
-	threads = 4; //todo: put in properties file
+	threads = 4;
 	while (i < argc)
 	{
 		if (argsVector[i] == "-threads")
@@ -107,6 +106,18 @@ int GameUtils::execCmd(char const * cmd, string & shellRes)
 	/* Close pipe and get shelexit code */
 	exitCode = _pclose(pPipe); // returns -1 in case of a _popen failure otherwise returns the shell exit code
 	return exitCode;
+}
+
+// python zip equivalent
+vector<pair<int, int>> GameUtils::zip(vector<int> arr1, vector<int> arr2)
+{
+	int len = arr1.size() <= arr2.size() ? arr1.size() : arr2.size();
+	vector<pair<int, int>> ret;
+	for (int i = 0; i < len; i++)
+	{
+		ret.push_back(make_pair(arr1[i], arr2[i]));
+	}
+	return ret;
 }
 
 int GameUtils::fetchInputFiles(vector<string> & boards, vector<string> & dlls, vector<string> & messages, const string path)
