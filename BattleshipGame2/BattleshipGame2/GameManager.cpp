@@ -109,23 +109,27 @@ void GameManager::printResultsForPlayers()
 {
 	cout << left << setfill(' ')
 		<< setw(5) << "#"
-		<< setw(15) << "Player Name"
-		<< setw(10) << "Total Wins"
-		<< setw(10) << "Total Losses"
-		<< setw(8) << "%"
-		<< setw(10) << "Pts For"
-		<< setw(10) << "Pts Against" << '\n';
+		<< setw(30) << "Player Name"
+		<< setw(20) << "Total Wins"
+		<< setw(20) << "Total Losses"
+		<< setw(10) << "%"
+		<< setw(15) << "Pts For"
+		<< setw(15) << "Pts Against" << endl;
 
+	cout << setfill('-') << setw(115) << "-" << endl;
+	cout << setfill(' ');
 	for (int i = 0; i < _playerResults.size(); i++)
 	{
 		cout << setw(5) << to_string(i + 1).append(".")
-			<< setw(15) << _playerResults[i]._name
-			<< setw(10) << _playerResults[i]._totalNumWins
-			<< setw(10) << (_playerResults[i]._totalNumLosses)
-			<< setw(8) << setprecision(2) << fixed << _playerResults[i].getWinPercentage()
-			<< setw(10) << _playerResults[i]._totalNumPointsFor
-			<< setw(10) << _playerResults[i]._totalNumPointsAgainst << '\n';
+			<< setw(30) << _playerResults[i]._name
+			<< setw(20) << _playerResults[i]._totalNumWins
+			<< setw(20) << (_playerResults[i]._totalNumLosses)
+			<< setw(10) << setprecision(2) << fixed << _playerResults[i].getWinPercentage()
+			<< setw(15) << _playerResults[i]._totalNumPointsFor
+			<< setw(15) << _playerResults[i]._totalNumPointsAgainst << endl;
 	}
+	cout << endl;
+
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const

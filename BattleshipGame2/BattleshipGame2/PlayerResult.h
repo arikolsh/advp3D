@@ -8,7 +8,7 @@ class PlayerResult
 public:
 	PlayerResult() = delete;
 	explicit PlayerResult(const std::string &name);
-	int getWinPercentage() const;
+	float getWinPercentage() const;
 	int _totalNumPointsFor;
 	int _totalNumPointsAgainst;
 	int _totalNumLosses;

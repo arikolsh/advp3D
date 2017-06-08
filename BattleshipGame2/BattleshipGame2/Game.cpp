@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	Logger* logger = Logger::getInstance();
 	logger->init("game.log", "DEBUG");
 	string path = "";
-	GameManager gameManager(path, 10);
+	GameManager gameManager(path, threads);
 	bool isStarted =gameManager.init();
 	if(!isStarted)
 	{
