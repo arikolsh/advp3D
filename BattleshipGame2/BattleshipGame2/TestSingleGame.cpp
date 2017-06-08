@@ -17,6 +17,7 @@
 #define DEEP 2
 #define MAX_NUM_SHIPS 5 //max number of ships per player
 
+/*
 
 using namespace std;
 
@@ -56,11 +57,9 @@ int main(int argc, char* argv[])
 
 	IBattleshipGameAlgo* players[2];
 	
-	/* get DLLs and board file */
 	//int err = GameUtils::getInputFiles(inputFiles, messages, searchDir);
 	//if (err) { return EXIT_FAILURE; }
 
-	/* load player A from dll */
 	HINSTANCE hDllA;
 	int err = getPlayerFromDll("smartalgorithm.dll", players[0], hDllA);
 	if (err)
@@ -86,7 +85,6 @@ int main(int argc, char* argv[])
 	int winner = matchManager.runGame(players);
 	matchManager.gameOver(winner);
 
-	/* freeing resources */
 	delete players[0];
 	delete players[1];
 }
@@ -143,3 +141,5 @@ void getArgs(int argc, char** argv, int& threads, string& searchDir)
 		i++;
 	}
 }
+
+*/
