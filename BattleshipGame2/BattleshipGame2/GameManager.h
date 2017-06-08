@@ -12,9 +12,9 @@ public:
 	vector<vector<pair<int, int>>> getAllRoundsSchedule() const;
 	bool init();
 	void runGame();
-
+	//player results for every player 
+	vector<PlayerResult> _playerResults;
 private:
-
 	GameManager() = delete;
 	GameManager(const GameManager& that) = delete;
 	int getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const;
@@ -23,8 +23,6 @@ private:
 	std::vector<std::string> _messages;
 	std::vector<GameBoard> _boards; //holds vector of 3D boards
 	vector<GetAlgoType> _playersGet;
-	//player results for every player 
-	vector<PlayerResult> _playerResults;
 	// additional result container for carry player in case of odd num of players
 	void runMatch(pair<int, int> playersPair, int boardNum);
 };

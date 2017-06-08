@@ -31,12 +31,12 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 
 	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
-	
+
 	// Set boards for both players:
 	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
-	
+
 	// Set both players:
 	auto player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());
 	player1->setPlayer(playersPair.first);
@@ -48,9 +48,9 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 	// Run this match:
 	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
 	int winner = matchManager.runGame(players);
-	
+
 	// Update PlayerResult for each player:
-	matchManager.gameOver(winner, playersPair, result1, result2);
+	matchManager.gameOver(winner, playersPair, _playerResults[playersPair.first], _playerResults[playersPair.second]);
 }
 
 void GameManager::runGame()
@@ -87,7 +87,7 @@ void GameManager::runGame()
 					if (matchThreads[i].joinable())
 						matchThreads.at(i).join();
 				}
-				lastThreadOffset = numActiveThreads;
+				lastThreadOffset += numActiveThreads;
 				numActiveThreads = 0;
 			}
 
