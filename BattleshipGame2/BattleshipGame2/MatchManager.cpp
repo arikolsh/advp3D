@@ -263,3 +263,33 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 	}
 	return winner;
 }
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
+void MatchManager::buildPlayerBoards(const GameBoard board, GameBoard& targetBoard1, GameBoard& targetBoard2) const
+{ //todo: check
+	int rows = board.rows();
+	int cols = board.cols();
+	int depth = board.depth();
+	for (int i = 1; i <= rows; i++)
+	{
+		for (int j = 1; j <= cols; j++)
+		{
+			for (int k = 1; k <= depth; k++)
+			{
+				char cell = board.charAt(Coordinate(i, j, k));
+
+				if (Ship::isShip(cell))
+				{
+					if (cell == tolower(cell))
+					{
+						targetBoard1.setAt(Coordinate(i, j, k)) = cell;
+					}
+					else
+					{
+						targetBoard2.setAt(Coordinate(i, j, k)) = cell;
+					}
+				}
+			}
+		}
+	}
+}

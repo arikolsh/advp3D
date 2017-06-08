@@ -33,6 +33,8 @@ public:
 	* the number of the winner player.
 	*/
 	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS]);
+	void buildPlayerBoards(const GameBoard board, GameBoard& board1, GameBoard& board2) const;
+
 private:
 	MatchManager() = delete;
 	MatchManager(const MatchManager& that) = delete;
@@ -42,7 +44,6 @@ private:
 	pair<int, int> _playersNumActiveShips;
 	/*who is the next player to attack*/
 	int _currentPlayer;
-
 	map<vector<int>, pair<shared_ptr<Ship>, bool>> _shipsMap;
 
 	/* Each player board is prepared in advance and hidden from the opponent!
