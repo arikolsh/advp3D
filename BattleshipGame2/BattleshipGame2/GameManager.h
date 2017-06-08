@@ -4,6 +4,7 @@
 #include <memory>
 #include "GameBoard.h"
 #include "PlayerResult.h"
+#include <mutex>
 
 class GameManager {
 public:
@@ -11,6 +12,7 @@ public:
 	std::vector<std::pair<int, int>> getNextRoundPair(std::vector<std::vector<int>>& permMatrix, int& carriedPlayer) const;
 	bool init();
 	void runGame();
+	mutex _mutex;
 
 private:
 	GameManager() = delete;

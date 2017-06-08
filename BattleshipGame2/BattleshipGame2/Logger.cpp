@@ -35,7 +35,6 @@ void Logger::init(const string path, const string mode)
 void Logger::log(const string messgae, const string severity)
 {
 	unique_lock<mutex> lock(_mutex);
-	ostringstream b;
 	char currTime[SIZE];
 	time_t now = time(0);
 	ctime_s(currTime, sizeof(currTime), &now);

@@ -5,13 +5,19 @@
 #include <memory>
 #include "Ship.h"
 #include <fstream>
+#include "PlayerResult.h"
 
 #define NUM_PLAYERS 2
 #define INVALID_COORDINATE  { -1 , -1, -1 }
 
+namespace std {
+	class mutex;
+}
+
 class MatchManager {
 public:
 	explicit MatchManager(GameBoard &gameBoard);
+	~MatchManager();
 	int getPlayerScore(int player) const;
 	bool isPlayerDefeated(int player) const;
 	void logShipsMap();
@@ -23,6 +29,8 @@ public:
 	* Else, return Hit. */
 	AttackResult executeAttack(int attackedPlayerNum, Coordinate attack);
 	void gameOver(int winner);
+	void gameOver(int winner, PlayerResult &resA, PlayerResult &resB, mutex &Mutex);
+
 	/*
 	* Each player declares his next attack.
 	* Then, his enemy executes the attack and returns the AttackResult.

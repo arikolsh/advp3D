@@ -21,29 +21,34 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum, pair<int, int> resultIndices)
 {
-	ostringstream  s;
-	s << "I AM IN THREAD !!!" << "players: " << playersPair.first << "," << playersPair.second << "   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
-	cout << s.str();
-	Logger* logger = Logger::getInstance();
-	logger->log("hi how are you", "ERROR");
+	cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;//"   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
+	//Logger* logger = Logger::getInstance();
+	//logger->log("hi how are you", "ERROR");
+	
 	MatchManager matchManager(_boards[boardNum]);
+	
 	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
+	
+	_players[playersPair.first]->setPlayer(playersPair.first);
 	_players[playersPair.first]->setBoard(board1);
+	
+	_players[playersPair.second]->setPlayer(playersPair.second);
 	_players[playersPair.second]->setBoard(board2);
-	if (true) return;
-
-	///from here up everything is good
+	
 	IBattleshipGameAlgo* players[2] = { _players[playersPair.first].get(), _players[playersPair.second].get() };
-	//matchManager.runGame(players, _playerResults[resultIndices.first], _playerResults[resultIndices.second]); //todo: uncomment
-	//todo: run game need to get result by reference and update them
+	int winner = matchManager.runGame(players);
+	matchManager.gameOver(winner, _playerResults[resultIndices.first], _playerResults[resultIndices.second], _mutex);
+	// Should delete players or is it smart ptrs ???????????????????????????????
+	//delete players[0];
+	//delete players[1];
 }
 
 void GameManager::runGame()
 {
 	int CARRIED_RESULT_SLOT = _playerResults.size() - 1; //this is relevant only if odd number of players
-	cout << "carried slot: " << CARRIED_RESULT_SLOT << endl;
+	//cout << "carried slot: " << CARRIED_RESULT_SLOT << endl;
 	int numPlayers = _players.size();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
