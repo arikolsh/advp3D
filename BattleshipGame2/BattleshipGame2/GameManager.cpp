@@ -10,25 +10,23 @@
 #include "MatchManager.h"
 #include <iostream>
 #include <sstream>
-#include "Logger.h"
 
 #define SUCCESS 0
 #define FAILURE -1
 
 using namespace std;
 
+
 GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _threads(threads)
 {
+	_logger = Logger::getInstance();
 }
 
-mutex matchMutex;
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
-	unique_lock<mutex> lock(matchMutex);
-	cout << "\n################### Next Match #######################################\n";
-	cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;//"   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
-	//Logger* logger = Logger::getInstance();
-	//logger->log("hi how are you", "ERROR");
+	ostringstream stream;
+
+	//cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;
 
 	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
@@ -109,10 +107,13 @@ void GameManager::runGame()
 
 void GameManager::printResultsForPlayers()
 {
+	ostringstream stream;
+	stream << "\n!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#\nSummary of player results after a full round:\n";
 	for (PlayerResult playerResult : _playerResults)
 	{
-		playerResult.getReport();
+		stream << playerResult.getReport();
 	}
+	_logger->log(stream.str(), "Debug");
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const

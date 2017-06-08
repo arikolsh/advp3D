@@ -1,1 +1,127 @@
 Program execution started...
+Thu Jun  8 17:12:10 2017	
+################### Current Match #######################################
+Running match: player 3 against player 2
+	Debug
+Thu Jun  8 17:12:10 2017	
+################### Current Match #######################################
+Running match: player 1 against player 0
+	Debug
+Thu Jun  8 17:12:10 2017	Player 3 won
+Points:
+Player 3: 24
+Player 2: 14
+
+Player 3 results so far:
+Number of victories: 1
+Total score for player (so far): 24
+Number of losses: 0
+Total score against (so far): 14
+
+Player 2 results so far:
+Number of victories: 0
+Total score for player (so far): 14
+Number of losses: 1
+Total score against (so far): 24
+	Debug
+Thu Jun  8 17:12:10 2017	Player 0 won
+Points:
+Player 1: 21
+Player 0: 24
+
+Player 1 results so far:
+Number of victories: 0
+Total score for player (so far): 21
+Number of losses: 1
+Total score against (so far): 24
+
+Player 0 results so far:
+Number of victories: 1
+Total score for player (so far): 24
+Number of losses: 0
+Total score against (so far): 21
+	Debug
+Thu Jun  8 17:12:10 2017	
+################### Current Match #######################################
+Running match: player 3 against player 1
+	Debug
+Thu Jun  8 17:12:10 2017	
+################### Current Match #######################################
+Running match: player 0 against player 2
+	Debug
+Thu Jun  8 17:12:10 2017	Player 0 won
+Points:
+Player 0: 24
+Player 2: 6
+
+Player 0 results so far:
+Number of victories: 2
+Total score for player (so far): 48
+Number of losses: 0
+Total score against (so far): 27
+
+Player 2 results so far:
+Number of victories: 0
+Total score for player (so far): 20
+Number of losses: 2
+Total score against (so far): 48
+	Debug
+Thu Jun  8 17:12:10 2017	Player 3 won
+Points:
+Player 3: 24
+Player 1: 21
+
+Player 3 results so far:
+Number of victories: 2
+Total score for player (so far): 48
+Number of losses: 0
+Total score against (so far): 35
+
+Player 1 results so far:
+Number of victories: 0
+Total score for player (so far): 42
+Number of losses: 2
+Total score against (so far): 48
+	Debug
+Thu Jun  8 17:12:10 2017	
+################### Current Match #######################################
+Running match: player 2 against player 1
+	Debug
+Thu Jun  8 17:12:10 2017	
+################### Current Match #######################################
+Running match: player 3 against player 0
+	Debug
+Thu Jun  8 17:12:10 2017	Player 2 won
+Points:
+Player 2: 24
+Player 1: 21
+
+Player 2 results so far:
+Number of victories: 1
+Total score for player (so far): 44
+Number of losses: 2
+Total score against (so far): 69
+
+Player 1 results so far:
+Number of victories: 0
+Total score for player (so far): 63
+Number of losses: 3
+Total score against (so far): 72
+	Debug
+Thu Jun  8 17:12:10 2017	Player 3 won
+Points:
+Player 3: 24
+Player 0: 0
+
+Player 3 results so far:
+Number of victories: 3
+Total score for player (so far): 72
+Number of losses: 0
+Total score against (so far): 35
+
+Player 0 results so far:
+Number of victories: 2
+Total score for player (so far): 48
+Number of losses: 1
+Total score against (so far): 51
+	Debug

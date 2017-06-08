@@ -14,5 +14,5 @@ public:
 	int _totalNumLosses;
 	int _totalNumWins;
 	string _name;
-	void getReport() const; 
+	string getReport() const;
 };

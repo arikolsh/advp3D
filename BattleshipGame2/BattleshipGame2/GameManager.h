@@ -1,9 +1,10 @@
 #pragma once
 #include "IBattleshipGameAlgo.h"
 #include <vector>
-#include <memory>
 #include "GameBoard.h"
 #include "PlayerResult.h"
+#include "Logger.h"
+
 typedef IBattleshipGameAlgo *(*GetAlgoType)();
 
 class GameManager {
@@ -14,7 +15,9 @@ public:
 	void runGame();
 	//player results for every player 
 	vector<PlayerResult> _playerResults;
+
 private:
+	Logger* _logger;
 	GameManager() = delete;
 	GameManager(const GameManager& that) = delete;
 	int getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const;

@@ -4,8 +4,8 @@
 #include <map>
 #include <memory>
 #include "Ship.h"
-#include <fstream>
 #include "PlayerResult.h"
+#include "Logger.h"
 
 #define NUM_PLAYERS 2
 #define INVALID_COORDINATE  { -1 , -1, -1 }
@@ -63,5 +63,5 @@ private:
 	/*return true if own goal*/
 	static bool isOwnGoal(int attackedPlayerNum, char shipType);
 
-	ofstream _logFile;
+	Logger* _logger;
 };

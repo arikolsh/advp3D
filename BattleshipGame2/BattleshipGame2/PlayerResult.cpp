@@ -6,7 +6,7 @@ PlayerResult::PlayerResult(const std::string& name) : _totalNumPointsFor(0), _to
 {
 }
 
-void PlayerResult::getReport() const
+string PlayerResult::getReport() const
 {
 	ostringstream stream;
 	stream << "\nPlayer " << _name << " results so far:" << std::endl;
@@ -15,6 +15,7 @@ void PlayerResult::getReport() const
 	stream << "Number of losses: " << _totalNumLosses << endl;
 	stream << "Total score against (so far): " << _totalNumPointsAgainst << std::endl;
 	cout << stream.str();
+	return stream.str();
 }
 
 void PlayerResult::clear()
