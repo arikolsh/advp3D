@@ -11,6 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 #define SUCCESS 0
 #define FAILURE -1
@@ -118,19 +119,22 @@ void GameManager::printResultsForPlayers()
 
 	cout << setfill('-') << setw(115) << "-" << endl;
 	cout << setfill(' ');
-	for (int i = 0; i < _playerResults.size(); i++)
+	vector<PlayerResult> sortedResults(_playerResults.begin(), _playerResults.end());
+	sort(sortedResults.begin(), sortedResults.end(), PlayerResult::cmd);
+	for (int i = 0; i < sortedResults.size(); i++)
 	{
 		cout << setw(5) << to_string(i + 1).append(".")
-			<< setw(30) << _playerResults[i]._name
-			<< setw(20) << _playerResults[i]._totalNumWins
-			<< setw(20) << (_playerResults[i]._totalNumLosses)
-			<< setw(10) << setprecision(2) << fixed << _playerResults[i].getWinPercentage()
-			<< setw(15) << _playerResults[i]._totalNumPointsFor
-			<< setw(15) << _playerResults[i]._totalNumPointsAgainst << endl;
+			<< setw(30) << sortedResults[i]._name
+			<< setw(20) << sortedResults[i]._totalNumWins
+			<< setw(20) << (sortedResults[i]._totalNumLosses)
+			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
+			<< setw(15) << sortedResults[i]._totalNumPointsFor
+			<< setw(15) << sortedResults[i]._totalNumPointsAgainst << endl;
 	}
 	cout << endl;
-
 }
+
+bool wayToSort(int i, int j) { return i > j; }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 {
@@ -202,6 +206,7 @@ bool GameManager::init() {
 			return false;
 		}
 		if (BoardUtils::isValidBoard(tmpBoard, boardDepth, boardRows, BoardCols, numShips)) {
+			cout << endl;
 			if (numShips[0] == numShips[1])
 			{
 				_boards.push_back(GameBoard(tmpBoard, boardRows, BoardCols, boardDepth));
@@ -232,6 +237,15 @@ bool GameManager::init() {
 		// write to log
 		return false;
 	}
+	for (int i = 0; i < _boards.size(); i++)
+	{
+		cout << "board " << i << endl;
+		cout << _boards[i].cols() << endl;
+		cout << _boards[i].rows() << endl;
+		cout << _boards[i].depth() << endl;
+	}
+
+
 	return true;
 }
 
