@@ -318,7 +318,7 @@ void MatchManager::buildPlayerBoards(const GameBoard board, GameBoard& targetBoa
 
 				if (Ship::isShip(cell))
 				{
-					if (cell == tolower(cell))
+					if (cell == toupper(cell))
 					{
 						targetBoard1.setAt(Coordinate(i, j, k)) = cell;
 					}

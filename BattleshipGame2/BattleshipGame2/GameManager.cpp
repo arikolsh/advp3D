@@ -237,13 +237,13 @@ bool GameManager::init() {
 		// write to log
 		return false;
 	}
-	for (int i = 0; i < _boards.size(); i++)
+/*	for (int i = 0; i < _boards.size(); i++)
 	{
 		cout << "board " << i << endl;
 		cout << _boards[i].cols() << endl;
 		cout << _boards[i].rows() << endl;
 		cout << _boards[i].depth() << endl;
-	}
+	}*/
 
 
 	return true;
