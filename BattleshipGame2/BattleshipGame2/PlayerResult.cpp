@@ -17,5 +17,9 @@ float PlayerResult::getWinPercentage() const
 	return (_totalNumWins / totalGames) * 100;
 }
 
+bool PlayerResult::cmd(const PlayerResult & p1, const PlayerResult & p2)
+{
+	return p1._totalNumWins > p2._totalNumWins;
+}
 
 
