@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardUtils.h" />
-    <ClInclude Include="GameBoardOld.h" />
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameUtils.h" />
@@ -33,11 +32,6 @@
   <ItemGroup>
     <ClCompile Include="BoardUtils.cpp" />
     <ClCompile Include="Game.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="GameBoardOld.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeaderFile>

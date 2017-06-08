@@ -14,11 +14,11 @@
 #define HIT_COLOR 5 //magneta
 #define HIT_SYMBOL '*'
 #define EMPTY_CELL_COLOR 8 //gray
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 #define NUM_SHIPS 5
 #define SUCCESS 0
 #define FAILURE -1
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 #define VISITED 'x'
 
 bool debugMode = false;
@@ -40,7 +40,6 @@ MatchManager::~MatchManager()
 
 void MatchManager::fillMapWithShips()
 {
-	Coordinate coordinate(INVALID_COORDINATE);
 	char cell;
 	for (int i = 1; i < _gameBoard.rows() + 1; i++)
 	{
@@ -48,7 +47,7 @@ void MatchManager::fillMapWithShips()
 		{
 			for (int k = 1; k < _gameBoard.depth() + 1; k++)
 			{
-				coordinate = Coordinate(i, j, k);
+				Coordinate coordinate = Coordinate(i, j, k);
 				cell = _gameBoard.charAt(coordinate);
 				if (!Ship::isShip(cell)) { continue; } // Skip non-ship cells
 				_gameBoard.setAt(coordinate) = VISITED; // Mark coordinate as visited
@@ -222,7 +221,7 @@ void MatchManager::gameOver(int winner)
 	logShipsMap();
 }
 
-void MatchManager::gameOver(int winner, pair<int,int> playersPair, PlayerResult& resA, PlayerResult& resB) const
+void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const
 {
 	// Updates results for players:
 	resA._totalNumPointsFor += _playerScores.first;
@@ -251,7 +250,7 @@ void MatchManager::gameOver(int winner, pair<int,int> playersPair, PlayerResult&
 		cout << "Points:" << endl << "Player " << playersPair.first << ": " << _playerScores.first << endl;
 		cout << "Player " << playersPair.second << ": " << _playerScores.second << endl;
 		// Player A total results:
-		cout << "\nPlayer " << playersPair.first <<" results so far:" << endl;
+		cout << "\nPlayer " << playersPair.first << " results so far:" << endl;
 		cout << "Number of victories: " << resA._totalNumWins << endl;
 		cout << "Total score for player (so far): " << resA._totalNumPointsFor << endl;
 		cout << "Number of losses: " << resA._totalNumLosses << endl;
@@ -314,7 +313,7 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
 void MatchManager::buildPlayerBoards(const GameBoard board, GameBoard& targetBoard1, GameBoard& targetBoard2) const
-{ //todo: check
+{
 	int rows = board.rows();
 	int cols = board.cols();
 	int depth = board.depth();

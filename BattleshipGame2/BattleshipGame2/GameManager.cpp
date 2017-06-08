@@ -57,7 +57,6 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 void GameManager::runGame()
 {
 	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
-	int numPlayers = _playersGet.size();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
 		/*
@@ -208,7 +207,9 @@ bool GameManager::init() {
 		}
 		_playersGet.push_back(tmpGetAlgo); //dll is good
 		// init player result for specific player
-		string name = dllPaths[i].substr(0, dllPaths[i].size() - 4); //remove .dll suffix
+		// get player name: remove .dll suffix and last '/'
+		int x = dllPaths[i].find_last_of("/\\");
+		string name = dllPaths[i].substr(x + 1, dllPaths[i].size() - 4 - x - 1);
 		_playerResults.push_back(PlayerResult(name));
 	}
 	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {
