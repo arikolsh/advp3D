@@ -21,9 +21,10 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 {
 }
 
+mutex matchMutex;
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
-	//unique_lock<mutex> lock(matchMutex);
+	unique_lock<mutex> lock(matchMutex);
 	cout << "\n################### Next Match #######################################\n";
 	cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;//"   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
 	//Logger* logger = Logger::getInstance();
@@ -91,14 +92,27 @@ void GameManager::runGame()
 				numActiveThreads = 0;
 			}
 
-			for (int res = 0; res < _playerResults.size(); res++)
-			{ //print results exculding the carry
-				//todo: IOMANIP?
-				std::cout << res << "." << _playerResults[res].getReport() << endl;
-			}
+			// Print current match results:
+			auto t = thread(&GameManager::printResultsForPlayers, this);
+			if (t.joinable())
+				t.join();
 		}
 	}
 
+	// Print Final results:
+	cout << "\n\n F I N A L      R E S U L T S\n\n";
+	auto t = thread(&GameManager::printResultsForPlayers, this);
+	if (t.joinable())
+		t.join();
+}
+
+
+void GameManager::printResultsForPlayers()
+{
+	for (PlayerResult playerResult : _playerResults)
+	{
+		playerResult.getReport();
+	}
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const

@@ -21,7 +21,7 @@
 #define EMPTY_CELL '-'
 #define VISITED 'x'
 
-bool debugMode = true;
+bool debugMode = false;
 
 MatchManager::MatchManager(GameBoard &gameBoard)
 {
