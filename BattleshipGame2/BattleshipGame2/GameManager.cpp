@@ -10,6 +10,7 @@
 #include "MatchManager.h"
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 #define SUCCESS 0
 #define FAILURE -1
@@ -90,7 +91,11 @@ void GameManager::runGame()
 			}
 
 			// Print current match results:
-			//printResultsForPlayers();
+			printResultsForPlayers();
+			/////
+
+
+			/////
 		}
 	}
 
@@ -102,13 +107,25 @@ void GameManager::runGame()
 
 void GameManager::printResultsForPlayers()
 {
-	ostringstream stream;
-	stream << "\n!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#\nSummary of player results after a full round:\n";
-	for (PlayerResult playerResult : _playerResults)
+	cout << left << setfill(' ')
+		<< setw(5) << "#"
+		<< setw(15) << "Player Name"
+		<< setw(10) << "Total Wins"
+		<< setw(10) << "Total Losses"
+		<< setw(8) << "%"
+		<< setw(10) << "Pts For"
+		<< setw(10) << "Pts Against" << '\n';
+
+	for (int i = 0; i < _playerResults.size(); i++)
 	{
-		stream << playerResult.getReport();
+		cout << setw(5) << to_string(i + 1).append(".")
+			<< setw(15) << _playerResults[i]._name
+			<< setw(10) << _playerResults[i]._totalNumWins
+			<< setw(10) << (_playerResults[i]._totalNumLosses)
+			<< setw(8) << setprecision(2) << fixed << _playerResults[i].getWinPercentage()
+			<< setw(10) << _playerResults[i]._totalNumPointsFor
+			<< setw(10) << _playerResults[i]._totalNumPointsAgainst << '\n';
 	}
-	_logger->log(stream.str(), "Debug");
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
