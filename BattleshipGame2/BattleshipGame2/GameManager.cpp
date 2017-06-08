@@ -146,7 +146,24 @@ vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 		players.pop_back();
 		players.insert(players.begin() + 1, last);
 	}
-	return schedule;
+	// generate flipped pairs
+	vector <vector<pair<int, int>>> scheduleFinal;
+	for (int i = 0; i < schedule.size(); i++)
+	{
+		scheduleFinal.push_back(schedule[i]);
+	}
+
+	for (int pv = 0; pv < schedule.size(); pv++)
+	{
+		vector<pair<int, int>> pairVec = schedule[pv];
+		vector<pair<int, int>> flipPairVec;
+		for (int i = 0; i < pairVec.size(); i++)
+		{
+			flipPairVec.push_back(make_pair(pairVec[i].second, pairVec[i].first));
+		}
+		scheduleFinal.push_back(flipPairVec);
+	}
+	return scheduleFinal;
 }
 
 bool GameManager::init() {
