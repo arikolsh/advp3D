@@ -228,33 +228,6 @@ bool GameManager::init() {
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-int GameManager::getPlayerFromDll(string dllPath, IBattleshipGameAlgo *& player) const
-{
-	// define function of the type we expect
-	typedef IBattleshipGameAlgo *(*GetAlgoType)();
-	GetAlgoType getAlgo;
-
-	HINSTANCE hDll = LoadLibraryA(dllPath.c_str());
-	if (!hDll)
-	{
-		//write to log : std::cout << "Cannot load dll: " << dllPath << endl;
-		return FAILURE;
-	}
-
-	// Get function pointer
-	getAlgo = GetAlgoType(GetProcAddress(hDll, "GetAlgorithm"));
-	if (!getAlgo)
-	{
-		//write to log : std::cout << "Algorithm initialization failed for dll: " << dllPath << endl;
-		FreeLibrary(hDll);
-		return FAILURE;
-	}
-	/* init player A */
-	player = getAlgo();
-	return SUCCESS;
-}
-
-// ReSharper disable once CppMemberFunctionMayBeStatic
 int GameManager::getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const
 {
 	// define function of the type we expect
