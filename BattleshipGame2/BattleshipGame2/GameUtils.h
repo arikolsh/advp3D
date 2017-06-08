@@ -16,6 +16,7 @@ public:
 	static int getInputFiles(vector<string> & boards, vector<string> & dlls, vector<string>& messages, string searchDir);
 	/* print 2d char array for debug purposes */
 	static void print2DCharArray(char**arr, int rows, int cols);
+	static vector<pair<int, int>> zip(vector<int> arr1, vector<int> arr2);
 
 private:
 	GameUtils() = delete; //disallow creating instance of class

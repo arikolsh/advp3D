@@ -17,14 +17,14 @@
 
 using namespace std;
 
-GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _threads(threads), _carryResult("carried")
+GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _threads(threads)
 {
 }
 
-void GameManager::runMatch(pair<int, int> playersPair, int boardNum, PlayerResult& result1, PlayerResult& result2)
+void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
 	ostringstream  s;
-	s << "I AM IN THREAD !!!" << "players: " << playersPair.first << "," << playersPair.second << ", result1: " << result1._name << ", result2: " << result2._name << endl;;
+	s << "I AM IN THREAD !!!" << "players: " << playersPair.first << "," << playersPair.second << endl;
 	std::cout << s.str();
 
 	Logger* logger = Logger::getInstance();
@@ -46,6 +46,7 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum, PlayerResul
 
 void GameManager::runGame()
 {
+	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
 	int numPlayers = _playersGet.size();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
@@ -55,40 +56,20 @@ void GameManager::runGame()
 		* against each other. for every i permMatrix[i][i] = 1 in advance because
 		* player_i cannot play againset himself.
 		*/
-		vector<vector<int>> permMatrix(numPlayers, vector<int>(numPlayers));
-		int counter = 0;
-		while (counter < numPlayers*numPlayers - numPlayers)
+		while (schedule.size() > 0)
 		{	//------- one board round -------//
 			int numActiveThreads = 0;
-			int carriedPlayer = -1; //this will hold the player index that played twice
-			vector<pair<int, int>> pairs = move(getNextRoundPair(permMatrix, carriedPlayer)); //get next pairs for round and update carriedPlayer
-			if (carriedPlayer >= 0) { _carryResult.clear(); }
-			counter += pairs.size();
+			vector<pair<int, int>> pairs = schedule.back(); //get next pairs for round and update carriedPlayer
+			schedule.pop_back();
 			vector<thread> matchThreads;
 			int lastThreadOffset = 0;
-			bool usedCarryResultSlot = false;
 			while (pairs.size() > 0) //still pending tasks
 			{ //------- round -------//
 				while (numActiveThreads < _threads && pairs.size() > 0)
 				{
 					pair<int, int> currentPair = pairs.back();
-					PlayerResult firstResultSlot = _playerResults[currentPair.first];
-					PlayerResult secondResultSlot = _playerResults[currentPair.second];
-					if (!usedCarryResultSlot && carriedPlayer >= 0)
-					{
-						if (currentPair.first == carriedPlayer)
-						{
-							firstResultSlot = _carryResult;
-							usedCarryResultSlot = true;
-						}
-						else if (currentPair.second == carriedPlayer)
-						{
-							secondResultSlot = _carryResult;
-							usedCarryResultSlot = true;
-						}
-
-					}
-					matchThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum, firstResultSlot, secondResultSlot));
+					if (currentPair.first == -1 || currentPair.second == -1) { continue; } //skip the player that didnt have a pair
+					matchThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
 					pairs.pop_back();
 					numActiveThreads++;
 				}
@@ -106,73 +87,43 @@ void GameManager::runGame()
 				//todo: IOMANIP?
 				std::cout << res << "." << _playerResults[res].getReport() << endl;
 			}
-
-			if (carriedPlayer >= 0)
-			{ //spill carried player result to its appropriate player result bucket and will be printed next round with next round results 
-				_playerResults[carriedPlayer]._totalNumLosses += _carryResult._totalNumLosses;
-				_playerResults[carriedPlayer]._totalNumPointsAgainst += _carryResult._totalNumPointsAgainst;
-				_playerResults[carriedPlayer]._totalNumPointsFor += _carryResult._totalNumPointsFor;
-				_playerResults[carriedPlayer]._totalNumWins += _carryResult._totalNumWins;
-			}
 		}
-		std::cout << "##### end #####" << endl;
-		//last print
-		for (int res = 0; res < _playerResults.size(); res++)
-		{ //print results exculding the carry
-		  //todo: IOMANIP?
-			std::cout << res << "." << _playerResults[res].getReport() << endl;
-		}
-
-
 	}
 
 }
 
-vector<pair<int, int>> GameManager::getNextRoundPair(vector<vector<int>>& permMatrix, int& carriedPlayer) const
+vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 {
-	int numPlayers = _playersGet.size();
-	/*
-	* isActive[i] stores true iff player_i was selected for the round.
-	* cleared after every round.
-	*/
-	vector<bool> isActive(numPlayers, false);
-	for (int i = 0; i < numPlayers; i++) { permMatrix[i][i] = 1; }
-	///get next round pairs ///
-	vector<pair<int, int>> pairs;
-	for (size_t player = 0; player < numPlayers; player++)
+	vector<int> players;
+	for (int i = 0; i < _playersGet.size(); i++)
 	{
-
-		if (isActive[player]) { continue; }
-		size_t other = 0;
-		for (; other < numPlayers; other++)
-		{
-			if (isActive[other] || permMatrix[player][other] == 1) { continue; }
-			pairs.push_back(make_pair(player, other));
-			isActive[player] = true;
-			isActive[other] = true;
-			permMatrix[player][other] = 1;
-			break;
-		}
-
-		if (other == numPlayers)
-		{	// player left with no pair
-			// assign someone to him
-			int k = 1;
-			while (k < numPlayers)
-			{
-				carriedPlayer = (player + k) % numPlayers;
-				if (permMatrix[player][carriedPlayer] != 1)
-				{
-					pairs.push_back(make_pair(player, carriedPlayer));
-					isActive[player] = true;
-					permMatrix[player][carriedPlayer] = 1;
-					break;
-				}
-				k++;
-			}
-		}
+		players.push_back(i);
 	}
-	return pairs;
+	vector < vector<pair<int, int>>> schedule;
+	if (players.size() % 2 == 1)
+	{ //num of players is odd
+		players.push_back(-1); //add dummy player
+	}
+	for (auto i = 0; i < players.size() - 1; i++)
+	{
+		int mid = players.size() / 2;
+		vector<int> left(players.begin(), players.begin() + mid);
+		vector<int> right(players.begin() + mid, players.end());
+		reverse(right.begin(), right.end());
+		// switch sides after each round
+		if (i % 2 == 1)
+		{
+			schedule.push_back(GameUtils::zip(left, right));
+		}
+		else
+		{
+			schedule.push_back(GameUtils::zip(right, left));
+		}
+		int last = players.back();
+		players.pop_back();
+		players.insert(players.begin() + 1, last);
+	}
+	return schedule;
 }
 
 bool GameManager::init() {

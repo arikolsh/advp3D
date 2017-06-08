@@ -1,13 +1,7 @@
 Program execution started...
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
-Thu Jun  8 10:54:23 2017	hi how are you	ERROR
+Thu Jun  8 16:05:26 2017	hi how are you	ERROR
+Thu Jun  8 16:05:26 2017	hi how are you	ERROR
+Thu Jun  8 16:05:26 2017	hi how are you	ERROR
+Thu Jun  8 16:05:26 2017	hi how are you	ERROR
+Thu Jun  8 16:05:26 2017	hi how are you	ERROR
+Thu Jun  8 16:05:26 2017	hi how are you	ERROR
