@@ -1,5 +1,8 @@
 #pragma once
 #include <ostream>
+#include <iostream>
+
+using namespace std;
 
 class PlayerResult
 {
@@ -11,6 +14,6 @@ public:
 	int _totalNumPointsAgainst;
 	int _totalNumLosses;
 	int _totalNumWins;
-	std::string _name;
-	std::string getReport(); 
+	string _name;
+	void getReport() const; 
 };

@@ -4,6 +4,7 @@
 #include "Ship.h"
 #include <iostream>
 #include <mutex>
+#include "GameManager.h"
 #define NUM_SHIP_TYPES 4
 #define NUM_PLAYERS 2
 #define A_NUM 0
@@ -21,7 +22,7 @@
 #define EMPTY_CELL '-'
 #define VISITED 'x'
 
-bool debugMode = true;
+bool debugMode = false;
 
 MatchManager::MatchManager(GameBoard &gameBoard)
 {

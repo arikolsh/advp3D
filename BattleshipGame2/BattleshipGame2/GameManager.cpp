@@ -25,8 +25,9 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum, PlayerResult& result1, PlayerResult& result2)
 {
 	//unique_lock<mutex> lock(matchMutex);
-	cout << "\n################### Next Match #######################################\n";
-	cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;//"   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
+	//cout << "\n################### Next Match #######################################\n";
+	//cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;//"   resultSlots: " << resultIndices.first << ", " << resultIndices.second << endl;
+	
 	//Logger* logger = Logger::getInstance();
 	//logger->log("hi how are you", "ERROR");
 
@@ -52,6 +53,14 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum, PlayerResul
 	
 	// Update PlayerResult for each player:
 	matchManager.gameOver(winner, playersPair, result1, result2);
+}
+
+void GameManager::printResultsForPlayers()
+{
+	for (PlayerResult playerResult : _playerResults)
+	{
+		playerResult.getReport();
+	}
 }
 
 void GameManager::runGame()
@@ -82,23 +91,25 @@ void GameManager::runGame()
 				while (numActiveThreads < _threads && pairs.size() > 0)
 				{
 					pair<int, int> currentPair = pairs.back();
-					PlayerResult firstResultSlot = _playerResults[currentPair.first];
-					PlayerResult secondResultSlot = _playerResults[currentPair.second];
+					
+					//PlayerResult firstResultSlot = _playerResults[currentPair.first];
+					//PlayerResult secondResultSlot = _playerResults[currentPair.second];
+
 					if (!usedCarryResultSlot && carriedPlayer >= 0)
 					{
 						if (currentPair.first == carriedPlayer)
 						{
-							firstResultSlot = _carryResult;
+							_playerResults[currentPair.first] = _carryResult;
 							usedCarryResultSlot = true;
 						}
 						else if (currentPair.second == carriedPlayer)
 						{
-							secondResultSlot = _carryResult;
+							_playerResults[currentPair.second] = _carryResult;
 							usedCarryResultSlot = true;
 						}
 
 					}
-					matchThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum, firstResultSlot, secondResultSlot));
+					matchThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum, _playerResults[currentPair.first], _playerResults[currentPair.second]));
 					pairs.pop_back();
 					numActiveThreads++;
 				}
@@ -107,15 +118,16 @@ void GameManager::runGame()
 					if (matchThreads[i].joinable())
 						matchThreads.at(i).join();
 				}
-				lastThreadOffset = numActiveThreads;
+				lastThreadOffset += numActiveThreads;
 				numActiveThreads = 0;
 			}
 
-			for (int res = 0; res < _playerResults.size(); res++)
-			{ //print results exculding the carry
-				//todo: IOMANIP?
-				std::cout << res << "." << _playerResults[res].getReport() << endl;
-			}
+
+			// Print current match results:
+			auto t = thread(&GameManager::printResultsForPlayers, this);
+			if (t.joinable())
+				t.join();
+			//printResultsForPlayers();
 
 			if (carriedPlayer >= 0)
 			{ //spill carried player result to its appropriate player result bucket and will be printed next round with next round results 
@@ -125,15 +137,12 @@ void GameManager::runGame()
 				_playerResults[carriedPlayer]._totalNumWins += _carryResult._totalNumWins;
 			}
 		}
-		std::cout << "##### end #####" << endl;
-		//last print
-		for (int res = 0; res < _playerResults.size(); res++)
-		{ //print results exculding the carry
-		  //todo: IOMANIP?
-			std::cout << res << "." << _playerResults[res].getReport() << endl;
-		}
-
-
+		
+		// Print final results:
+		std::cout << "\n\n##################### Final Results: #########################" << endl;
+		auto t = thread(&GameManager::printResultsForPlayers, this);
+		if (t.joinable())
+			t.join();
 	}
 
 }

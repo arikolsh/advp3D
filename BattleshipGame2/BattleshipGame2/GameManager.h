@@ -13,6 +13,9 @@ public:
 	bool init();
 	void runGame();
 
+	//player results for every player 
+	vector<PlayerResult> _playerResults;
+
 private:
 
 	GameManager() = delete;
@@ -24,9 +27,9 @@ private:
 	std::vector<std::string> _messages;
 	std::vector<GameBoard> _boards; //holds vector of 3D boards
 	vector<GetAlgoType> _playersGet;
-	//player results for every player 
-	vector<PlayerResult> _playerResults;
+
 	// additional result container for carry player in case of odd num of players
 	PlayerResult _carryResult;
 	void runMatch(pair<int, int> playersPair, int boardNum, PlayerResult& result1, PlayerResult& result2);
+	void printResultsForPlayers();
 };
