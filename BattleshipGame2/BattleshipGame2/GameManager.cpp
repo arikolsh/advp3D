@@ -48,7 +48,7 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 
 	// Run this match:
 	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
-	int winner = matchManager.runGame(players);
+	int winner = matchManager.runGame(players, { playersPair.first, playersPair.second });
 
 	// Update PlayerResult for each player:
 	matchManager.gameOver(winner, playersPair, _playerResults[playersPair.first], _playerResults[playersPair.second]);

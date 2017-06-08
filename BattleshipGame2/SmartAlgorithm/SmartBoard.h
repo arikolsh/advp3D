@@ -1,14 +1,14 @@
 #pragma once
-#include <vector>
 #include "IBattleshipGameAlgo.h"
+#include <vector>
+#include <iostream>
+
 
 using namespace std;
 
 #define INVALID_COORDINATE  { -1 , -1, -1 }
-#define EMPTY_CELL ' '
+#define EMPTY_CELL '-'
 #define MARKED_CELL 'x'
-#define A_NUM 0
-#define B_NUM 1
 #define  NUM_SHIP_TYPES 4
 
 class SmartBoard : public BoardData
@@ -29,8 +29,7 @@ public:
 	void copyPlayerShips(const BoardData& board, int player); // Copy all player's ships to _board (which is initialized with EMPTY_CELLs)
 
 	bool shipBelongsToPlayer(char c, int player) const; // return true iff c is a ship that belongs to given player
-	const char shipTypesA[NUM_SHIP_TYPES] = { 'B', 'P', 'M', 'D' };
-	const char shipTypesB[NUM_SHIP_TYPES] = { 'b', 'p', 'm', 'd' };
+	const char shipTypes[NUM_SHIP_TYPES] = { 'b', 'p', 'm', 'd' };
 
 	// Overloading operators for safely accessing _board
 	char& operator[](Coordinate coor) { return internalBoard[coor.row][coor.col][coor.depth]; }

@@ -1,8 +1,5 @@
 #include "SmartBoard.h"
 
-#include <iostream>
-#include "IBattleshipGameAlgo.h"
-
 //Create a padded board of size (rows+2 X cols+2 X depth+2) filled with EMPTY_CELLs:
 void SmartBoard::initialize()
 {
@@ -39,7 +36,7 @@ void SmartBoard::copyPlayerShips(const BoardData& board, int player)
 bool SmartBoard::shipBelongsToPlayer(char c, int player) const
 {
 	for (int i = 0; i < NUM_SHIP_TYPES; i++) {
-		if ((player == A_NUM && c == shipTypesA[i]) || (player == B_NUM && c == shipTypesB[i]))
+		if (tolower(c) == shipTypes[i])
 		{
 			return true;
 		}
