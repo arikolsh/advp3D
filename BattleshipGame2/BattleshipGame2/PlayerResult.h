@@ -6,6 +6,7 @@ class PlayerResult
 public:
 	PlayerResult() = delete;
 	explicit PlayerResult(const std::string &name);
+	void clear(); //clear fields
 	int _totalNumPointsFor;
 	int _totalNumPointsAgainst;
 	int _totalNumLosses;
