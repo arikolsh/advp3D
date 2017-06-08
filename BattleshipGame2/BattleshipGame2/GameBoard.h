@@ -4,8 +4,6 @@
 
 using namespace std;
 
-//#define EMPTY_CELL ' '
-
 class GameBoard : public BoardData
 {
 public:

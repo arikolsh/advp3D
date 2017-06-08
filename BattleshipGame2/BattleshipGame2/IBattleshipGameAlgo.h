@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string> // Actually not required here - but here due to students' request
-
 /*Notice:
 * Usually it is bad practice to have several classes/structs in the same header.
 * Here we use this practice only for simplicity considerations,

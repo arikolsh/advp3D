@@ -7,7 +7,7 @@
 #include <sstream>
 #include "Ship.h"
 #define MIN(a, b) ((a < b) ? (a) : (b))
-#define EMPTY_CELL '-' //todo: eventually should be ' ' (space)
+#define EMPTY_CELL ' '
 #define VISITED_CELL 'v'
 #define PADDING 2
 #define DIM_DELIMITER 'X' //according to this token we split the first line in every board file

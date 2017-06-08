@@ -1,4 +1,3 @@
-#include <fstream>
 #include <iostream>
 #include "GameUtils.h"
 #include <string>
@@ -34,7 +33,7 @@ void GameUtils::getArgs(int argc, char** argv, int& threads, string& searchDir)
 {
 	vector<string> argsVector(argv, argv + argc);
 	int i = 1;
-	threads = 4; //todo: put in properties file
+	threads = 4;
 	while (i < argc)
 	{
 		if (argsVector[i] == "-threads")

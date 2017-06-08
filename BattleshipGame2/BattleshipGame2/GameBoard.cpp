@@ -3,7 +3,7 @@
 #include "BoardUtils.h"
 #include <iostream>
 #define PADDING 2
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 
 vector<vector<string>> GameBoard::board() const
 {
