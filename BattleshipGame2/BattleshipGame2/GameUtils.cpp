@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include "Logger.h"
 
 #define MAX_PATH 1024
 #define SEARCH_DEFAULT_CMD "dir /b /a-d 2> nul"
@@ -55,7 +56,8 @@ int GameUtils::getInputFiles(vector<string> & boards, vector<string> & dlls, vec
 	int op_res = fetchInputFiles(boards, dlls, messages, searchDir);
 	if (op_res == FAILURE)
 	{
-		cout << "Error: failed to fetch input files from super-file container" << endl;
+		Logger* logger = Logger::getInstance();
+		logger->log("Error: failed to fetch input files from super-file container");
 		return FAILURE;
 	}
 	if (messages.size() != 0)

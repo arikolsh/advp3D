@@ -200,16 +200,6 @@ bool MatchManager::isOwnGoal(int attackedPlayerNum, char shipType)
 		|| attackedPlayerNum == B_NUM && shipType != tolower(shipType);
 }
 
-void MatchManager::gameOver(int winner)
-{
-	if (winner != -1) //We have a winner
-	{
-		cout << "Player " << (winner == A_NUM ? "A" : "B") << " won" << endl;
-	}
-	cout << "Points:" << endl << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
-	//logShipsMap();
-}
-
 void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const
 {
 	// Updates results for players:
@@ -252,8 +242,8 @@ void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult
 	stream << "Number of victories: " << resB._totalNumWins << endl;
 	stream << "Total score for player (so far): " << resB._totalNumPointsFor << endl;
 	stream << "Number of losses: " << resB._totalNumLosses << endl;
-	stream << "Total score against (so far): " << resB._totalNumPointsAgainst << endl;
-	_logger->log(stream.str(), "Debug");
+	stream << "Total score against (so far): " << resB._totalNumPointsAgainst;
+	_logger->log(stream.str());
 }
 
 int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS], vector<int> playerNums)

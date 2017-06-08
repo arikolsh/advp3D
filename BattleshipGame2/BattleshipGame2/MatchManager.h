@@ -35,7 +35,6 @@ public:
 	* run game will run the flow of the game and eventually returns -1 if no winners or
 	* the number of the winner player. */
 	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS], vector<int> playerNums);
-	void gameOver(int winner);
 	void gameOver(int winner, pair<int, int> playersPair, PlayerResult &resA, PlayerResult &resB) const;
 
 private:

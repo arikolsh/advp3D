@@ -27,8 +27,9 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
 	ostringstream stream;
-
-	//cout << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;
+	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second;
+	Logger* logger = Logger::getInstance();
+	logger->log(stream.str());
 
 	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
@@ -93,15 +94,10 @@ void GameManager::runGame()
 
 			// Print current match results:
 			printResultsForPlayers();
-			/////
-
-
-			/////
 		}
 	}
 
 	// Print Final results:
-	cout << "\n\n F I N A L      R E S U L T S\n\n";
 	printResultsForPlayers();
 }
 
@@ -110,7 +106,7 @@ void GameManager::printResultsForPlayers()
 {
 	cout << left << setfill(' ')
 		<< setw(5) << "#"
-		<< setw(_maxNameLength+5) << "Player Name"
+		<< setw(_maxNameLength + 5) << "Player Name"
 		<< setw(20) << "Total Wins"
 		<< setw(20) << "Total Losses"
 		<< setw(10) << "%"
@@ -124,7 +120,7 @@ void GameManager::printResultsForPlayers()
 	for (int i = 0; i < sortedResults.size(); i++)
 	{
 		cout << setw(5) << to_string(i + 1).append(".")
-			<< setw(_maxNameLength+5) << sortedResults[i]._name
+			<< setw(_maxNameLength + 5) << sortedResults[i]._name
 			<< setw(20) << sortedResults[i]._totalNumWins
 			<< setw(20) << (sortedResults[i]._totalNumLosses)
 			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
@@ -186,45 +182,59 @@ vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 }
 
 bool GameManager::init() {
+	ostringstream stream;
+	Logger* logger = Logger::getInstance();
 	int numShips[] = { 0,0 };
 	int boardDepth = 0, boardRows = 0, BoardCols = 0;
 	vector<vector<string>> tmpBoard;
 	vector<string> boardPaths;
 	vector<string> dllPaths;
 	int err = GameUtils::getInputFiles(boardPaths, dllPaths, _messages, _searchDir);
+	for (int m = 0; m < _messages.size(); m++)
+	{
+		logger->log(_messages[m]);
+	}
 	if (err) {
-		//write to log
 		return false;
 	}
 	for (size_t i = 0; i < boardPaths.size(); i++)
 	{
 		if (!BoardUtils::getBoardFromFile(tmpBoard, boardPaths[i], boardDepth, boardRows, BoardCols))
 		{
-			//write to log : std::cout << "Error: failed to read board from file " << path << endl;
+			stream.str(string()); //clear stream
+			stream << "Error: failed to read board from file " << boardPaths[i];
+			logger->log(stream.str());
 			return false;
 		}
 		if (BoardUtils::isValidBoard(tmpBoard, boardDepth, boardRows, BoardCols, numShips)) {
-			cout << endl;
+			stream.str(string()); //clear stream
 			if (numShips[0] == numShips[1])
 			{
+				stream << "valid board in file" << boardPaths[i] << ", added to manager";
+				logger->log(stream.str());
 				_boards.push_back(GameBoard(tmpBoard, boardRows, BoardCols, boardDepth));
-				//write to log : std::cout << "Warning: board not balanced in file " << path << endl;
 			}
-			//write to log : std::cout << "Warning: invalid board in file " << path << endl;
+			else
+			{
+				stream << "Warning: invalid board in file" << boardPaths[i] << ", skip to next board";
+				logger->log(stream.str());
+			}
 		}
 	}
 	for (size_t i = 0; i < dllPaths.size(); i++)
 	{
-		// find working dlls and put in dlls list
-		//cout << dllPaths[i] << endl;
 		GetAlgoType tmpGetAlgo;
 		err = getPlayerAlgoFromDll(dllPaths[i], tmpGetAlgo);
 		if (err) {
-			//bad dll, skip
-			//write to log: 
+			stream.str(string()); //clear stream
+			stream << "Warning: invalid dll in file" << dllPaths[i] << ", skip to next dll";
+			logger->log(stream.str());
 			continue;
 		}
 		_playersGet.push_back(tmpGetAlgo); //dll is good
+		stream.str(string()); //clear stream
+		stream << "valid dll in file" << dllPaths[i] << ", added to manager";
+		logger->log(stream.str());
 		// init player result for specific player
 		// get player name: remove .dll suffix and last '/'
 		int x = dllPaths[i].find_last_of("/\\");
@@ -233,19 +243,17 @@ bool GameManager::init() {
 			_maxNameLength = name.size();
 		}
 		_playerResults.push_back(PlayerResult(name));
+		stream.str(string()); //clear stream
+		stream << "added result slot for player" << name;
+		logger->log(stream.str());
 	}
 	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {
-		// write to log
+		logger->log("Error: invalid number of players or number of boards, exiting game");
 		return false;
 	}
-	/*	for (int i = 0; i < _boards.size(); i++)
-		{
-			cout << "board " << i << endl;
-			cout << _boards[i].cols() << endl;
-			cout << _boards[i].rows() << endl;
-			cout << _boards[i].depth() << endl;
-		}*/
 
+	cout << "Number of legal players: " << _playersGet.size() << endl;
+	cout << "Number of legal boards: " << _boards.size() << endl;
 
 	return true;
 }
@@ -260,7 +268,6 @@ int GameManager::getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const
 	HINSTANCE hDll = LoadLibraryA(dllPath.c_str());
 	if (!hDll)
 	{
-		//write to log : std::cout << "Cannot load dll: " << dllPath << endl;
 		return FAILURE;
 	}
 
@@ -268,7 +275,6 @@ int GameManager::getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const
 	getAlgo = GetAlgoType(GetProcAddress(hDll, "GetAlgorithm"));
 	if (!getAlgo)
 	{
-		//write to log : std::cout << "Algorithm initialization failed for dll: " << dllPath << endl;
 		FreeLibrary(hDll);
 		return FAILURE;
 	}
