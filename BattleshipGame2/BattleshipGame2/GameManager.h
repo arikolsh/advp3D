@@ -4,6 +4,7 @@
 #include <memory>
 #include "GameBoard.h"
 #include "PlayerResult.h"
+typedef IBattleshipGameAlgo *(*GetAlgoType)();
 
 class GameManager {
 public:
@@ -13,14 +14,16 @@ public:
 	void runGame();
 
 private:
+
 	GameManager() = delete;
 	GameManager(const GameManager& that) = delete;
 	int GameManager::getPlayerFromDll(std::string dllPath, IBattleshipGameAlgo*& player) const;
+	int getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const;
 	std::string _searchDir;
 	int _threads;
 	std::vector<std::string> _messages;
 	std::vector<GameBoard> _boards; //holds vector of 3D boards
-	std::vector<std::unique_ptr<IBattleshipGameAlgo>> _players;
+	vector<GetAlgoType> _playersGet;
 	//player results for every player 
 	vector<PlayerResult> _playerResults;
 	// additional result container for carry player in case of odd num of players

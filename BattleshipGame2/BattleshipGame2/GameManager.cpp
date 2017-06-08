@@ -24,28 +24,29 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 void GameManager::runMatch(pair<int, int> playersPair, int boardNum, PlayerResult& result1, PlayerResult& result2)
 {
 	ostringstream  s;
-	s << "I AM IN THREAD !!!" << "players: " << playersPair.first << "," << playersPair.second << endl;;
+	s << "I AM IN THREAD !!!" << "players: " << playersPair.first << "," << playersPair.second << ", result1: " << result1._name << ", result2: " << result2._name << endl;;
 	std::cout << s.str();
+
 	Logger* logger = Logger::getInstance();
 	logger->log("hi how are you", "ERROR");
 	MatchManager matchManager(_boards[boardNum]);
 	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
-	if (true) return;
-
-	_players[playersPair.first]->setBoard(board1);
-	_players[playersPair.second]->setBoard(board2);
-
+	// copy players
+	unique_ptr<IBattleshipGameAlgo> player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());;
+	unique_ptr<IBattleshipGameAlgo> player2 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.second]());;
+	player1->setBoard(board1);
+	player2->setBoard(board2);
 	///from here up everything is good
-	IBattleshipGameAlgo* players[2] = { _players[playersPair.first].get(), _players[playersPair.second].get() };
+	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
 	//matchManager.runGame(players, result1, result2); //todo: uncomment
 	//todo: run game need to get result by reference and update them
 }
 
 void GameManager::runGame()
 {
-	int numPlayers = _players.size();
+	int numPlayers = _playersGet.size();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
 		/*
@@ -129,7 +130,7 @@ void GameManager::runGame()
 
 vector<pair<int, int>> GameManager::getNextRoundPair(vector<vector<int>>& permMatrix, int& carriedPlayer) const
 {
-	int numPlayers = _players.size();
+	int numPlayers = _playersGet.size();
 	/*
 	* isActive[i] stores true iff player_i was selected for the round.
 	* cleared after every round.
@@ -178,9 +179,8 @@ bool GameManager::init() {
 	int numShips[] = { 0,0 };
 	int boardDepth = 0, boardRows = 0, BoardCols = 0;
 	vector<vector<string>> tmpBoard;
-	IBattleshipGameAlgo* tmp;
-	vector<string> dllPaths;
 	vector<string> boardPaths;
+	vector<string> dllPaths;
 	int err = GameUtils::getInputFiles(boardPaths, dllPaths, _messages, _searchDir);
 	if (err) {
 		//write to log
@@ -206,19 +206,21 @@ bool GameManager::init() {
 	}
 	for (size_t i = 0; i < dllPaths.size(); i++)
 	{
+		// find working dlls and put in dlls list
 		cout << dllPaths[i] << endl;
-		err = getPlayerFromDll(dllPaths[i], tmp);
+		GetAlgoType tmpGetAlgo;
+		err = getPlayerAlgoFromDll(dllPaths[i], tmpGetAlgo);
 		if (err) {
-			//write to log:
-			return false;
+			//bad dll, skip
+			//write to log: 
+			continue;
 		}
+		_playersGet.push_back(tmpGetAlgo); //dll is good
 		// init player result for specific player
-		_players.push_back(unique_ptr<IBattleshipGameAlgo>(tmp));
 		string name = dllPaths[i].substr(0, dllPaths[i].size() - 4); //remove .dll suffix
 		_playerResults.push_back(PlayerResult(name));
 	}
-	if ((_players.size() <= 1) || (_boards.size() == 0)) {
-		_players.clear();
+	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {
 		// write to log
 		return false;
 	}
@@ -247,8 +249,33 @@ int GameManager::getPlayerFromDll(string dllPath, IBattleshipGameAlgo *& player)
 		FreeLibrary(hDll);
 		return FAILURE;
 	}
-
 	/* init player A */
 	player = getAlgo();
+	return SUCCESS;
+}
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
+int GameManager::getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const
+{
+	// define function of the type we expect
+	typedef IBattleshipGameAlgo *(*GetAlgoType)();
+	GetAlgoType getAlgo;
+
+	HINSTANCE hDll = LoadLibraryA(dllPath.c_str());
+	if (!hDll)
+	{
+		//write to log : std::cout << "Cannot load dll: " << dllPath << endl;
+		return FAILURE;
+	}
+
+	// Get function pointer
+	getAlgo = GetAlgoType(GetProcAddress(hDll, "GetAlgorithm"));
+	if (!getAlgo)
+	{
+		//write to log : std::cout << "Algorithm initialization failed for dll: " << dllPath << endl;
+		FreeLibrary(hDll);
+		return FAILURE;
+	}
+	algo = getAlgo;
 	return SUCCESS;
 }
