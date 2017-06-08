@@ -110,7 +110,7 @@ void GameManager::printResultsForPlayers()
 {
 	cout << left << setfill(' ')
 		<< setw(5) << "#"
-		<< setw(30) << "Player Name"
+		<< setw(_maxNameLength+5) << "Player Name"
 		<< setw(20) << "Total Wins"
 		<< setw(20) << "Total Losses"
 		<< setw(10) << "%"
@@ -124,7 +124,7 @@ void GameManager::printResultsForPlayers()
 	for (int i = 0; i < sortedResults.size(); i++)
 	{
 		cout << setw(5) << to_string(i + 1).append(".")
-			<< setw(30) << sortedResults[i]._name
+			<< setw(_maxNameLength+5) << sortedResults[i]._name
 			<< setw(20) << sortedResults[i]._totalNumWins
 			<< setw(20) << (sortedResults[i]._totalNumLosses)
 			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
@@ -133,8 +133,6 @@ void GameManager::printResultsForPlayers()
 	}
 	cout << endl;
 }
-
-bool wayToSort(int i, int j) { return i > j; }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 {
@@ -231,19 +229,22 @@ bool GameManager::init() {
 		// get player name: remove .dll suffix and last '/'
 		int x = dllPaths[i].find_last_of("/\\");
 		string name = dllPaths[i].substr(x + 1, dllPaths[i].size() - 4 - x - 1);
+		if (_maxNameLength <= name.size()) {
+			_maxNameLength = name.size();
+		}
 		_playerResults.push_back(PlayerResult(name));
 	}
 	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {
 		// write to log
 		return false;
 	}
-/*	for (int i = 0; i < _boards.size(); i++)
-	{
-		cout << "board " << i << endl;
-		cout << _boards[i].cols() << endl;
-		cout << _boards[i].rows() << endl;
-		cout << _boards[i].depth() << endl;
-	}*/
+	/*	for (int i = 0; i < _boards.size(); i++)
+		{
+			cout << "board " << i << endl;
+			cout << _boards[i].cols() << endl;
+			cout << _boards[i].rows() << endl;
+			cout << _boards[i].depth() << endl;
+		}*/
 
 
 	return true;

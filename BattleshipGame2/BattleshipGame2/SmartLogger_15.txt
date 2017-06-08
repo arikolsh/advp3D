@@ -1,0 +1,287 @@
+Starting logger...
+SmartPlayer number 15 board: row-col cut for depth 1
+----------
+---------B
+----------
+B---------
+----------
+-------M--
+-------M--
+-------M--
+---P------
+---P-B----
+
+
+Randomization seed is: 1496949470
+
+notifyOnAttackResult: player 15 attacked 1,1,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 1,2,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 10,2,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 10,7,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 4,5,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 4,7,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 3,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 3,10,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 1,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 1,7,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 7,4,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 1,3,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 7,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 8,8,1
+AttackResult: 'Hit'
+
+notifyOnAttackResult: player 8 attacked 9,8,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 2,1,1
+Attacking State: Routine
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 2,1,1 After Sink!
+
+notifyOnAttackResult: player 15 attacked 6,4,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 7,8,1
+AttackResult: 'Hit'
+
+notifyOnAttackResult: player 8 attacked 6,8,1
+AttackResult: 'Sink'
+
+notifyOnAttackResult: player 8 attacked 8,10,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 3,4,1
+Attacking State: Routine
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 3,4,1 After Sink!
+
+notifyOnAttackResult: player 15 attacked 5,3,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 2,3,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 10,10,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 3,8,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 1,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 5,6,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 6,10,1
+Attacking State: Routine
+AttackResult: 'Hit'
+
+Player 15 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 15 attacked 7,10,1
+Attacking State: Hunting Y forwards
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 4,9,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 5,10,1
+Attacking State: Hunting Y backwards
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 5,10,1 After Sink!
+First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
+cleared Surrounding cells arround hit point: 6,10,1 In Hunting direction: 0,1,1 (Hunting Y axis)
+
+notifyOnAttackResult: player 15 attacked 9,10,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 2,7,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 2,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 1,9,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 6,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 1,4,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 5,7,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 10,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 9,7,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 2,9,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 10,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 6,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 8,1,1
+Attacking State: Routine
+AttackResult: 'Hit'
+
+Player 15 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 15 attacked 9,1,1
+Attacking State: Hunting Y forwards
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 10,3,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 7,1,1
+Attacking State: Hunting Y backwards
+AttackResult: 'Miss'
+
+Player 15 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 8 attacked 9,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 8,2,1
+Attacking State: Hunting X forwards
+AttackResult: 'Hit'
+cleared Surrounding cells arround hit point: 8,2,1 In Hunting direction: 1,0,1 (Hunting X axis)
+First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
+cleared Surrounding cells arround hit point: 8,1,1 In Hunting direction: 1,0,1 (Hunting X axis)
+
+notifyOnAttackResult: player 15 attacked 8,3,1
+Attacking State: Hunting X forwards
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 8,3,1 After Sink!
+
+notifyOnAttackResult: player 15 attacked 8,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 10,1,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 5,2,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 4,2,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 5,5,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 9,9,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 2,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 2,10,1
+AttackResult: 'Sink'
+
+notifyOnAttackResult: player 8 attacked 3,2,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 3,7,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 4,1,1
+AttackResult: 'Sink'
+
+notifyOnAttackResult: player 8 attacked 4,6,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 3,9,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 8,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 4,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 4,3,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 2,5,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 10,4,1
+AttackResult: 'Hit'
+
+notifyOnAttackResult: player 8 attacked 9,4,1
+AttackResult: 'Sink'
+
+notifyOnAttackResult: player 8 attacked 5,4,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 6,1,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 8 attacked 1,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 15 attacked 6,3,1
+Attacking State: Routine
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 6,3,1 After Sink!
