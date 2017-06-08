@@ -1,6 +1,8 @@
 #include "PlayerResult.h"
-#include <iostream>
 #include <sstream>
+#include <iostream>
+
+using namespace std;
 
 PlayerResult::PlayerResult(const std::string& name) : _totalNumPointsFor(0), _totalNumPointsAgainst(0), _totalNumLosses(0), _totalNumWins(0), _name(name)
 {

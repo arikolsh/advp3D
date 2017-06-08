@@ -46,7 +46,7 @@ void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult
 {
 	// Log important info from notifyOnAttackResult to SmartLogger.txt:
 	notifyOnAttackToLogger(player, move, result, false);
-	
+
 	// Unmark the attacked cell (to avoid attacking it again):
 	if (_board.charAt(move) == MARKED_CELL) { _board.At(move) = EMPTY_CELL; }
 

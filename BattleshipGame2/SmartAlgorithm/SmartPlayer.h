@@ -5,7 +5,7 @@
 #include <vector>
 
 #define INVALID_COORDINATE  { -1 , -1, -1 }
-#define EMPTY_CELL '-'
+#define EMPTY_CELL ' '
 #define MARKED_CELL 'x'
 #define SURROUNDING_SHIP_CELL '0'
 #define A_NUM 0

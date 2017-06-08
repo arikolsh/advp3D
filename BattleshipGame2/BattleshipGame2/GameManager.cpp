@@ -55,7 +55,6 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 void GameManager::runGame()
 {
 	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
-	int numPlayers = _playersGet.size();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
 		/*
@@ -147,7 +146,24 @@ vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 		players.pop_back();
 		players.insert(players.begin() + 1, last);
 	}
-	return schedule;
+	// generate flipped pairs
+	vector <vector<pair<int, int>>> scheduleFinal;
+	for (int i = 0; i < schedule.size(); i++)
+	{
+		scheduleFinal.push_back(schedule[i]);
+	}
+
+	for (int pv = 0; pv < schedule.size(); pv++)
+	{
+		vector<pair<int, int>> pairVec = schedule[pv];
+		vector<pair<int, int>> flipPairVec;
+		for (int i = 0; i < pairVec.size(); i++)
+		{
+			flipPairVec.push_back(make_pair(pairVec[i].second, pairVec[i].first));
+		}
+		scheduleFinal.push_back(flipPairVec);
+	}
+	return scheduleFinal;
 }
 
 bool GameManager::init() {
@@ -192,7 +208,9 @@ bool GameManager::init() {
 		}
 		_playersGet.push_back(tmpGetAlgo); //dll is good
 		// init player result for specific player
-		string name = dllPaths[i].substr(0, dllPaths[i].size() - 4); //remove .dll suffix
+		// get player name: remove .dll suffix and last '/'
+		int x = dllPaths[i].find_last_of("/\\");
+		string name = dllPaths[i].substr(x + 1, dllPaths[i].size() - 4 - x - 1);
 		_playerResults.push_back(PlayerResult(name));
 	}
 	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {

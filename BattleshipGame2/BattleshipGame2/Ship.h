@@ -3,7 +3,7 @@
 class Ship {
 public:
 
-	Ship(char _type);
+	explicit Ship(char _type);
 
 	// Class destructor
 	~Ship();
