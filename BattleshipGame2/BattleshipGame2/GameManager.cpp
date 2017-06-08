@@ -90,17 +90,13 @@ void GameManager::runGame()
 			}
 
 			// Print current match results:
-			auto t = thread(&GameManager::printResultsForPlayers, this);
-			if (t.joinable())
-				t.join();
+			//printResultsForPlayers();
 		}
 	}
 
 	// Print Final results:
 	cout << "\n\n F I N A L      R E S U L T S\n\n";
-	auto t = thread(&GameManager::printResultsForPlayers, this);
-	if (t.joinable())
-		t.join();
+	printResultsForPlayers();
 }
 
 
@@ -188,17 +184,15 @@ bool GameManager::init() {
 			if (numShips[0] == numShips[1])
 			{
 				_boards.push_back(GameBoard(tmpBoard, boardRows, BoardCols, boardDepth));
-				//_boards.erase(_boards.begin() + i); //renove invalid boards
 				//write to log : std::cout << "Warning: board not balanced in file " << path << endl;
 			}
-			//_boards.erase(_boards.begin() + i); //renove invalid boards
 			//write to log : std::cout << "Warning: invalid board in file " << path << endl;
 		}
 	}
 	for (size_t i = 0; i < dllPaths.size(); i++)
 	{
 		// find working dlls and put in dlls list
-		cout << dllPaths[i] << endl;
+		//cout << dllPaths[i] << endl;
 		GetAlgoType tmpGetAlgo;
 		err = getPlayerAlgoFromDll(dllPaths[i], tmpGetAlgo);
 		if (err) {
