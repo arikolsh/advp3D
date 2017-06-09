@@ -28,8 +28,7 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
 	ostringstream stream;
 	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second;
-	Logger* logger = Logger::getInstance();
-	logger->log(stream.str());
+	_logger->log(stream.str());
 
 	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
@@ -68,28 +67,24 @@ void GameManager::runGame()
 		*/
 		while (schedule.size() > 0)
 		{	//------- one board round -------//
-			int numActiveThreads = 0;
 			vector<pair<int, int>> pairs = schedule.back(); //get next pairs for round and update carriedPlayer
 			schedule.pop_back();
-			vector<thread> matchThreads;
-			int lastThreadOffset = 0;
+			vector<thread> activeThreads;
 			while (pairs.size() > 0) //still pending tasks
 			{ //------- round -------//
-				while (numActiveThreads < _threads && pairs.size() > 0)
+				while (activeThreads.size() < _threads && pairs.size() > 0)
 				{
 					pair<int, int> currentPair = pairs.back();
 					if (currentPair.first == -1 || currentPair.second == -1) { continue; } //skip the player that didnt have a pair
-					matchThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
+					activeThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
 					pairs.pop_back();
-					numActiveThreads++;
 				}
-				for (auto i = lastThreadOffset; i < matchThreads.size(); i++)
+				for (auto i = 0; i < activeThreads.size(); i++)
 				{ //wait for matches to finish
-					if (matchThreads[i].joinable())
-						matchThreads.at(i).join();
+					if (activeThreads[i].joinable())
+						activeThreads.at(i).join();
 				}
-				lastThreadOffset += numActiveThreads;
-				numActiveThreads = 0;
+				activeThreads.clear(); // clear threads buffer
 			}
 			printResultsForPlayers(); // Print current match results
 		}
@@ -174,7 +169,6 @@ vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 
 bool GameManager::init() {
 	ostringstream stream;
-	Logger* logger = Logger::getInstance();
 	int numShips[] = { 0,0 };
 	int boardDepth = 0, boardRows = 0, BoardCols = 0;
 	vector<vector<string>> tmpBoard;
@@ -183,7 +177,7 @@ bool GameManager::init() {
 	int err = GameUtils::getInputFiles(boardPaths, dllPaths, _messages, _searchDir);
 	for (int m = 0; m < _messages.size(); m++)
 	{
-		logger->log(_messages[m]);
+		_logger->log(_messages[m]);
 	}
 	if (err) {
 		return false;
@@ -194,7 +188,7 @@ bool GameManager::init() {
 		{
 			stream.str(string()); //clear stream
 			stream << "Error: failed to read board from file " << boardPaths[i];
-			logger->log(stream.str());
+			_logger->log(stream.str());
 			return false;
 		}
 		if (BoardUtils::isValidBoard(tmpBoard, boardDepth, boardRows, BoardCols, numShips)) {
@@ -202,13 +196,13 @@ bool GameManager::init() {
 			if (numShips[0] == numShips[1])
 			{
 				stream << "valid board in file" << boardPaths[i] << ", added to manager";
-				logger->log(stream.str());
+				_logger->log(stream.str());
 				_boards.push_back(GameBoard(tmpBoard, boardRows, BoardCols, boardDepth));
 			}
 			else
 			{
 				stream << "Warning: invalid board in file" << boardPaths[i] << ", skip to next board";
-				logger->log(stream.str());
+				_logger->log(stream.str());
 			}
 		}
 	}
@@ -219,13 +213,13 @@ bool GameManager::init() {
 		if (err) {
 			stream.str(string()); //clear stream
 			stream << "Warning: invalid dll in file" << dllPaths[i] << ", skip to next dll";
-			logger->log(stream.str());
+			_logger->log(stream.str());
 			continue;
 		}
 		_playersGet.push_back(tmpGetAlgo); //dll is good
 		stream.str(string()); //clear stream
 		stream << "valid dll in file" << dllPaths[i] << ", added to manager";
-		logger->log(stream.str());
+		_logger->log(stream.str());
 		// init player result for specific player
 		// get player name: remove .dll suffix and last '/'
 		int x = dllPaths[i].find_last_of("/\\");
@@ -236,10 +230,10 @@ bool GameManager::init() {
 		_playerResults.push_back(PlayerResult(name));
 		stream.str(string()); //clear stream
 		stream << "added result slot for player" << name;
-		logger->log(stream.str());
+		_logger->log(stream.str());
 	}
 	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {
-		logger->log("Error: invalid number of players or number of boards, exiting game");
+		_logger->log("Error: invalid number of players or number of boards, exiting game");
 		return false;
 	}
 
