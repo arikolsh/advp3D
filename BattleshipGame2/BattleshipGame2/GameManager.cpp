@@ -91,14 +91,10 @@ void GameManager::runGame()
 				lastThreadOffset += numActiveThreads;
 				numActiveThreads = 0;
 			}
-
-			// Print current match results:
-			printResultsForPlayers();
+			printResultsForPlayers(); // Print current match results
 		}
 	}
-
-	// Print Final results:
-	printResultsForPlayers();
+	printResultsForPlayers(); // Print Final results
 }
 
 
@@ -116,12 +112,13 @@ void GameManager::printResultsForPlayers()
 		stream << setw(5) << to_string(i + 1).append(".")
 			<< setw(_maxNameLength + 5) << sortedResults[i]._name
 			<< setw(20) << sortedResults[i]._totalNumWins
-			<< setw(20) << (sortedResults[i]._totalNumLosses)
+			<< setw(20) << sortedResults[i]._totalNumLosses
 			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
 			<< setw(15) << sortedResults[i]._totalNumPointsFor
 			<< setw(15) << sortedResults[i]._totalNumPointsAgainst << endl;
 	}
 	cout << stream.str() << endl;
+	_logger->log(stream.str());
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
