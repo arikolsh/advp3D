@@ -63,4 +63,5 @@ private:
 	static bool isOwnGoal(int attackedPlayerNum, char shipType);
 
 	Logger* _logger;
+	void logMatchResults(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const;
 };

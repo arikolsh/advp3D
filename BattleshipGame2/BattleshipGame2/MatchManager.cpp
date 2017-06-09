@@ -219,9 +219,14 @@ void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult
 	}
 	//else: Winner == -1 which means no winner..
 
+	logMatchResults(winner, playersPair, resA, resB); // Debug: log all match info
+}
+
+void MatchManager::logMatchResults(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const
+{
 	// Debug: log all info:
 	ostringstream stream;
-	stream << "\n#### Current Match ####\n";
+	stream << "\n\n#### Current Match ####\n";
 	std::thread::id this_id = std::this_thread::get_id();
 	stream << "Running in thread id: " << this_id << endl;
 	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second << endl;

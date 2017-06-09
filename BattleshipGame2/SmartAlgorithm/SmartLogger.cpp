@@ -15,7 +15,11 @@ SmartLogger::SmartLogger(const SmartLogger &logger)
 	_player = logger._player, _logPath = logger._logPath, _shouldLog = logger._shouldLog;
 }
 
-SmartLogger::~SmartLogger() { _logFile.close(); }
+SmartLogger::~SmartLogger()
+{
+	if (!_shouldLog) { return; }
+	_logFile.close();
+}
 
 SmartLogger& SmartLogger::operator=(const SmartLogger& logger)
 {
@@ -25,22 +29,21 @@ SmartLogger& SmartLogger::operator=(const SmartLogger& logger)
 
 bool SmartLogger::createLog()
 {
+	if (!_shouldLog) { return false; }
 	_logFile.open(_logPath);
-	//check for errors...
 	return true;
 }
 
-//basic_ostream<char> operator<<(const basic_ostream<char>& lhs, const string& cs){}
-
 bool SmartLogger::log(const string msg)
 {
+	if (!_shouldLog) { return false; }
 	_logFile << msg.c_str() << endl;
-	//check for errors...
 	return true;
 }
 
 void SmartLogger::log_3D_board(SmartBoard board, bool includePadding, int player)
 {
+	if (!_shouldLog) { return; }
 	int i, j, k, start, last_row, last_col, last_depth;
 	start = includePadding ? 0 : 1;
 	last_row = includePadding ? board.rows() + 2 : board.rows() + 1;
@@ -62,6 +65,7 @@ void SmartLogger::log_3D_board(SmartBoard board, bool includePadding, int player
 
 void SmartLogger::log_potential_attacks(vector<Coordinate> potentialAttacks)
 {
+	if (!_shouldLog) { return; }
 	ostringstream stream;
 	stream << "Printing potential attacks for player " << _player << endl;
 	for (auto c : potentialAttacks)
