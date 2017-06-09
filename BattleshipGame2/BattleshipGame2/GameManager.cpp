@@ -56,7 +56,7 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 
 void GameManager::runGame()
 {
-	vector<vector<pair<int, int>>> schedule;
+	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
 		/*
@@ -65,20 +65,20 @@ void GameManager::runGame()
 		* against each other. for every i permMatrix[i][i] = 1 in advance because
 		* player_i cannot play againset himself.
 		*/
-		schedule = getAllRoundsSchedule();
-		while (schedule.size() > 0)
+		int curRound = 0;
+		while (curRound < schedule.size())
 		{	//------- one board round -------//
-			vector<pair<int, int>> pairs = schedule.back(); //get next pairs for round and update carriedPlayer
-			schedule.pop_back();
+			vector<pair<int, int>> pairs = schedule[curRound]; //get next pairs for round and update carriedPlayer
 			vector<thread> activeThreads;
-			while (pairs.size() > 0) //still pending tasks
+			int curPairIndex = 0;
+			while (curPairIndex < pairs.size()) //still pending tasks
 			{ //------- round -------//
-				while (activeThreads.size() < _threads && pairs.size() > 0)
+				while (activeThreads.size() < _threads && curPairIndex < pairs.size())
 				{
-					pair<int, int> currentPair = pairs.back();
+					pair<int, int> currentPair = pairs[curPairIndex];
 					if (currentPair.first == -1 || currentPair.second == -1) { continue; } //skip the player that didnt have a pair
 					activeThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
-					pairs.pop_back();
+					curPairIndex++;
 				}
 				for (auto i = 0; i < activeThreads.size(); i++)
 				{ //wait for matches to finish
@@ -88,6 +88,7 @@ void GameManager::runGame()
 				activeThreads.clear(); // clear threads buffer
 			}
 			printResultsForPlayers(); // Print current match results
+			curRound++;
 		}
 	}
 	printResultsForPlayers(); // Print Final results
