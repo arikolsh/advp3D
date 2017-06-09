@@ -32,7 +32,6 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 
 	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
-
 	// Set boards for both players:
 	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());

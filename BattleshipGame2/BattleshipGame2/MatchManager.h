@@ -12,7 +12,7 @@
 
 class MatchManager {
 public:
-	explicit MatchManager(GameBoard &gameBoard);
+	explicit MatchManager(GameBoard gameBoard);
 	~MatchManager();
 	int getPlayerScore(int player) const;
 	bool isPlayerDefeated(int player) const;
@@ -40,7 +40,6 @@ public:
 private:
 	MatchManager() = delete;
 	MatchManager(const MatchManager& that) = delete;
-	GameBoard _gameBoard;
 	/*player data: first is A, second is B*/
 	pair<int, int> _playerScores;
 	pair<int, int> _playersNumActiveShips;
@@ -51,13 +50,9 @@ private:
 	/* Each player board is prepared in advance and hidden from the opponent!
 	* fillPlayerBoard gets the full board with both players ships,
 	* and fills the given player's board with his ships only. */
-	void fillMapWithShips();
+	void fillMapWithShips(GameBoard gameBoard);
 
-	enum ShipDirection { VERTICAL = 0, HORIZONTAL = 1, DEPTH = 2 };
-
-	ShipDirection findShipDirection(Coordinate c, char ship) const;
-
-	void insertShipToMap(Coordinate c, char ship_char);
+	void insertShipToMap(GameBoard& gameBoard, Coordinate c, char ship_char);
 
 	/*return true if own goal*/
 	static bool isOwnGoal(int attackedPlayerNum, char shipType);
