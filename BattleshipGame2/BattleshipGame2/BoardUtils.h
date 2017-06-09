@@ -24,11 +24,11 @@ class BoardUtils {
 	* for a specifc ship on the board in a certain direction, mark its cells and return its length.
 	*/
 	static int markCellsAndGetLen(std::vector<std::vector<std::string>>& board, char ship, int direction, int depth, int row, int col);
+public:
 	/*
 	* for a specifc cell which contains a ship type char, return its direction. can be RIGHT,DOWN,DEEP.
 	*/
 	static int findShipDirection(std::vector<std::vector<std::string>> board, int depth, int row, int col, char ship);
-public:
 	/*
 	* fill board3d with the board in given path, and put in depth, rows and cols its dimensions.
 	* return true if successful and false otherwise.

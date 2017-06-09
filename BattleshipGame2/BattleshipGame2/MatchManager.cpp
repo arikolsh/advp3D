@@ -6,6 +6,7 @@
 #include <mutex>
 #include "GameManager.h"
 #include <sstream>
+#include "BoardUtils.h"
 #define NUM_SHIP_TYPES 4
 #define NUM_PLAYERS 2
 #define A_NUM 0
@@ -22,56 +23,45 @@
 #define FAILURE -1
 #define EMPTY_CELL ' '
 #define VISITED 'x'
+#define RIGHT 0
+#define DOWN 1
+#define DEEP 2
 
 bool debugMode = false;
 
-MatchManager::MatchManager(GameBoard &gameBoard)
+MatchManager::MatchManager(GameBoard gameBoard)
 {
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
 	_playerScores = { 0, 0 };
 	_currentPlayerIndex = A_NUM; //player A starts the game
-	_gameBoard = GameBoard(gameBoard); // Copy the given board
-	fillMapWithShips();
+	fillMapWithShips(gameBoard);
 	_logger = Logger::getInstance();
 }
 
 MatchManager::~MatchManager() {}
 
-void MatchManager::fillMapWithShips()
+void MatchManager::fillMapWithShips(GameBoard gameBoard)
 {
 	char cell;
-	for (int i = 1; i < _gameBoard.rows() + 1; i++)
+	for (int i = 1; i < gameBoard.rows() + 1; i++)
 	{
-		for (int j = 1; j < _gameBoard.cols() + 1; j++)
+		for (int j = 1; j < gameBoard.cols() + 1; j++)
 		{
-			for (int k = 1; k < _gameBoard.depth() + 1; k++)
+			for (int k = 1; k < gameBoard.depth() + 1; k++)
 			{
 				Coordinate coordinate = Coordinate(i, j, k);
-				cell = _gameBoard.charAt(coordinate);
+				cell = gameBoard.charAt(coordinate);
 				if (!Ship::isShip(cell)) { continue; } // Skip non-ship cells
-				_gameBoard.setAt(coordinate) = VISITED; // Mark coordinate as visited
-				insertShipToMap(coordinate, cell);
+				gameBoard.setAt(coordinate) = VISITED; // Mark coordinate as visited
+				insertShipToMap(gameBoard,coordinate, cell);
 			}
 		}
 	}
 }
 
-MatchManager::ShipDirection MatchManager::findShipDirection(struct Coordinate c, char ship) const
-{
-	if (_gameBoard.charAt(Coordinate(c.row + 1, c.col, c.depth)) == ship)
-	{
-		return VERTICAL;
-	}
-	if (_gameBoard.charAt(Coordinate(c.row, c.col + 1, c.depth)) == ship)
-	{
-		return HORIZONTAL;
-	}
-	return DEPTH; // Default also for single-cell ships ('b' / 'B')
-}
-
 /* create the ship object and then find the ship orientation (VERTICAL / HORIZONTAL / Depth)
 * and add all cells which belong to the current ship to _shipsMap */
-void MatchManager::insertShipToMap(Coordinate c, char ship_char)
+void MatchManager::insertShipToMap(GameBoard& gameBoard,Coordinate c, char ship_char)
 {
 	int shipLen, direction;
 	vector<int> insPoint = { -1, -1, -1 };
@@ -82,24 +72,24 @@ void MatchManager::insertShipToMap(Coordinate c, char ship_char)
 	shipLen = ship->getLife();
 	shipAndHit = { ship , false };
 	//Find the ship orientation (VERTICAL / HORIZONTAL / Depth):
-	direction = findShipDirection(c, ship_char);
+	direction = BoardUtils::findShipDirection(gameBoard.board(), c.depth,c.row,c.col, ship_char);
 	//Find all cells which belong to the current ship and add them to _shipsMap:
 	for (int m = 0; m < shipLen; m++)
 	{
 		switch (direction)
 		{
-		case VERTICAL:
+		case DOWN:
 			coor = Coordinate(c.row + m, c.col, c.depth);
 			break;
-		case HORIZONTAL:
+		case RIGHT:
 			coor = Coordinate(c.row, c.col + m, c.depth);
 			break;
-		case DEPTH:
+		case DEEP:
 			coor = Coordinate(c.row, c.col, c.depth + m);
 			break;
 		default: break;
 		}
-		_gameBoard.setAt(coor) = VISITED;
+		gameBoard.setAt(coor) = VISITED;
 		_shipsMap[{coor.row, coor.col, coor.depth}] = shipAndHit;
 	}
 }
