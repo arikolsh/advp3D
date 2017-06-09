@@ -56,7 +56,7 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 
 void GameManager::runGame()
 {
-	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
+	vector<vector<pair<int, int>>> schedule;
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
 		/*
@@ -65,6 +65,7 @@ void GameManager::runGame()
 		* against each other. for every i permMatrix[i][i] = 1 in advance because
 		* player_i cannot play againset himself.
 		*/
+		schedule = getAllRoundsSchedule();
 		while (schedule.size() > 0)
 		{	//------- one board round -------//
 			vector<pair<int, int>> pairs = schedule.back(); //get next pairs for round and update carriedPlayer
