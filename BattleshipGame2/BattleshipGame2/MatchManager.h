@@ -34,8 +34,7 @@ public:
 	* Game is over once a player loses all his ships, or all attackes were taken.
 	* run game will run the flow of the game and eventually returns -1 if no winners or
 	* the number of the winner player. */
-	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS]);
-	void gameOver(int winner);
+	int runGame(IBattleshipGameAlgo * players[NUM_PLAYERS], vector<int> playerNums);
 	void gameOver(int winner, pair<int, int> playersPair, PlayerResult &resA, PlayerResult &resB) const;
 
 private:
@@ -46,7 +45,7 @@ private:
 	pair<int, int> _playerScores;
 	pair<int, int> _playersNumActiveShips;
 	/*who is the next player to attack*/
-	int _currentPlayer;
+	int _currentPlayerIndex;
 	map<vector<int>, pair<shared_ptr<Ship>, bool>> _shipsMap;
 
 	/* Each player board is prepared in advance and hidden from the opponent!

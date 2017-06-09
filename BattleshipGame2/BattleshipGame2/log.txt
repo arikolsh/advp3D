@@ -1,7 +1,0 @@
-Program execution started...
-Thu Jun  8 01:02:08 2017	hi how are you	ERROR
-Thu Jun  8 01:02:08 2017	hi how are you	ERROR
-Thu Jun  8 01:02:08 2017	hi how are you	ERROR
-Thu Jun  8 01:02:08 2017	hi how are you	ERROR
-Thu Jun  8 01:02:08 2017	hi how are you	ERROR
-Thu Jun  8 01:02:08 2017	hi how are you	ERROR

@@ -12,11 +12,10 @@ int main(int argc, char* argv[])
 	GameUtils::getArgs(argc, argv, threads, searchDir);
 	///check logger//
 	Logger* logger = Logger::getInstance();
-	logger->init("game.log", "DEBUG");
-	string path = "";
-	GameManager gameManager(path, 10);
-	bool isStarted =gameManager.init();
-	if(!isStarted)
+	logger->init("game.log");
+	GameManager gameManager(searchDir, threads);
+	bool isStarted = gameManager.init();
+	if (!isStarted)
 	{
 		logger->destroy();
 		return EXIT_FAILURE;

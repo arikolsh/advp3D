@@ -29,7 +29,7 @@ MatchManager::MatchManager(GameBoard &gameBoard)
 {
 	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
 	_playerScores = { 0, 0 };
-	_currentPlayer = A_NUM; //player A starts the game
+	_currentPlayerIndex = A_NUM; //player A starts the game
 	_gameBoard = GameBoard(gameBoard); // Copy the given board
 	fillMapWithShips();
 	_logger = Logger::getInstance();
@@ -141,7 +141,7 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 	auto found = _shipsMap.find({ attack.row, attack.col, attack.depth });
 	if (found == _shipsMap.end()) //attack point not in map --> Miss
 	{
-		_currentPlayer = attackedPlayerNum;
+		_currentPlayerIndex = attackedPlayerNum;
 		return AttackResult::Miss;
 	}
 	auto ship = found->second.first; //attack point is in map --> get the ship
@@ -150,7 +150,7 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 	if (shipWasHit == true) //Not the first hit on this specific cell (i,j)
 	{
 		//pass turn to opponent
-		_currentPlayer = attackedPlayerNum;
+		_currentPlayerIndex = attackedPlayerNum;
 		if (ship->getLife() == 0) //ship already sank.. Miss
 		{
 			return AttackResult::Miss;
@@ -164,7 +164,7 @@ AttackResult MatchManager::executeAttack(int attackedPlayerNum, Coordinate attac
 	if (isOwnGoal(attackedPlayerNum, shipType))
 	{
 		//in case of own goal pass turn to opponent
-		_currentPlayer = attackedPlayerNum;
+		_currentPlayerIndex = attackedPlayerNum;
 	}
 	if (ship->getLife() == 0) //It's a Sink
 	{
@@ -198,16 +198,6 @@ bool MatchManager::isOwnGoal(int attackedPlayerNum, char shipType)
 {
 	return attackedPlayerNum == A_NUM && shipType != toupper(shipType)
 		|| attackedPlayerNum == B_NUM && shipType != tolower(shipType);
-}
-
-void MatchManager::gameOver(int winner)
-{
-	if (winner != -1) //We have a winner
-	{
-		cout << "Player " << (winner == A_NUM ? "A" : "B") << " won" << endl;
-	}
-	cout << "Points:" << endl << "Player A: " << _playerScores.first << endl << "Player B: " << _playerScores.second << endl;
-	//logShipsMap();
 }
 
 void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const
@@ -252,50 +242,50 @@ void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult
 	stream << "Number of victories: " << resB._totalNumWins << endl;
 	stream << "Total score for player (so far): " << resB._totalNumPointsFor << endl;
 	stream << "Number of losses: " << resB._totalNumLosses << endl;
-	stream << "Total score against (so far): " << resB._totalNumPointsAgainst << endl;
-	_logger->log(stream.str(), "Debug");
+	stream << "Total score against (so far): " << resB._totalNumPointsAgainst;
+	_logger->log(stream.str());
 }
 
-int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS])
+int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS], vector<int> playerNums)
 {
 	int winner = -1;
 	//finishedAttacks[i] is true iff players[i] finished all his attacks
 	bool finishedAttacks[NUM_PLAYERS] = { false,false };
 	Coordinate attackPoint(INVALID_COORDINATE);
 	AttackResult attackResult;
-	int attacker;
+	int attackerIndex;
 	//logShipsMap();
 	while (true)
 	{
-		attacker = _currentPlayer;
+		attackerIndex = _currentPlayerIndex;
 		//Player declares his next attack:
-		attackPoint = players[_currentPlayer]->attack();
+		attackPoint = players[_currentPlayerIndex]->attack();
 		if (attackPoint.row == -1)
 		{
-			finishedAttacks[_currentPlayer] = true;
+			finishedAttacks[_currentPlayerIndex] = true;
 			if (finishedAttacks[0] && finishedAttacks[1])
 			{ //both players finished all their attacks
 				break;
 			}
 			//switch to opponent
-			_currentPlayer = 1 - _currentPlayer;
+			_currentPlayerIndex = 1 - _currentPlayerIndex;
 			continue;
 		}
 
-		attackResult = executeAttack(1 - _currentPlayer, attackPoint);
-		players[A_NUM]->notifyOnAttackResult(attacker, attackPoint, attackResult);
-		players[B_NUM]->notifyOnAttackResult(attacker, attackPoint, attackResult);
+		attackResult = executeAttack(1 - _currentPlayerIndex, attackPoint);
+		players[A_NUM]->notifyOnAttackResult(playerNums[attackerIndex], attackPoint, attackResult);
+		players[B_NUM]->notifyOnAttackResult(playerNums[attackerIndex], attackPoint, attackResult);
 		//check for defeated players
-		if (isPlayerDefeated(1 - _currentPlayer))
+		if (isPlayerDefeated(1 - _currentPlayerIndex))
 		{
 			//current player sunk all opponent's ships
-			winner = _currentPlayer; //winner is the current player
+			winner = _currentPlayerIndex; //winner is the current player
 			break;
 		}
-		if (isPlayerDefeated(_currentPlayer))
+		if (isPlayerDefeated(_currentPlayerIndex))
 		{
 			//current player sunk his own last ship
-			winner = 1 - _currentPlayer; //winner is the opponent
+			winner = 1 - _currentPlayerIndex; //winner is the opponent
 			break;
 		}
 	}
@@ -318,7 +308,7 @@ void MatchManager::buildPlayerBoards(const GameBoard board, GameBoard& targetBoa
 
 				if (Ship::isShip(cell))
 				{
-					if (cell == tolower(cell))
+					if (cell == toupper(cell))
 					{
 						targetBoard1.setAt(Coordinate(i, j, k)) = cell;
 					}

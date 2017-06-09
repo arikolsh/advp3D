@@ -35,9 +35,9 @@ void SmartPlayer::setBoard(const BoardData& board)
 	_board.SetDimentions(board.rows(), board.cols(), board.depth());
 	_board.initialize(); // Initialize an empty board with paddings
 	_board.copyPlayerShips(board, _playerNum); // Copy all player's ships to the private _board
+	_logger.log_3D_board(_board, false, _playerNum);
 	getAllPotentialHits(); // Fills the _potentialAttacks vector with all points marked ('X') as potential hits
 	updateDirections(true, true, true); // Initialize all directions as valid for attack
-	_logger.log_3D_board(_board, false, _playerNum);
 	//_logger.log_potential_attacks(_potentialAttacks);
 	//_board.print_3D_board(false, _playerNum);
 }
@@ -45,7 +45,7 @@ void SmartPlayer::setBoard(const BoardData& board)
 void SmartPlayer::notifyOnAttackResult(int player, Coordinate move, AttackResult result)
 {
 	// Log important info from notifyOnAttackResult to SmartLogger.txt:
-	notifyOnAttackToLogger(player, move, result, false);
+	notifyOnAttackToLogger(player, move, result, true);
 
 	// Unmark the attacked cell (to avoid attacking it again):
 	if (_board.charAt(move) == MARKED_CELL) { _board.At(move) = EMPTY_CELL; }
@@ -426,9 +426,13 @@ void SmartPlayer::clearSurroundings(Coordinate hit, AttackResult result)
 	else if (result == AttackResult::Sink) // Clear surrounding cells in all directions
 	{
 		clearCellsInBoard(hit, 1, 1, 1);
+		if (_attackingState == Routine)
+		{
+			_cleanedFirstHit = true;
+		}
 	}
 
-	if (!_cleanedFirstHit)
+	if (!_cleanedFirstHit && _attackingState != Routine)
 	{
 		_logger.log("First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:");
 		clearCellsInBoard(_firstHit, r, c, d);

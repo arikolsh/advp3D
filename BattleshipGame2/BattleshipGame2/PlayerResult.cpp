@@ -1,5 +1,4 @@
 #include "PlayerResult.h"
-#include <sstream>
 #include <iostream>
 
 using namespace std;
@@ -8,25 +7,19 @@ PlayerResult::PlayerResult(const std::string& name) : _totalNumPointsFor(0), _to
 {
 }
 
-string PlayerResult::getReport() const
+float PlayerResult::getWinPercentage() const
 {
-	ostringstream stream;
-	stream << "\nPlayer " << _name << " results so far:" << std::endl;
-	stream << "Number of victories: " << _totalNumWins << endl;
-	stream << "Total score for player (so far): " << _totalNumPointsFor << endl;
-	stream << "Number of losses: " << _totalNumLosses << endl;
-	stream << "Total score against (so far): " << _totalNumPointsAgainst << std::endl;
-	cout << stream.str();
-	return stream.str();
+	float totalGames = _totalNumLosses + _totalNumWins;
+	if (totalGames == 0)
+	{
+		return 0;
+	}
+	return (_totalNumWins / totalGames) * 100;
 }
 
-void PlayerResult::clear()
+bool PlayerResult::cmd(const PlayerResult & p1, const PlayerResult & p2)
 {
-	_totalNumPointsAgainst = 0;
-	_totalNumPointsAgainst = 0;
-	_totalNumLosses = 0;
-	_totalNumWins = 0;
+	return p1._totalNumWins > p2._totalNumWins;
 }
-
 
 

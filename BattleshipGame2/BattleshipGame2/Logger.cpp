@@ -1,7 +1,6 @@
 #include "Logger.h"
 #include <fstream> 
 #include <ctime>
-#include <sstream>
 #include <string>
 #include <future>
 
@@ -14,7 +13,6 @@ static mutex _mutex;
 
 //static variables
 Logger* Logger::_instance = nullptr;
-string Logger::_mode = "DEBUG";
 ofstream Logger::_log;
 
 Logger* Logger::getInstance() {
@@ -28,14 +26,13 @@ Logger::Logger() {
 	// Just for the linker
 }
 
-void Logger::init(const string path, const string mode)
+void Logger::init(const string path)
 {
 	_log.open(path);
-	_mode = mode;
 	_log << START << endl;
 }
 
-void Logger::log(const string messgae, const string severity)
+void Logger::log(const string messgae)
 {
 	//unique_lock<mutex> lock(_mutex);
 	std::lock_guard<std::mutex> lk(_mutex);
@@ -43,13 +40,10 @@ void Logger::log(const string messgae, const string severity)
 	time_t now = time(0);
 	ctime_s(currTime, sizeof(currTime), &now);
 
-	//std::string thetime = ctime(&now);
 	string sTime(currTime);
 	sTime = sTime.substr(0, sTime.length() - 1);
-	if (_mode == "DEBUG") {
-		//_log << sTime << TAB << messgae << TAB << severity << endl;
-		_log << messgae << endl;
-	}
+	_log << sTime << TAB << messgae << endl;
+
 }
 
 void Logger::destroy() {

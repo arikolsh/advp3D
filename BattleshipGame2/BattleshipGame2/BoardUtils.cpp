@@ -6,11 +6,12 @@
 #include <fstream>
 #include <sstream>
 #include "Ship.h"
+#include "Logger.h"
 #define MIN(a, b) ((a < b) ? (a) : (b))
 #define EMPTY_CELL ' '
 #define VISITED_CELL 'v'
 #define PADDING 2
-#define DIM_DELIMITER 'X' //according to this token we split the first line in every board file
+#define DIM_DELIMITER 'x' //according to this token we split the first line in every board file
 #define RIGHT 0
 #define DOWN 1
 #define DEEP 2
@@ -55,7 +56,10 @@ bool BoardUtils::fillBoardWithShipsFromFile(vector<vector<string>>& board3d, ifs
 	}
 	if (boardCount < depth)
 	{
-		cout << "Error: wrong number of boards in file " << path << endl;
+		Logger* logger = Logger::getInstance();
+		ostringstream stream;
+		stream << "Error: wrong number of boards in file " << path;
+		logger->log(stream.str());
 		return false;
 	}
 	return true;
@@ -88,16 +92,22 @@ vector<vector<string>> BoardUtils::getNewEmptyBoard(int depth, int rows, int col
 */
 bool BoardUtils::getBoardFromFile(vector<vector<string>> &board3d, string path, int& depth, int& rows, int& cols)
 {
+	ostringstream stream;
 	string line;
 	ifstream file(path);
+	Logger* logger = Logger::getInstance();
 	if (!file.is_open()) {
-		cout << "Error: failed to open file " << path << endl;
+		stream.str(string());
+		stream << "Error: failed to open file " << path;
+		logger->log(stream.str());
 		return false;
 	}
 	// get board dimensions 
 	if (!getline(file, line))
 	{
-		cout << "Error: invalid file " << path << endl;
+		stream.str(string());
+		stream << "Error: invalid file " << path;
+		logger->log(stream.str());
 		return false;
 	}
 	// split line to vector with 'x' delimeter
@@ -105,7 +115,9 @@ bool BoardUtils::getBoardFromFile(vector<vector<string>> &board3d, string path, 
 	split(line, dims, DIM_DELIMITER);
 	if (dims.size() != 3)
 	{
-		cout << "Error: invalid line in file " << path << endl;
+		stream.str(string());
+		stream << "Error: invalid line in file " << path;
+		logger->log(stream.str());
 		return false;
 	}
 	try {
@@ -115,7 +127,9 @@ bool BoardUtils::getBoardFromFile(vector<vector<string>> &board3d, string path, 
 	}
 	catch (exception const & e)
 	{
-		cout << "Error: invalid board dimensions in file " << path << ", " << e.what() << endl;
+		stream.str(string());
+		stream << "Error: invalid board dimensions in file " << path << ", " << e.what();
+		logger->log(stream.str());
 		return false;
 	}
 	// init 3d board with padding
@@ -258,14 +272,10 @@ bool BoardUtils::isValidBoard(vector<vector<string>> board, int depth, int rows,
 	auto playerNum = [](char c) {return tolower(c) == c ? 1 : 0; };
 	for (int d = 1; d <= depth; d++)
 	{
-		//cout << "in depth: " << d << endl;
 		for (int row = 1; row <= rows; row++)
 		{
-			//cout << "in row: " << row << endl;
 			for (int col = 1; col <= cols; col++)
 			{
-				//cout << "in col: " << col << endl;
-				//cout << "cell is: " << board[d][row][col] << endl;
 				if (!Ship::isShip(board[row][col][d]))
 				{ //not a ship skip to next iteration
 					continue;
