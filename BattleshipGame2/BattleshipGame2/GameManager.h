@@ -11,6 +11,7 @@ class GameManager {
 public:
 	explicit GameManager(std::string& searchDir, int threads);
 	vector<vector<pair<int, int>>> getAllRoundsSchedule() const;
+	vector<pair<int, int>> getAllPossiblePairs() const;
 	bool init();
 	void runGame();
 	//player results for every player 
