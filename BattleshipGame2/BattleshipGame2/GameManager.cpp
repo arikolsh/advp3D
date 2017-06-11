@@ -168,6 +168,22 @@ vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 	return scheduleFinal;
 }
 
+vector<pair<int, int>> GameManager::getAllPossiblePairs() const
+{
+	vector<vector<pair<int, int>>> roundsSchedule = getAllRoundsSchedule();
+	vector<pair<int, int>> allPairs;
+	for (auto v = 0; v < roundsSchedule.size(); v++)
+	{
+		for (auto p = 0; p < roundsSchedule[v].size(); p++)
+		{
+			pair<int, int> currentPair = roundsSchedule[v][p];
+			if (currentPair.first == -1 || currentPair.second == -1) { continue; } //skip the player that didnt have a pair
+			allPairs.push_back(currentPair);
+		}
+	}
+	return allPairs;
+}
+
 bool GameManager::init() {
 	ostringstream stream;
 	int numShips[] = { 0,0 };
