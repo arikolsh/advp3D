@@ -7,18 +7,11 @@
 #include "GameManager.h"
 #include <sstream>
 #include "BoardUtils.h"
+
 #define NUM_SHIP_TYPES 4
 #define NUM_PLAYERS 2
 #define A_NUM 0
 #define B_NUM 1
-#define BOMB_COLOR_A 6 //brown
-#define BOMB_COLOR_B 3 //cyan
-#define BOMB_SYMBOL '@'
-#define HIT_COLOR 5 //magneta
-#define HIT_SYMBOL '*'
-#define EMPTY_CELL_COLOR 8 //gray
-#define EMPTY_CELL ' '
-#define NUM_SHIPS 5
 #define SUCCESS 0
 #define FAILURE -1
 #define EMPTY_CELL ' '
@@ -26,15 +19,17 @@
 #define RIGHT 0
 #define DOWN 1
 #define DEEP 2
+#define NUM_SHIPS 5
+
 
 bool debugMode = false;
 
 MatchManager::MatchManager(GameBoard gameBoard)
 {
-	_playersNumActiveShips = { NUM_SHIPS, NUM_SHIPS };
 	_playerScores = { 0, 0 };
 	_currentPlayerIndex = A_NUM; //player A starts the game
 	fillMapWithShips(gameBoard);
+	_playersNumActiveShips = gameBoard.getShipsPerPlayer();
 	_logger = Logger::getInstance();
 }
 

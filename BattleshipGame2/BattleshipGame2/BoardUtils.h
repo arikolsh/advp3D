@@ -36,7 +36,7 @@ public:
 	static bool getBoardFromFile(std::vector<std::vector<std::string>> &board3d, std::string path, int& depth, int& rows, int& cols);
 	/*
 	* check if valid board and put number of ships for each player in numShips[]
-	* return true iff no adjacent ships, no invalid shapes, number of ships is MAX_NUM_SHIPS.
+	* return true iff no adjacent ships, no invalid shapes...
 	*/
 	static bool isValidBoard(std::vector<std::vector<std::string>> board, int depth, int rows, int cols, int numShips[]);
 	/*
