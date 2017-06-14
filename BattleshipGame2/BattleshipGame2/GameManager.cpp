@@ -19,7 +19,7 @@
 using namespace std;
 
 
-GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _threads(threads)
+GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir), _maxThreads(threads)
 {
 	_logger = Logger::getInstance();
 }
@@ -53,20 +53,50 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 	matchManager.gameOver(winner, playersPair, _playerResults[playersPair.first], _playerResults[playersPair.second]);
 }
 
+void GameManager::runMatchV2(pair<int, int> playersPair, int boardNum)
+{
+	ostringstream stream;
+	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second;
+	_logger->log(stream.str());
+
+	// Initialize the Match Manager (with the full board):
+	MatchManager matchManager(_boards[boardNum]);
+	// Set boards for both players:
+	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
+	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
+	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
+
+	// Set both players:
+	auto player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());
+	player1->setPlayer(playersPair.first);
+	player1->setBoard(board1);
+	auto player2 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.second]());
+	player2->setPlayer(playersPair.second);
+	player2->setBoard(board2);
+	// Run this match:
+	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
+	int winner = matchManager.runGame(players, { playersPair.first, playersPair.second });
+	PlayerResult res1(playersPair.first);
+	PlayerResult res2(playersPair.first);
+	// Update PlayerResult for each player:
+	matchManager.gameOver(winner, playersPair, res1, res2);
+}
+
 void GameManager::runGameV2()
 {
 	//schedule[i] holds the pair of the match and for each player the slot in which we need to update his result
-	vector<pair<int, int>> schedule = getAllPossiblePairs();
-	int boardNum = -1, matchCount = 0;
+	vector<pair<int, int>> allPossibleMatchPairs = getAllPossiblePairs();
+	thread resultPrinterThread(&GameManager::resultPrinter, this, allPossibleMatchPairs.size()*_boards.size()); //run printer thread
 	vector<thread> activeThreads;
+	int boardNum = -1, matchCount = 0;
 	while (true)
 	{
 		if (matchCount == 0) { boardNum++; }
 		if (boardNum >= _boards.size()) { break; }
-		pair<int, int> match = schedule[matchCount];
-		activeThreads.push_back(thread(&GameManager::runMatch, this, match, boardNum));
-		matchCount = (matchCount + 1) % schedule.size();
-		if (activeThreads.size() >= _threads) { //reached max thread count, join
+		pair<int, int> match = allPossibleMatchPairs[matchCount];
+		activeThreads.push_back(thread(&GameManager::runMatchV2, this, match, boardNum));
+		matchCount = (matchCount + 1) % allPossibleMatchPairs.size();
+		if (activeThreads.size() >= _maxThreads) { //reached max thread count, join
 			for (auto i = 0; i < activeThreads.size(); i++)
 			{ //wait for matches to finish
 				if (activeThreads[i].joinable())
@@ -75,6 +105,8 @@ void GameManager::runGameV2()
 			activeThreads.clear(); // clear threads buffer
 		}
 	}
+	if (resultPrinterThread.joinable())
+		resultPrinterThread.join();
 }
 
 void GameManager::runGame()
@@ -96,7 +128,7 @@ void GameManager::runGame()
 			int curPairIndex = 0;
 			while (curPairIndex < pairs.size()) //still pending tasks
 			{ //------- round -------//
-				while (activeThreads.size() < _threads && curPairIndex < pairs.size())
+				while (activeThreads.size() < _maxThreads && curPairIndex < pairs.size())
 				{
 					pair<int, int> currentPair = pairs[curPairIndex];
 					if (currentPair.first == -1 || currentPair.second == -1) { continue; } //skip the player that didnt have a pair
@@ -117,6 +149,43 @@ void GameManager::runGame()
 	printResultsForPlayers(); // Print Final results
 }
 
+void GameManager::resultPrinter(int numTotalMatches) //this the thread that prints results
+{
+	int currRound = 0;
+	vector<PlayerResult> results;
+	while (currRound < numTotalMatches)
+	{
+		for (int i = 0; i < _playersGet.size(); i++)
+		{
+			results.push_back(_resultsPerPlayer[i].safeGet(currRound));
+		}
+		printResultsForPlayers(results);
+		currRound++;
+	}
+}
+
+void GameManager::printResultsForPlayers(vector<PlayerResult>& playerResults)
+{
+	ostringstream stream;
+	stream << left << setfill(' ') << setw(5) << "#" << setw(_maxNameLength + 5) << "Player Name"
+		<< setw(20) << "Total Wins" << setw(20) << "Total Losses" << setw(10) << "%" << setw(15)
+		<< "Pts For" << setw(15) << "Pts Against" << endl;
+	stream << setfill('-') << setw(115) << "-" << endl << setfill(' ');
+	vector<PlayerResult> sortedResults(playerResults.begin(), playerResults.end());
+	sort(sortedResults.begin(), sortedResults.end(), PlayerResult::cmd);
+	for (int i = 0; i < sortedResults.size(); i++)
+	{
+		stream << setw(5) << to_string(i + 1).append(".")
+			<< setw(_maxNameLength + 5) << _playerNames[sortedResults[i]._playerNum]
+			<< setw(20) << sortedResults[i]._totalNumWins
+			<< setw(20) << sortedResults[i]._totalNumLosses
+			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
+			<< setw(15) << sortedResults[i]._totalNumPointsFor
+			<< setw(15) << sortedResults[i]._totalNumPointsAgainst << endl;
+	}
+	cout << stream.str() << endl;
+	//_logger->log(stream.str());
+}
 
 void GameManager::printResultsForPlayers()
 {
@@ -208,25 +277,6 @@ vector<pair<int, int>> GameManager::getAllPossiblePairs() const
 	return allPairs;
 }
 
-//make schedule, for each pair of a possible match assign
-vector<pair<pair<int, int>, pair<int, int>>> GameManager::getSchedule() const
-{
-	//slots mat[i][j] = true iff assigned to player j the number i
-	vector<vector<bool>> slotsMat(_playersGet.size(), vector<bool>(_playersGet.size(), false)); //init 2d boolean matrix with false values
-	vector<pair<pair<int, int>, pair<int, int>>> schedule;
-	vector<pair<int, int>> allPossiblePairs = getAllPossiblePairs();
-	for (auto p = 0; p < allPossiblePairs.size(); p++)
-	{
-		pair<int, int> currPair = allPossiblePairs[p];
-		int i = 0, j = 0;
-		//as long slot is true, increment
-		while (i < _playersGet.size() && slotsMat[i][currPair.first]) { i++; } //find slot for player1
-		while (j < _playersGet.size() && slotsMat[j][currPair.second]) { j++; } //find slot for player2
-		schedule.push_back(make_pair(currPair, make_pair(i, j)));
-	}
-	return schedule;
-}
-
 void GameManager::initPlayersDetails(vector<string> &dllPaths)
 {
 	ostringstream stream;
@@ -252,6 +302,7 @@ void GameManager::initPlayersDetails(vector<string> &dllPaths)
 			_maxNameLength = name.size();
 		}
 		_playerNames.push_back(name);
+		_resultsPerPlayer = vector<SafeAccResultsVector>(_playersGet.size());
 		int currentPlayerNum = _playersGet.size() - 1;
 		_playerResults.push_back(PlayerResult(currentPlayerNum));
 		stream.str(string()); //clear stream

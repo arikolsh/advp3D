@@ -2,11 +2,13 @@
 #include "Logger.h"
 #include "GameManager.h"
 #include "GameUtils.h"
+#include <iostream>
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
+
 	int threads;
 	string searchDir;
 	GameUtils::getArgs(argc, argv, threads, searchDir);
@@ -20,7 +22,7 @@ int main(int argc, char* argv[])
 		logger->destroy();
 		return EXIT_FAILURE;
 	}
-	gameManager.runGame();
+	gameManager.runGameV2();
 	logger->destroy();
 	return EXIT_SUCCESS;
 
