@@ -27,7 +27,7 @@
     <ClInclude Include="MatchManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="PlayerResult.h" />
-    <ClInclude Include="SafeVector.h" />
+    <ClInclude Include="SafeAccResultsVector.h" />
     <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>
@@ -51,7 +51,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MatchManager.cpp" />
     <ClCompile Include="PlayerResult.cpp" />
-    <ClCompile Include="SafeVector.cpp" />
+    <ClCompile Include="SafeAccResultsVector.cpp" />
     <ClCompile Include="Ship.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

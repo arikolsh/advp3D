@@ -7,6 +7,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+
 	int threads;
 	string searchDir, loggerPath;
 	GameUtils::getArgs(argc, argv, threads, searchDir, loggerPath);
@@ -20,7 +21,7 @@ int main(int argc, char* argv[])
 		logger->destroy();
 		return EXIT_FAILURE;
 	}
-	gameManager.runGame();
+	gameManager.runGameV2();
 	logger->destroy();
 	return EXIT_SUCCESS;
 

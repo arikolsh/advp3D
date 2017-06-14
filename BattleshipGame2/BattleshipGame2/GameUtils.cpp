@@ -164,9 +164,9 @@ int GameUtils::execCmd(char const * cmd, string & shellRes)
 // python zip equivalent
 vector<pair<int, int>> GameUtils::zip(vector<int> arr1, vector<int> arr2)
 {
-	int len = arr1.size() <= arr2.size() ? arr1.size() : arr2.size();
+	auto len = arr1.size() <= arr2.size() ? arr1.size() : arr2.size();
 	vector<pair<int, int>> ret;
-	for (int i = 0; i < len; i++)
+	for (auto i = 0; i < len; i++)
 	{
 		ret.push_back(make_pair(arr1[i], arr2[i]));
 	}
