@@ -19,8 +19,6 @@
 #define RIGHT 0
 #define DOWN 1
 #define DEEP 2
-#define NUM_SHIPS 5
-
 
 bool debugMode = false;
 
