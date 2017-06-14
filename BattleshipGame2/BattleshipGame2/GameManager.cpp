@@ -53,6 +53,30 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 	matchManager.gameOver(winner, playersPair, _playerResults[playersPair.first], _playerResults[playersPair.second]);
 }
 
+void GameManager::runGameV2()
+{
+	//schedule[i] holds the pair of the match and for each player the slot in which we need to update his result
+	vector<pair<int, int>> schedule = getAllPossiblePairs();
+	int boardNum = -1, matchCount = 0;
+	vector<thread> activeThreads;
+	while (true)
+	{
+		if (matchCount == 0) { boardNum++; }
+		if (boardNum >= _boards.size()) { break; }
+		pair<int, int> match = schedule[matchCount];
+		activeThreads.push_back(thread(&GameManager::runMatch, this, match, boardNum));
+		matchCount = (matchCount + 1) % schedule.size();
+		if (activeThreads.size() >= _threads) { //reached max thread count, join
+			for (auto i = 0; i < activeThreads.size(); i++)
+			{ //wait for matches to finish
+				if (activeThreads[i].joinable())
+					activeThreads.at(i).join();
+			}
+			activeThreads.clear(); // clear threads buffer
+		}
+	}
+}
+
 void GameManager::runGame()
 {
 	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
@@ -106,7 +130,7 @@ void GameManager::printResultsForPlayers()
 	for (int i = 0; i < sortedResults.size(); i++)
 	{
 		stream << setw(5) << to_string(i + 1).append(".")
-			<< setw(_maxNameLength + 5) << sortedResults[i]._name
+			<< setw(_maxNameLength + 5) << _playerNames[sortedResults[i]._playerNum]
 			<< setw(20) << sortedResults[i]._totalNumWins
 			<< setw(20) << sortedResults[i]._totalNumLosses
 			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
@@ -114,7 +138,7 @@ void GameManager::printResultsForPlayers()
 			<< setw(15) << sortedResults[i]._totalNumPointsAgainst << endl;
 	}
 	cout << stream.str() << endl;
-	_logger->log(stream.str());
+	//_logger->log(stream.str());
 }
 
 vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
@@ -184,21 +208,64 @@ vector<pair<int, int>> GameManager::getAllPossiblePairs() const
 	return allPairs;
 }
 
-bool GameManager::init() {
+//make schedule, for each pair of a possible match assign
+vector<pair<pair<int, int>, pair<int, int>>> GameManager::getSchedule() const
+{
+	//slots mat[i][j] = true iff assigned to player j the number i
+	vector<vector<bool>> slotsMat(_playersGet.size(), vector<bool>(_playersGet.size(), false)); //init 2d boolean matrix with false values
+	vector<pair<pair<int, int>, pair<int, int>>> schedule;
+	vector<pair<int, int>> allPossiblePairs = getAllPossiblePairs();
+	for (auto p = 0; p < allPossiblePairs.size(); p++)
+	{
+		pair<int, int> currPair = allPossiblePairs[p];
+		int i = 0, j = 0;
+		//as long slot is true, increment
+		while (i < _playersGet.size() && slotsMat[i][currPair.first]) { i++; } //find slot for player1
+		while (j < _playersGet.size() && slotsMat[j][currPair.second]) { j++; } //find slot for player2
+		schedule.push_back(make_pair(currPair, make_pair(i, j)));
+	}
+	return schedule;
+}
+
+void GameManager::initPlayersDetails(vector<string> &dllPaths)
+{
 	ostringstream stream;
+	for (size_t i = 0; i < dllPaths.size(); i++)
+	{
+		GetAlgoType tmpGetAlgo;
+		int err = getPlayerAlgoFromDll(dllPaths[i], tmpGetAlgo);
+		if (err) {
+			stream.str(string()); //clear stream
+			stream << "Warning: invalid dll in file" << dllPaths[i] << ", skip to next dll";
+			_logger->log(stream.str());
+			continue;
+		}
+		_playersGet.push_back(tmpGetAlgo); //dll is good
+		stream.str(string()); //clear stream
+		stream << "valid dll in file" << dllPaths[i] << ", added to manager";
+		_logger->log(stream.str());
+		// init player result for specific player
+		// get player name: remove .dll suffix and last '/'
+		int x = dllPaths[i].find_last_of("/\\");
+		string name = dllPaths[i].substr(x + 1, dllPaths[i].size() - 4 - x - 1);
+		if (_maxNameLength <= name.size()) {
+			_maxNameLength = name.size();
+		}
+		_playerNames.push_back(name);
+		int currentPlayerNum = _playersGet.size() - 1;
+		_playerResults.push_back(PlayerResult(currentPlayerNum));
+		stream.str(string()); //clear stream
+		stream << "added result slot for player" << name;
+		_logger->log(stream.str());
+	}
+}
+
+bool GameManager::initBoards(vector<string> boardPaths)
+{
+	ostringstream stream;
+	vector<vector<string>> tmpBoard;
 	int numShips[] = { 0,0 };
 	int boardDepth = 0, boardRows = 0, BoardCols = 0;
-	vector<vector<string>> tmpBoard;
-	vector<string> boardPaths;
-	vector<string> dllPaths;
-	int err = GameUtils::getInputFiles(boardPaths, dllPaths, _messages, _searchDir);
-	for (int m = 0; m < _messages.size(); m++)
-	{
-		_logger->log(_messages[m]);
-	}
-	if (err) {
-		return false;
-	}
 	for (size_t i = 0; i < boardPaths.size(); i++)
 	{
 		if (!BoardUtils::getBoardFromFile(tmpBoard, boardPaths[i], boardDepth, boardRows, BoardCols))
@@ -223,32 +290,29 @@ bool GameManager::init() {
 			}
 		}
 	}
-	for (size_t i = 0; i < dllPaths.size(); i++)
+	return true;
+}
+
+bool GameManager::init() {
+	ostringstream stream;
+	vector<string> boardPaths;
+	vector<string> dllPaths;
+	int err = GameUtils::getInputFiles(boardPaths, dllPaths, _messages, _searchDir);
+	for (int m = 0; m < _messages.size(); m++)
 	{
-		GetAlgoType tmpGetAlgo;
-		err = getPlayerAlgoFromDll(dllPaths[i], tmpGetAlgo);
-		if (err) {
-			stream.str(string()); //clear stream
-			stream << "Warning: invalid dll in file" << dllPaths[i] << ", skip to next dll";
-			_logger->log(stream.str());
-			continue;
-		}
-		_playersGet.push_back(tmpGetAlgo); //dll is good
-		stream.str(string()); //clear stream
-		stream << "valid dll in file" << dllPaths[i] << ", added to manager";
-		_logger->log(stream.str());
-		// init player result for specific player
-		// get player name: remove .dll suffix and last '/'
-		int x = dllPaths[i].find_last_of("/\\");
-		string name = dllPaths[i].substr(x + 1, dllPaths[i].size() - 4 - x - 1);
-		if (_maxNameLength <= name.size()) {
-			_maxNameLength = name.size();
-		}
-		_playerResults.push_back(PlayerResult(name));
-		stream.str(string()); //clear stream
-		stream << "added result slot for player" << name;
-		_logger->log(stream.str());
+		_logger->log(_messages[m]);
 	}
+
+	if (err) {
+		return false;
+	}
+
+	if (!initBoards(boardPaths)) {
+		return false;
+	}
+
+	initPlayersDetails(dllPaths);
+
 	if ((_playersGet.size() <= 1) || (_boards.size() == 0)) {
 		_logger->log("Error: invalid number of players or number of boards, exiting game");
 		return false;
@@ -256,7 +320,6 @@ bool GameManager::init() {
 
 	cout << "Number of legal players: " << _playersGet.size() << endl;
 	cout << "Number of legal boards: " << _boards.size() << endl;
-
 	return true;
 }
 
