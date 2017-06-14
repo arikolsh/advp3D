@@ -1,6 +1,6 @@
-#include "SafeAccResultsVector.h"
+#include "AccResultsVector.h"
 
-void SafeAccResultsVector::safeAccPush(const PlayerResult& p) {
+void AccResultsVector::safeAccPush(const PlayerResult& p) {
 	unique_lock<mutex> pLock(_pLock);
 	PlayerResult resultTillNow = p;
 	// construct accumulated result until now
@@ -15,9 +15,23 @@ void SafeAccResultsVector::safeAccPush(const PlayerResult& p) {
 	_cv.notify_one();
 }
 
-PlayerResult SafeAccResultsVector::safeGet(size_t i) {
+PlayerResult AccResultsVector::safeGet(size_t i) {
 	mutex gMutex;
 	unique_lock<mutex> gLock(gMutex);
 	_cv.wait(gLock, [&i, this]() {return i < _count; });
 	return _vec[i];
+}
+
+PlayerResult AccResultsVector::unsafeGet(size_t i) {
+	return _vec[i];
+}
+
+size_t AccResultsVector::unsafeGetSize() const
+{
+	return _count;
+}
+
+void AccResultsVector::releaseCV()
+{
+	_cv.notify_one();
 }

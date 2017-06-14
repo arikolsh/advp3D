@@ -115,6 +115,14 @@ void GameManager::runGameV2()
 		}
 		activeThreads.clear(); // clear threads buffer
 	}
+
+	_gameStopped = true;
+
+	for (auto i = 0; i < _resultsPerPlayer.size(); i++)
+	{
+		_resultsPerPlayer[i].releaseCV();
+	}
+
 	if (resultPrinterThread.joinable())
 		resultPrinterThread.join();
 }
@@ -143,7 +151,6 @@ void GameManager::runGame()
 
 				while (activeThreads.size() < _maxThreads && curPairIndex < pairs.size())
 				{
-					cout << "LOOP" << endl;
 					pair<int, int> currentPair = pairs[curPairIndex++];
 					if (currentPair.first == -1 || currentPair.second == -1)
 					{
@@ -169,7 +176,7 @@ void GameManager::resultPrinter(int numTotalMatches) //this the thread that prin
 {
 	size_t currRound = 0;
 	vector<PlayerResult> results;
-	while (currRound < numTotalMatches)
+	while (!_gameStopped)
 	{
 		if (currRound == 46)
 		{
@@ -179,8 +186,21 @@ void GameManager::resultPrinter(int numTotalMatches) //this the thread that prin
 		for (size_t i = 0; i < _playersGet.size(); i++)
 		{//get results for player i
 			results.push_back(_resultsPerPlayer[i].safeGet(currRound));
+			if (_gameStopped) { break; }
 		}
 		cout << "ROUND " << currRound << endl;
+		printResultsForPlayers(results);
+		results.clear();
+		currRound++;
+	}
+	// print the rest, can use thread-unsafe function because at this point no other threads except manaer
+	// are running in the background
+	while (currRound < _resultsPerPlayer[0].unsafeGetSize())
+	{
+		for (size_t i = 0; i < _playersGet.size(); i++)
+		{//get results for player i
+			results.push_back(_resultsPerPlayer[i].unsafeGet(currRound));
+		}
 		printResultsForPlayers(results);
 		results.clear();
 		currRound++;
@@ -325,7 +345,7 @@ void GameManager::initPlayersDetails(vector<string> &dllPaths)
 			_maxNameLength = name.size();
 		}
 		_playerNames.push_back(name);
-		_resultsPerPlayer = vector<SafeAccResultsVector>(_playersGet.size());
+		_resultsPerPlayer = vector<AccResultsVector>(_playersGet.size());
 		auto currentPlayerNum = _playersGet.size() - 1;
 		_playerResults.push_back(PlayerResult(currentPlayerNum));
 		stream.str(string()); //clear stream

@@ -4,7 +4,7 @@
 #include "GameBoard.h"
 #include "PlayerResult.h"
 #include "Logger.h"
-#include "SafeAccResultsVector.h"
+#include "AccResultsVector.h"
 
 typedef IBattleshipGameAlgo *(*GetAlgoType)();
 
@@ -24,11 +24,12 @@ private:
 	int getPlayerAlgoFromDll(string dllPath, GetAlgoType& algo) const;
 	std::string _searchDir;
 	int _maxThreads;
+	bool _gameStopped = false;
 	std::vector<std::string> _messages;
 	std::vector<GameBoard> _boards; //holds vector of 3D boards
 	vector<GetAlgoType> _playersGet;
 	vector<string> _playerNames;
-	vector<SafeAccResultsVector> _resultsPerPlayer;
+	vector<AccResultsVector> _resultsPerPlayer;
 	size_t _maxNameLength = 0;
 	// additional result container for carry player in case of odd num of players
 	void runMatch(pair<int, int> playersPair, int boardNum);
