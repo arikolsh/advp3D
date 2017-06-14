@@ -209,7 +209,7 @@ void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult
 	}
 	//else: Winner == -1 which means no winner..
 
-	logMatchResults(winner, playersPair, resA, resB); // Debug: log all match info
+	//logMatchResults(winner, playersPair, resA, resB); // Debug: log all match info
 }
 
 void MatchManager::logMatchResults(int winner, pair<int, int> playersPair, PlayerResult& resA, PlayerResult& resB) const
