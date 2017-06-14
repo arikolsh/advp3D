@@ -88,7 +88,7 @@ void GameManager::runGameV2()
 {
 	//schedule[i] holds the pair of the match and for each player the slot in which we need to update his result
 	vector<pair<int, int>> allPossibleMatchPairs = getAllPossiblePairs();
-	thread resultPrinterThread(&GameManager::resultPrinter, this, allPossibleMatchPairs.size()*_boards.size()); //run printer thread
+	thread resultPrinterThread(&GameManager::resultPrinter, this); //run printer thread
 	vector<thread> activeThreads;
 	int boardNum = -1, matchCount = 0;
 	while (true)
@@ -172,24 +172,19 @@ void GameManager::runGame()
 	printResultsForPlayers(); // Print Final results
 }
 
-void GameManager::resultPrinter(int numTotalMatches) //this the thread that prints results
+void GameManager::resultPrinter() //this the thread that prints results
 {
 	size_t currRound = 0;
 	vector<PlayerResult> results;
 	while (!_gameStopped)
 	{
-		if (currRound == 46)
-		{
-			cout << endl;
-		}
-
 		for (size_t i = 0; i < _playersGet.size(); i++)
 		{//get results for player i
 			results.push_back(_resultsPerPlayer[i].safeGet(currRound));
 			if (_gameStopped) { break; }
 		}
-		cout << "ROUND " << currRound << endl;
-		printResultsForPlayers(results);
+		//cout << "ROUND " << currRound << endl;
+		//printResultsForPlayers(results);
 		results.clear();
 		currRound++;
 	}

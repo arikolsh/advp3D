@@ -39,6 +39,6 @@ private:
 	void printResultsForPlayers(); //todo: del
 	vector<vector<pair<int, int>>> getAllRoundsSchedule() const;
 	vector<pair<int, int>> getAllPossiblePairs() const;
-	void resultPrinter(int numTotalMatches);
+	void resultPrinter();
 	void printResultsForPlayers(vector<PlayerResult>& playerResults);
 };

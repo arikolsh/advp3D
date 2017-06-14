@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	GameUtils::getArgs(argc, argv, threads, searchDir, loggerPath);
 	auto logger = Logger::getInstance();
 	logger->init(loggerPath);
-	GameManager gameManager(searchDir, 10);
+	GameManager gameManager(searchDir, threads);
 	bool isStarted = gameManager.init();
 	if (!isStarted)
 	{
