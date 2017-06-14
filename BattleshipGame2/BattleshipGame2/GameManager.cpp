@@ -144,14 +144,12 @@ void GameManager::runGame()
 				while (activeThreads.size() < _maxThreads && curPairIndex < pairs.size())
 				{
 					cout << "LOOP" << endl;
-					pair<int, int> currentPair = pairs[curPairIndex];
+					pair<int, int> currentPair = pairs[curPairIndex++];
 					if (currentPair.first == -1 || currentPair.second == -1)
 					{
-						curPairIndex++;
 						continue;
 					} //skip the player that didnt have a pair
 					activeThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
-					curPairIndex++;
 				}
 				for (auto i = 0; i < activeThreads.size(); i++)
 				{ //wait for matches to finish
