@@ -6,7 +6,7 @@ using namespace std;
 class GameUtils {
 public:
 	static void showMessages(vector<string> messages);
-	static void getArgs(int argc, char** argv, int& threads, string& searchDir);
+	static void getArgs(int argc, char** argv, int& threads, string& searchDir, string& loggerPath);
 	/* getInputFiles function gets the cmd args and a vector of input files (without pre-defined size)
 	* the function returns successs iff it succeeded to fill the given inputFiles vector with the required files
 	* and the returned mesaages vector is with size of 0 (no failures).

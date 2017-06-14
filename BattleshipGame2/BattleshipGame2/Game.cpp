@@ -8,11 +8,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	int threads;
-	string searchDir;
-	GameUtils::getArgs(argc, argv, threads, searchDir);
-	///check logger//
+	string searchDir, loggerPath;
+	GameUtils::getArgs(argc, argv, threads, searchDir, loggerPath);
 	Logger* logger = Logger::getInstance();
-	logger->init("game.log");
+	logger->init(loggerPath);
+	return 1;
 	GameManager gameManager(searchDir, threads);
 	bool isStarted = gameManager.init();
 	if (!isStarted)
@@ -25,3 +25,9 @@ int main(int argc, char* argv[])
 	return EXIT_SUCCESS;
 
 }
+
+
+
+
+
+

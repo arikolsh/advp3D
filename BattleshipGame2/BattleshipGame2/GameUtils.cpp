@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include "Logger.h"
+#include <fstream>
 
 #define MAX_PATH 1024
 #define SEARCH_DEFAULT_CMD "dir /b /a-d 2> nul"
@@ -28,13 +29,62 @@
 #define MODE "r"
 #define MISSING_DLL "Missing an algorithm (dll) file looking in path: "
 #define DLL_EXTENSION "dll"
+#define CONFIG_PATH "Configuration.txt"
 
-
-void GameUtils::getArgs(int argc, char** argv, int& threads, string& searchDir)
+class Configuration
 {
+public:
+	Configuration()
+	{
+		_configFile.open(CONFIG_PATH);
+	}
+
+	~Configuration()
+	{
+		_configFile.close();
+	}
+
+	int getNumOfThreads() const
+	{
+		return _numOfThreads;
+	}
+
+	string getLoggerpath() const
+	{
+		return _loggerPath;
+	}
+
+	void parseConfigFile()
+	{
+		string line;
+		stringstream stream;
+		string fieldName;
+		getline(_configFile, line);
+		stream.str(line);
+		stream >> fieldName >> _numOfThreads;
+		stream.clear();
+		getline(_configFile, line);
+		stream.str(line);
+		stream >> fieldName >> _loggerPath;
+		stream.clear();
+		cout << "Logger Path: " << _loggerPath << endl << "Number Of threads: " << _numOfThreads << endl;
+	}
+
+private:
+	int _numOfThreads = 0;
+	string _loggerPath = "";
+	ifstream _configFile;
+};
+
+
+void GameUtils::getArgs(int argc, char** argv, int& threads, string& searchDir, string& loggerPath)
+{
+	Configuration config;
+	config.parseConfigFile();
+	threads = config.getNumOfThreads(); // Default is 4
+	loggerPath = config.getLoggerpath(); // Default is "game.log"
 	vector<string> argsVector(argv, argv + argc);
 	int i = 1;
-	threads = 4;
 	searchDir = "";
 	while (i < argc)
 	{

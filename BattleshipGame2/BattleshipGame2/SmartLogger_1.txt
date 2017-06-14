@@ -40,7 +40,7 @@ SmartPlayer number 1 board: row-col cut for depth 4
 ----------
 ----------
 ----------
----------b
+----------
 ----------
 -m--d-----
 ----------
@@ -72,1097 +72,1164 @@ SmartPlayer number 1 board: row-col cut for depth 6
 ----------
 
 
-Randomization seed is: 1497457220
+Randomization seed is: 1497457434
 
-notifyOnAttackResult: player 0 attacked 1,5,6
+notifyOnAttackResult: player 0 attacked 3,7,4
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 8,7,5
+notifyOnAttackResult: player 1 attacked 3,4,3
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 1,2,5
+notifyOnAttackResult: player 0 attacked 5,3,2
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 7,9,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,4,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,10,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,9,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,10,6
+notifyOnAttackResult: player 1 attacked 4,9,6
 Attacking State: Routine
 AttackResult: 'Hit'
 
 Player 1 Randomizing next Hunting direction
 
-notifyOnAttackResult: player 1 attacked 9,9,6
-Attacking State: Hunting X backwards
-AttackResult: 'Miss'
-
-Player 1 Randomizing next Hunting direction
-
-notifyOnAttackResult: player 0 attacked 2,8,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,10,6
+notifyOnAttackResult: player 1 attacked 5,9,6
 Attacking State: Hunting Y forwards
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,2,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,10,6
-Attacking State: Hunting Y backwards
-AttackResult: 'Hit'
-cleared Surrounding cells arround hit point: 8,10,6 In Hunting direction: 0,1,1 (Hunting Y axis)
-First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
-cleared Surrounding cells arround hit point: 9,10,6 In Hunting direction: 0,1,1 (Hunting Y axis)
-
-notifyOnAttackResult: player 1 attacked 7,10,6
-Attacking State: Hunting Y backwards
-AttackResult: 'Sink'
-cleared Surrounding cells arround hit point: 7,10,6 After Sink!
-
-notifyOnAttackResult: player 1 attacked 10,6,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,2,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,10,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,6,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,8,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,7,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,3,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,9,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,4,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,2,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,8,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,4,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,5,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,3,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,2,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,7,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,8,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,6,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,10,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,5,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,4,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,3,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,10,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,9,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,7,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,3,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,2,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,6,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,6,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,3,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,1,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,7,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,5,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,6,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,6,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,9,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,6,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,10,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,3,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,2,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,1,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,2,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,6,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,9,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,6,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,10,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,3,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,3,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,4,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,4,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,4,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,1,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,7,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,6,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,1,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,8,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,1,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,1,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,8,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,8,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 3,6,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,2,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,2,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,7,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,6,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,2,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,1,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,3,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,10,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,10,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 3,6,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,10,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,7,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,8,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,7,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,7,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,4,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,8,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,5,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,3,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,4,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,6,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,8,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,4,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,1,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,7,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,5,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,1,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,3,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,9,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,7,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,3,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,3,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,3,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,4,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,8,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,9,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,2,2
-AttackResult: 'Hit'
-
-notifyOnAttackResult: player 0 attacked 10,3,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 3,1,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,9,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,8,3
-Attacking State: Routine
-AttackResult: 'Hit'
-
-Player 1 Randomizing next Hunting direction
-
-notifyOnAttackResult: player 1 attacked 2,8,3
-Attacking State: Hunting Y forwards
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,2,3
-AttackResult: 'Miss'
-
-Player 1 Randomizing next Hunting direction
-
-notifyOnAttackResult: player 1 attacked 1,8,4
-Attacking State: Hunting Z forwards
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,9,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,8,2
-Attacking State: Hunting Z backwards
-AttackResult: 'Miss'
-
-Player 1 Randomizing next Hunting direction
-
-notifyOnAttackResult: player 0 attacked 10,6,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,9,3
-Attacking State: Hunting X forwards
-AttackResult: 'Hit'
-cleared Surrounding cells arround hit point: 1,9,3 In Hunting direction: 1,0,1 (Hunting X axis)
-First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
-cleared Surrounding cells arround hit point: 1,8,3 In Hunting direction: 1,0,1 (Hunting X axis)
-
-notifyOnAttackResult: player 1 attacked 1,10,3
-Attacking State: Hunting X forwards
-AttackResult: 'Hit'
-cleared Surrounding cells arround hit point: 1,10,3 In Hunting direction: 1,0,1 (Hunting X axis)
-
-notifyOnAttackResult: player 1 attacked 1,7,3
-Attacking State: Hunting X backwards
-AttackResult: 'Sink'
-cleared Surrounding cells arround hit point: 1,7,3 After Sink!
-
-notifyOnAttackResult: player 1 attacked 6,10,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,6,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,9,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,10,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,4,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,1,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,8,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,2,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,10,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,5,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,3,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,8,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,8,1
-Attacking State: Routine
 AttackResult: 'Miss'
 
 notifyOnAttackResult: player 0 attacked 7,9,2
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 8,2,6
-Attacking State: Routine
+notifyOnAttackResult: player 1 attacked 3,9,6
+Attacking State: Hunting Y backwards
 AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,4,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,8,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,6,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,5,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,8,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,10,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,2,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,5,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,6,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,9,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,3,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,8,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,2,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,3,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,7,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,6,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,7,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,2,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,3,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,10,4
-AttackResult: 'Sink'
-
-notifyOnAttackResult: player 0 attacked 3,1,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,1,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,4,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,9,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,4,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,3,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,1,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,5,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 10,6,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,10,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 10,5,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,8,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,9,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,4,2
-Attacking State: Routine
-AttackResult: 'Sink'
-cleared Surrounding cells arround hit point: 2,4,2 After Sink!
-
-notifyOnAttackResult: player 1 attacked 5,8,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,2,3
-AttackResult: 'Hit'
-
-notifyOnAttackResult: player 0 attacked 1,2,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,3,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,8,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,7,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,10,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,2,2
-AttackResult: 'Hit'
-
-notifyOnAttackResult: player 1 attacked 5,2,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,5,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,2,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,3,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,6,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,3,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,9,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,3,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,4,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,9,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,8,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 10,10,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,6,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,8,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,7,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,10,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,10,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,6,3
-AttackResult: 'Hit'
-
-notifyOnAttackResult: player 0 attacked 10,9,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,8,6
-Attacking State: Routine
-AttackResult: 'Hit'
 
 Player 1 Randomizing next Hunting direction
 
-notifyOnAttackResult: player 1 attacked 4,9,6
-Attacking State: Hunting X forwards
-AttackResult: 'Hit'
-cleared Surrounding cells arround hit point: 4,9,6 In Hunting direction: 1,0,1 (Hunting X axis)
-First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
-cleared Surrounding cells arround hit point: 4,8,6 In Hunting direction: 1,0,1 (Hunting X axis)
+notifyOnAttackResult: player 0 attacked 9,6,5
+AttackResult: 'Miss'
 
 notifyOnAttackResult: player 1 attacked 4,10,6
 Attacking State: Hunting X forwards
 AttackResult: 'Hit'
 cleared Surrounding cells arround hit point: 4,10,6 In Hunting direction: 1,0,1 (Hunting X axis)
+First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
+cleared Surrounding cells arround hit point: 4,9,6 In Hunting direction: 1,0,1 (Hunting X axis)
+
+notifyOnAttackResult: player 1 attacked 4,8,6
+Attacking State: Hunting X backwards
+AttackResult: 'Hit'
+cleared Surrounding cells arround hit point: 4,8,6 In Hunting direction: 1,0,1 (Hunting X axis)
 
 notifyOnAttackResult: player 1 attacked 4,7,6
 Attacking State: Hunting X backwards
 AttackResult: 'Sink'
 cleared Surrounding cells arround hit point: 4,7,6 After Sink!
 
+notifyOnAttackResult: player 1 attacked 2,3,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,4,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,10,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,3,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,7,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,9,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,10,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,1,1
+AttackResult: 'Miss'
+
 notifyOnAttackResult: player 1 attacked 5,7,3
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 2,2,6
+notifyOnAttackResult: player 0 attacked 10,1,4
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 7,10,4
+notifyOnAttackResult: player 1 attacked 10,2,6
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 9,1,5
+notifyOnAttackResult: player 0 attacked 2,9,3
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 6,9,3
+notifyOnAttackResult: player 1 attacked 10,6,6
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 6,5,5
+notifyOnAttackResult: player 0 attacked 7,8,3
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 2,1,1
+notifyOnAttackResult: player 1 attacked 4,4,3
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 4,3,6
+notifyOnAttackResult: player 0 attacked 1,6,1
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 3,7,5
+notifyOnAttackResult: player 1 attacked 3,8,3
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 10,6,3
+notifyOnAttackResult: player 0 attacked 7,4,4
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 8,5,2
+notifyOnAttackResult: player 1 attacked 9,4,5
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 10,8,3
+notifyOnAttackResult: player 0 attacked 9,3,5
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 4,3,5
+notifyOnAttackResult: player 1 attacked 7,10,2
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 7,9,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,5,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,7,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,6,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 10,1,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,4,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,5,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,7,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,2,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,9,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,3,6
+notifyOnAttackResult: player 0 attacked 10,6,5
 AttackResult: 'Miss'
 
 notifyOnAttackResult: player 1 attacked 3,10,4
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 8,1,3
+notifyOnAttackResult: player 0 attacked 3,6,4
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 5,6,2
+notifyOnAttackResult: player 1 attacked 3,3,3
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 1,1,1
+notifyOnAttackResult: player 0 attacked 8,3,2
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 10,10,5
+notifyOnAttackResult: player 1 attacked 2,3,4
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 10,4,6
+notifyOnAttackResult: player 0 attacked 10,9,5
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 8,9,4
+notifyOnAttackResult: player 1 attacked 4,1,4
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 6,10,4
+notifyOnAttackResult: player 0 attacked 9,2,3
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 8,1,1
+notifyOnAttackResult: player 1 attacked 7,1,1
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 8,9,6
+notifyOnAttackResult: player 0 attacked 7,7,2
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 6,8,5
+notifyOnAttackResult: player 1 attacked 7,8,6
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 5,8,6
+notifyOnAttackResult: player 0 attacked 4,4,1
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 4,1,1
+notifyOnAttackResult: player 1 attacked 10,1,6
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 10,2,6
+notifyOnAttackResult: player 0 attacked 5,10,4
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 7,7,6
+notifyOnAttackResult: player 1 attacked 8,5,1
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 4,7,2
+notifyOnAttackResult: player 0 attacked 9,3,1
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 10,9,5
+notifyOnAttackResult: player 1 attacked 2,4,1
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 9,7,5
+notifyOnAttackResult: player 0 attacked 5,9,1
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 1 attacked 5,5,6
+notifyOnAttackResult: player 1 attacked 9,7,4
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 5,1,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,7,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 3,5,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,10,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,1,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,7,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,7,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,7,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,4,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,1,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,10,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,1,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 5,7,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,5,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,9,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,3,6
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,3,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,9,1
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 4,5,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 6,6,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 9,6,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,8,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,8,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 1,6,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,3,4
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,3,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,8,2
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,9,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,5,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,9,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 8,3,3
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 5,4,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 7,2,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 2,10,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 6,9,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 9,6,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,10,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 10,9,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 3,6,5
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,8,4
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,2,1
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 7,8,5
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,5,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 8,3,2
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 1,7,6
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 1 attacked 4,5,3
-Attacking State: Routine
-AttackResult: 'Miss'
-
-notifyOnAttackResult: player 0 attacked 2,7,6
+notifyOnAttackResult: player 0 attacked 8,4,5
 AttackResult: 'Miss'
 
 notifyOnAttackResult: player 1 attacked 2,4,4
 Attacking State: Routine
 AttackResult: 'Miss'
 
-notifyOnAttackResult: player 0 attacked 6,9,4
+notifyOnAttackResult: player 0 attacked 10,7,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,5,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,1,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,7,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,2,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,9,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,1,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,2,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,8,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,9,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,5,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,3,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,6,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 10,8,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,9,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,1,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,1,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,4,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,3,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 10,8,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,1,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,1,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,3,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,4,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,1,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,3,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,7,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,1,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 3,10,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,8,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,10,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,8,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,9,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,9,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,6,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,8,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,1,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,10,6
+Attacking State: Routine
+AttackResult: 'Hit'
+
+Player 1 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 1 attacked 8,10,5
+Attacking State: Hunting Z backwards
+AttackResult: 'Miss'
+
+Player 1 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 0 attacked 8,9,6
+AttackResult: 'Miss'
+
+Player 1 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 1 attacked 9,10,6
+Attacking State: Hunting Y forwards
+AttackResult: 'Hit'
+cleared Surrounding cells arround hit point: 9,10,6 In Hunting direction: 0,1,1 (Hunting Y axis)
+First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
+cleared Surrounding cells arround hit point: 8,10,6 In Hunting direction: 0,1,1 (Hunting Y axis)
+
+notifyOnAttackResult: player 1 attacked 10,10,6
+Attacking State: Hunting Y forwards
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,8,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,10,6
+Attacking State: Hunting Y backwards
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 7,10,6 After Sink!
+
+notifyOnAttackResult: player 1 attacked 6,6,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,2,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 10,10,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,7,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,3,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,2,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,8,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,5,6
+AttackResult: 'Hit'
+
+notifyOnAttackResult: player 0 attacked 10,1,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,2,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,4,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,4,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,3,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,5,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,2,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,5,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,1,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,10,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,3,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,1,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,8,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,5,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,5,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,3,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,7,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,2,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,8,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,6,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,7,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,9,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,5,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,3,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,3,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,9,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,2,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,1,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,2,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,7,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,4,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,7,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,1,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,9,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,6,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,7,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,6,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,6,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,4,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,10,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 3,10,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,8,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,6,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,6,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,10,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,8,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,6,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,2,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,10,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,3,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,2,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,8,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,1,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,7,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,9,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 3,8,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,4,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,7,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,5,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,9,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,6,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,1,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,10,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,9,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,7,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,8,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 10,3,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,8,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,1,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 4,4,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,5,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,8,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,3,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,9,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,9,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,4,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,3,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,10,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,4,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,6,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,8,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,2,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,3,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,1,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,8,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,2,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,10,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,1,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 3,2,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,6,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,3,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,1,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,1,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,3,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,2,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,1,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,9,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,5,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,6,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,6,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,7,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,6,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,8,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,6,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,3,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,1,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,1,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,9,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,2,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,3,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 10,1,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,7,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,9,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,4,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,5,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,8,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,4,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,8,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 4,6,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,8,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 2,6,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,7,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,7,4
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,4,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,4,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,9,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,5,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,2,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,3,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,10,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,2,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,3,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,3,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,8,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,7,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 4,2,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 8,1,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,10,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,3,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,4,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,5,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,1,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 3,1,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,9,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,2,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,4,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,7,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,9,4
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,10,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,3,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,5,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,1,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,8,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 3,5,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,4,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,1,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 7,6,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,8,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 4,2,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,5,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,4,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 4,5,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,4,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,7,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,2,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,8,3
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,2,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,5,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 2,9,6
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 10,6,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,6,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,6,5
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,4,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,4,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 9,10,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,2,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 6,7,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,2,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,4,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,9,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 1,7,3
+Attacking State: Routine
+AttackResult: 'Hit'
+
+Player 1 Randomizing next Hunting direction
+
+Player 1 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 1 attacked 1,7,4
+Attacking State: Hunting Z forwards
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 5,1,2
+AttackResult: 'Miss'
+
+Player 1 Randomizing next Hunting direction
+
+notifyOnAttackResult: player 1 attacked 1,8,3
+Attacking State: Hunting X forwards
+AttackResult: 'Hit'
+cleared Surrounding cells arround hit point: 1,8,3 In Hunting direction: 1,0,1 (Hunting X axis)
+First 'Hit' was in Routine_state (direction was unknown) - now it's time to clean arround it:
+cleared Surrounding cells arround hit point: 1,7,3 In Hunting direction: 1,0,1 (Hunting X axis)
+
+notifyOnAttackResult: player 1 attacked 1,9,3
+Attacking State: Hunting X forwards
+AttackResult: 'Hit'
+cleared Surrounding cells arround hit point: 1,9,3 In Hunting direction: 1,0,1 (Hunting X axis)
+
+notifyOnAttackResult: player 1 attacked 1,10,3
+Attacking State: Hunting X forwards
+AttackResult: 'Sink'
+cleared Surrounding cells arround hit point: 1,10,3 After Sink!
+
+notifyOnAttackResult: player 1 attacked 6,7,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,10,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 10,9,1
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 6,9,1
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,6,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 1,4,2
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,10,2
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 9,8,6
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 7,3,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 3,1,3
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 1 attacked 5,10,5
+Attacking State: Routine
+AttackResult: 'Miss'
+
+notifyOnAttackResult: player 0 attacked 8,4,4
 AttackResult: 'Miss'
 
 notifyOnAttackResult: player 1 attacked 2,1,2

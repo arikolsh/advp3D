@@ -1,0 +1,2 @@
+Threads: 4
+Logger_Path: game.log
