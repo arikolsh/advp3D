@@ -3,7 +3,7 @@
 #include "PlayerResult.h"
 #include <mutex>
 
-class SafeAccResultsVector
+class AccResultsVector
 {
 	vector<PlayerResult> _vec;
 	size_t _count = 0;
@@ -13,4 +13,7 @@ class SafeAccResultsVector
 public:
 	void safeAccPush(const PlayerResult& p);
 	PlayerResult safeGet(size_t i);
+	PlayerResult unsafeGet(size_t i);
+	size_t unsafeGetSize() const;
+	void releaseCV();
 };

@@ -42,7 +42,7 @@
     <ClInclude Include="PlayerResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SafeAccResultsVector.h">
+    <ClInclude Include="AccResultsVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,7 +74,7 @@
     <ClCompile Include="PlayerResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SafeAccResultsVector.cpp">
+    <ClCompile Include="AccResultsVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
