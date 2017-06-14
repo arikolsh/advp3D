@@ -67,7 +67,6 @@ public:
 		stream.str(line);
 		stream >> fieldName >> _loggerPath;
 		stream.clear();
-		cout << "Logger Path: " << _loggerPath << endl << "Number Of threads: " << _numOfThreads << endl;
 	}
 
 private:
