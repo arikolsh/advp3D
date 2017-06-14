@@ -121,6 +121,7 @@ void GameManager::runGameV2()
 
 void GameManager::runGame()
 {
+
 	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
 	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
 	{		//------- board rounds -------//
@@ -133,17 +134,22 @@ void GameManager::runGame()
 		int curRound = 0;
 		while (curRound < schedule.size())
 		{	//------- one board round -------//
+
 			vector<pair<int, int>> pairs = schedule[curRound]; //get next pairs for round and update carriedPlayer
 			vector<thread> activeThreads;
 			int curPairIndex = 0;
 			while (curPairIndex < pairs.size()) //still pending tasks
 			{ //------- round -------//
+
 				while (activeThreads.size() < _maxThreads && curPairIndex < pairs.size())
 				{
-					pair<int, int> currentPair = pairs[curPairIndex];
-					if (currentPair.first == -1 || currentPair.second == -1) { continue; } //skip the player that didnt have a pair
+					cout << "LOOP" << endl;
+					pair<int, int> currentPair = pairs[curPairIndex++];
+					if (currentPair.first == -1 || currentPair.second == -1)
+					{
+						continue;
+					} //skip the player that didnt have a pair
 					activeThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
-					curPairIndex++;
 				}
 				for (auto i = 0; i < activeThreads.size(); i++)
 				{ //wait for matches to finish
@@ -165,10 +171,16 @@ void GameManager::resultPrinter(int numTotalMatches) //this the thread that prin
 	vector<PlayerResult> results;
 	while (currRound < numTotalMatches)
 	{
+		if (currRound == 46)
+		{
+			cout << endl;
+		}
+
 		for (size_t i = 0; i < _playersGet.size(); i++)
 		{//get results for player i
 			results.push_back(_resultsPerPlayer[i].safeGet(currRound));
 		}
+		cout << "ROUND " << currRound << endl;
 		printResultsForPlayers(results);
 		results.clear();
 		currRound++;

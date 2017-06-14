@@ -13,14 +13,14 @@ int main(int argc, char* argv[])
 	GameUtils::getArgs(argc, argv, threads, searchDir, loggerPath);
 	auto logger = Logger::getInstance();
 	logger->init(loggerPath);
-	GameManager gameManager(searchDir, threads);
+	GameManager gameManager(searchDir, 1);
 	bool isStarted = gameManager.init();
 	if (!isStarted)
 	{
 		logger->destroy();
 		return EXIT_FAILURE;
 	}
-	gameManager.runGameV2();
+	gameManager.runGame();
 	logger->destroy();
 	return EXIT_SUCCESS;
 
