@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 		logger->destroy();
 		return EXIT_FAILURE;
 	}
-	gameManager.runGame();
+	gameManager.runGameV2();
 	logger->destroy();
 	return EXIT_SUCCESS;
 

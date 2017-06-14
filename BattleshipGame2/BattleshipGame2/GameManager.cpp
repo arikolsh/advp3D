@@ -143,7 +143,6 @@ void GameManager::runGame()
 
 				while (activeThreads.size() < _maxThreads && curPairIndex < pairs.size())
 				{
-					cout << "LOOP" << endl;
 					pair<int, int> currentPair = pairs[curPairIndex++];
 					if (currentPair.first == -1 || currentPair.second == -1)
 					{
