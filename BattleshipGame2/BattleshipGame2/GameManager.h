@@ -29,7 +29,7 @@ private:
 	vector<GetAlgoType> _playersGet;
 	vector<string> _playerNames;
 	vector<SafeAccResultsVector> _resultsPerPlayer;
-	int _maxNameLength = 0;
+	size_t _maxNameLength = 0;
 	// additional result container for carry player in case of odd num of players
 	void runMatch(pair<int, int> playersPair, int boardNum);
 	void initPlayersDetails(vector<string>& dllPaths);

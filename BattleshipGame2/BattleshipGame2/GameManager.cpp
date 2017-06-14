@@ -77,9 +77,11 @@ void GameManager::runMatchV2(pair<int, int> playersPair, int boardNum)
 	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
 	int winner = matchManager.runGame(players, { playersPair.first, playersPair.second });
 	PlayerResult res1(playersPair.first);
-	PlayerResult res2(playersPair.first);
+	PlayerResult res2(playersPair.second);
 	// Update PlayerResult for each player:
 	matchManager.gameOver(winner, playersPair, res1, res2);
+	_resultsPerPlayer[playersPair.first].safeAccPush(res1);
+	_resultsPerPlayer[playersPair.second].safeAccPush(res2);
 }
 
 void GameManager::runGameV2()
@@ -104,6 +106,14 @@ void GameManager::runGameV2()
 			}
 			activeThreads.clear(); // clear threads buffer
 		}
+	}
+	if (activeThreads.size() > 0) { //still active threads
+		for (auto i = 0; i < activeThreads.size(); i++)
+		{ //wait for matches to finish
+			if (activeThreads[i].joinable())
+				activeThreads.at(i).join();
+		}
+		activeThreads.clear(); // clear threads buffer
 	}
 	if (resultPrinterThread.joinable())
 		resultPrinterThread.join();
@@ -151,15 +161,16 @@ void GameManager::runGame()
 
 void GameManager::resultPrinter(int numTotalMatches) //this the thread that prints results
 {
-	int currRound = 0;
+	size_t currRound = 0;
 	vector<PlayerResult> results;
 	while (currRound < numTotalMatches)
 	{
-		for (int i = 0; i < _playersGet.size(); i++)
-		{
+		for (size_t i = 0; i < _playersGet.size(); i++)
+		{//get results for player i
 			results.push_back(_resultsPerPlayer[i].safeGet(currRound));
 		}
 		printResultsForPlayers(results);
+		results.clear();
 		currRound++;
 	}
 }
@@ -224,7 +235,7 @@ vector<vector<pair<int, int>>> GameManager::getAllRoundsSchedule() const
 	}
 	for (auto i = 0; i < players.size() - 1; i++)
 	{
-		int mid = players.size() / 2;
+		auto mid = players.size() / 2;
 		vector<int> left(players.begin(), players.begin() + mid);
 		vector<int> right(players.begin() + mid, players.end());
 		reverse(right.begin(), right.end());
@@ -296,14 +307,14 @@ void GameManager::initPlayersDetails(vector<string> &dllPaths)
 		_logger->log(stream.str());
 		// init player result for specific player
 		// get player name: remove .dll suffix and last '/'
-		int x = dllPaths[i].find_last_of("/\\");
+		auto x = dllPaths[i].find_last_of("/\\");
 		string name = dllPaths[i].substr(x + 1, dllPaths[i].size() - 4 - x - 1);
 		if (_maxNameLength <= name.size()) {
 			_maxNameLength = name.size();
 		}
 		_playerNames.push_back(name);
 		_resultsPerPlayer = vector<SafeAccResultsVector>(_playersGet.size());
-		int currentPlayerNum = _playersGet.size() - 1;
+		auto currentPlayerNum = _playersGet.size() - 1;
 		_playerResults.push_back(PlayerResult(currentPlayerNum));
 		stream.str(string()); //clear stream
 		stream << "added result slot for player" << name;

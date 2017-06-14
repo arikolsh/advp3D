@@ -6,11 +6,11 @@
 class SafeAccResultsVector
 {
 	vector<PlayerResult> _vec;
-	int _count = 0;
+	size_t _count = 0;
 	mutex _pLock; //lock for pushing to vector
 	condition_variable _cv;
 
 public:
 	void safeAccPush(const PlayerResult& p);
-	PlayerResult safeGet(int i);
+	PlayerResult safeGet(size_t i);
 };

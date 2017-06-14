@@ -3,13 +3,13 @@
 
 using namespace std;
 
-PlayerResult::PlayerResult(int playerNum) : _totalNumPointsFor(0), _totalNumPointsAgainst(0), _totalNumLosses(0), _totalNumWins(0), _playerNum(playerNum)
+PlayerResult::PlayerResult(size_t playerNum) : _totalNumPointsFor(0), _totalNumPointsAgainst(0), _totalNumLosses(0), _totalNumWins(0), _playerNum(playerNum)
 {
 }
 
 float PlayerResult::getWinPercentage() const
 {
-	float totalGames = _totalNumLosses + _totalNumWins;
+	float totalGames = float(_totalNumLosses) + float(_totalNumWins);
 	if (totalGames == 0)
 	{
 		return 0;

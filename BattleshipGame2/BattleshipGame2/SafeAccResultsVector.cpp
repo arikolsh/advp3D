@@ -15,7 +15,7 @@ void SafeAccResultsVector::safeAccPush(const PlayerResult& p) {
 	_cv.notify_one();
 }
 
-PlayerResult SafeAccResultsVector::safeGet(int i) {
+PlayerResult SafeAccResultsVector::safeGet(size_t i) {
 	mutex gMutex;
 	unique_lock<mutex> gLock(gMutex);
 	_cv.wait(gLock, [&i, this]() {return i < _count; });
