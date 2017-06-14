@@ -15,8 +15,6 @@
 #define RIGHT 0
 #define DOWN 1
 #define DEEP 2
-#define MAX_NUM_SHIPS 5 //max number of ships per player
-
 
 using namespace std;
 /*
@@ -265,7 +263,7 @@ int BoardUtils::findShipDirection(vector<vector<string>> board, int depth, int r
 }
 /*
 * check if valid board and put number of ships for each player in numShips[]
-* return true iff no adjacent ships, no invalid shapes, number of ships is MAX_NUM_SHIPS.
+* return true iff no adjacent ships, no invalid shapes.
 */
 bool BoardUtils::isValidBoard(vector<vector<string>> board, int depth, int rows, int cols, int numShips[])
 {

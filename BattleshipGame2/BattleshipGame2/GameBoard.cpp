@@ -20,13 +20,14 @@ GameBoard::GameBoard(int rows, int cols, int depth)
 }
 
 // expect getting a board with padding
-GameBoard::GameBoard(vector<vector<string>>& board, int rows, int cols, int depth)
+GameBoard::GameBoard(vector<vector<string>>& board, int rows, int cols, int depth, int shipsPerPlayer[])
 {
 	_depth = depth;
 	_rows = rows;
 	_cols = cols;
 	// get a copy of given board 
 	_board = board;
+	_shipsPerPlayer = { shipsPerPlayer[0] , shipsPerPlayer[1] };
 }
 
 GameBoard::GameBoard(const GameBoard& that)
@@ -35,6 +36,7 @@ GameBoard::GameBoard(const GameBoard& that)
 	_rows = that.rows();
 	_cols = that.cols();
 	_board = that.board();
+	_shipsPerPlayer = that._shipsPerPlayer;
 }
 
 char GameBoard::charAt(Coordinate c) const

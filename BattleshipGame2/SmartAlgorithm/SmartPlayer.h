@@ -8,7 +8,6 @@
 #define EMPTY_CELL '-'
 #define MARKED_CELL 'x'
 #define SURROUNDING_SHIP_CELL '0'
-#define  NUM_SHIP_TYPES 4
 
 using namespace std;
 
