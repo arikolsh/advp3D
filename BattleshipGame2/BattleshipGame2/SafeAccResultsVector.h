@@ -3,14 +3,14 @@
 #include "PlayerResult.h"
 #include <mutex>
 
-class SafeVector
+class SafeAccResultsVector
 {
-	vector<PlayerResult> buffer;
-	int _count = 0;
+	vector<PlayerResult> _vec;
+	size_t _count = 0;
 	mutex _pLock; //lock for pushing to vector
 	condition_variable _cv;
 
 public:
-	void safePush(const PlayerResult& p);
-	PlayerResult safeGet(int i);
+	void safeAccPush(const PlayerResult& p);
+	PlayerResult safeGet(size_t i);
 };
