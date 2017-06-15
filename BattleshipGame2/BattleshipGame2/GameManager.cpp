@@ -183,13 +183,15 @@ void GameManager::resultPrinter() //this the thread that prints results
 			results.push_back(_resultsPerPlayer[i].safeGet(currRound));
 			if (_gameStopped) { break; }
 		}
+		if (_gameStopped) { break; }
 		//cout << "ROUND " << currRound << endl;
-		//printResultsForPlayers(results);
+		printResultsForPlayers(results);
 		results.clear();
 		currRound++;
 	}
 	// print the rest, can use thread-unsafe function because at this point no other threads except manaer
 	// are running in the background
+	results.clear();
 	while (currRound < _resultsPerPlayer[0].unsafeGetSize())
 	{
 		for (size_t i = 0; i < _playersGet.size(); i++)
