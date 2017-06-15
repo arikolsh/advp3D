@@ -28,7 +28,14 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 {
 	ostringstream stream;
 	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second;
+
 	_logger->log(stream.str());
+
+	if (_boards[boardNum].getShipsPerPlayer().first == 10)
+	{
+		cout << endl;
+	}
+		cout << "Running match: " << "player " << playersPair.first << ": " << _playerNames[playersPair.first] << " against player " << playersPair.second <<": "<< _playerNames[playersPair.second] << endl;
 
 	// Initialize the Match Manager (with the full board):
 	MatchManager matchManager(_boards[boardNum]);
@@ -358,10 +365,10 @@ bool GameManager::initBoards(vector<string> boardPaths)
 {
 	ostringstream stream;
 	vector<vector<string>> tmpBoard;
-	int numShips[] = { 0,0 };
 	int boardDepth = 0, boardRows = 0, BoardCols = 0;
 	for (size_t i = 0; i < boardPaths.size(); i++)
 	{
+		int numShips[] = { 0,0 };
 		if (!BoardUtils::getBoardFromFile(tmpBoard, boardPaths[i], boardDepth, boardRows, BoardCols))
 		{
 			stream.str(string()); //clear stream
@@ -375,6 +382,7 @@ bool GameManager::initBoards(vector<string> boardPaths)
 			{
 				stream << "valid board in file" << boardPaths[i] << ", added to manager";
 				_logger->log(stream.str());
+				cout << numShips[0] << endl;
 				_boards.push_back(GameBoard(tmpBoard, boardRows, BoardCols, boardDepth, numShips));
 			}
 			else
