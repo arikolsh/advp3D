@@ -18,7 +18,7 @@ SmartPlayer::~SmartPlayer() {}
 void SmartPlayer::setPlayer(int player)
 {
 	_playerNum = player;
-	initLogger(true); // true will create a log file for each player
+	initLogger(false); // true will create an amazing log file for each smart player
 }
 
 void SmartPlayer::initLogger(bool shouldLog)

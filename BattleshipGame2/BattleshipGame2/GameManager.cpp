@@ -382,7 +382,6 @@ bool GameManager::initBoards(vector<string> boardPaths)
 			{
 				stream << "valid board in file" << boardPaths[i] << ", added to manager";
 				_logger->log(stream.str());
-				cout << numShips[0] << endl;
 				_boards.push_back(GameBoard(tmpBoard, boardRows, BoardCols, boardDepth, numShips));
 			}
 			else

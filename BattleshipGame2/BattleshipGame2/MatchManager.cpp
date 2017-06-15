@@ -243,16 +243,8 @@ int MatchManager::runGame(IBattleshipGameAlgo* players[NUM_PLAYERS], vector<int>
 	AttackResult attackResult;
 	int attackerIndex;
 	//logShipsMap();
-	cout << "ACTIVE SHIPS FOR PLAYER 0: " << _playersNumActiveShips.first << endl;
-	cout << "ACTIVE SHIPS FOR PLAYER 1: " << _playersNumActiveShips.second << endl;
-	if (_playersNumActiveShips.first == 10)
-	{
-		cout << endl;
-	}
 	while (true)
 	{
-
-
 		attackerIndex = _currentPlayerIndex;
 		//Player declares his next attack:
 		attackPoint = players[_currentPlayerIndex]->attack();
