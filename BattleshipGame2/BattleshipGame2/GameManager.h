@@ -25,7 +25,6 @@ private:
 	std::string _searchDir;
 	int _maxThreads;
 	bool _gameStopped = false;
-	std::vector<std::string> _messages;
 	std::vector<GameBoard> _boards; //holds vector of 3D boards
 	vector<GetAlgoType> _playersGet;
 	vector<string> _playerNames;

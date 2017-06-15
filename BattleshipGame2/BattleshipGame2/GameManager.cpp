@@ -34,8 +34,11 @@ void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
 	MatchManager matchManager(_boards[boardNum]);
 	// Set boards for both players:
 	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
+	cout << "board num: "<<boardNum << endl;
 	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
 	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
+	board1.print(false);
+	board2.print(false);
 
 	// Set both players:
 	auto player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());
@@ -388,10 +391,11 @@ bool GameManager::init() {
 	ostringstream stream;
 	vector<string> boardPaths;
 	vector<string> dllPaths;
-	int err = GameUtils::getInputFiles(boardPaths, dllPaths, _messages, _searchDir);
-	for (int m = 0; m < _messages.size(); m++)
+	std::vector<std::string> messages;
+	int err = GameUtils::getInputFiles(boardPaths, dllPaths, messages, _searchDir);
+	for (int m = 0; m < messages.size(); m++)
 	{
-		_logger->log(_messages[m]);
+		_logger->log(messages[m]);
 	}
 
 	if (err) {
