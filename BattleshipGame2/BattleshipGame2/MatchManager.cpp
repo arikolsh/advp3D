@@ -192,16 +192,15 @@ void MatchManager::gameOver(int winner, pair<int, int> playersPair, PlayerResult
 	resB._totalNumPointsAgainst += _playerScores.first;
 	if (winner == A_NUM)
 	{
-		resA._totalNumWins += 1;
-		resB._totalNumLosses += 1;
+		resA._totalNumWins = 1;
+		resB._totalNumLosses = 1;
 	}
 	else if (winner == B_NUM)
 	{
-		resA._totalNumLosses += 1;
-		resB._totalNumWins += 1;
+		resA._totalNumLosses = 1;
+		resB._totalNumWins = 1;
 	}
-	//else: Winner == -1 which means no winner..
-
+	//else: Winner == -1 which means no winner so we don't add victories / losses..
 	//logMatchResults(winner, playersPair, resA, resB); // Debug: log all match info
 }
 

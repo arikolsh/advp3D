@@ -24,45 +24,6 @@ GameManager::GameManager(string& searchDir, int threads) : _searchDir(searchDir)
 	_logger = Logger::getInstance();
 }
 
-void GameManager::runMatch(pair<int, int> playersPair, int boardNum)
-{
-	ostringstream stream;
-	stream << "Running match: " << "player " << playersPair.first << " against player " << playersPair.second;
-
-	_logger->log(stream.str());
-
-	if (_boards[boardNum].getShipsPerPlayer().first == 10)
-	{
-		cout << endl;
-	}
-		cout << "Running match: " << "player " << playersPair.first << ": " << _playerNames[playersPair.first] << " against player " << playersPair.second <<": "<< _playerNames[playersPair.second] << endl;
-
-	// Initialize the Match Manager (with the full board):
-	MatchManager matchManager(_boards[boardNum]);
-	// Set boards for both players:
-	GameBoard board1(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
-	cout << "board num: "<<boardNum << endl;
-	GameBoard board2(_boards[boardNum].rows(), _boards[boardNum].cols(), _boards[boardNum].depth());
-	matchManager.buildPlayerBoards(_boards[boardNum], board1, board2);
-	board1.print(false);
-	board2.print(false);
-
-	// Set both players:
-	auto player1 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.first]());
-	player1->setPlayer(playersPair.first);
-	player1->setBoard(board1);
-	auto player2 = unique_ptr<IBattleshipGameAlgo>(_playersGet[playersPair.second]());
-	player2->setPlayer(playersPair.second);
-	player2->setBoard(board2);
-
-	// Run this match:
-	IBattleshipGameAlgo* players[2] = { player1.get(), player2.get() };
-	int winner = matchManager.runGame(players, { playersPair.first, playersPair.second });
-
-	// Update PlayerResult for each player:
-	matchManager.gameOver(winner, playersPair, _playerResults[playersPair.first], _playerResults[playersPair.second]);
-}
-
 void GameManager::runMatchV2(pair<int, int> playersPair, int boardNum)
 {
 	ostringstream stream;
@@ -94,7 +55,7 @@ void GameManager::runMatchV2(pair<int, int> playersPair, int boardNum)
 	_resultsPerPlayer[playersPair.second].safeAccPush(res2);
 }
 
-void GameManager::runGameV2()
+void GameManager::runAllGames()
 {
 	//schedule[i] holds the pair of the match and for each player the slot in which we need to update his result
 	vector<pair<int, int>> allPossibleMatchPairs = getAllPossiblePairs();
@@ -137,51 +98,6 @@ void GameManager::runGameV2()
 		resultPrinterThread.join();
 }
 
-void GameManager::runGame()
-{
-
-	vector<vector<pair<int, int>>> schedule = getAllRoundsSchedule();
-	for (auto boardNum = 0; boardNum < _boards.size(); boardNum++)
-	{		//------- board rounds -------//
-			/*
-			* holds all the possible pairs of players for a match.
-			* permMatrix[i][j]=1 i and j already played
-			* against each other. for every i permMatrix[i][i] = 1 in advance because
-			* player_i cannot play againset himself.
-			*/
-		int curRound = 0;
-		while (curRound < schedule.size())
-		{	//------- one board round -------//
-
-			vector<pair<int, int>> pairs = schedule[curRound]; //get next pairs for round and update carriedPlayer
-			vector<thread> activeThreads;
-			int curPairIndex = 0;
-			while (curPairIndex < pairs.size()) //still pending tasks
-			{ //------- round -------//
-
-				while (activeThreads.size() < _maxThreads && curPairIndex < pairs.size())
-				{
-					pair<int, int> currentPair = pairs[curPairIndex++];
-					if (currentPair.first == -1 || currentPair.second == -1)
-					{
-						continue;
-					} //skip the player that didnt have a pair
-					activeThreads.push_back(thread(&GameManager::runMatch, this, currentPair, boardNum));
-				}
-				for (auto i = 0; i < activeThreads.size(); i++)
-				{ //wait for matches to finish
-					if (activeThreads[i].joinable())
-						activeThreads.at(i).join();
-				}
-				activeThreads.clear(); // clear threads buffer
-			}
-			printResultsForPlayers(); // Print current match results
-			curRound++;
-		}
-	}
-	printResultsForPlayers(); // Print Final results
-}
-
 void GameManager::resultPrinter() //this the thread that prints results
 {
 	size_t currRound = 0;
@@ -194,7 +110,6 @@ void GameManager::resultPrinter() //this the thread that prints results
 			if (_gameStopped) { break; }
 		}
 		if (_gameStopped) { break; }
-		//cout << "ROUND " << currRound << endl;
 		printResultsForPlayers(results);
 		results.clear();
 		currRound++;
@@ -222,29 +137,6 @@ void GameManager::printResultsForPlayers(vector<PlayerResult>& playerResults)
 		<< "Pts For" << setw(15) << "Pts Against" << endl;
 	stream << setfill('-') << setw(115) << "-" << endl << setfill(' ');
 	vector<PlayerResult> sortedResults(playerResults.begin(), playerResults.end());
-	sort(sortedResults.begin(), sortedResults.end(), PlayerResult::cmd);
-	for (int i = 0; i < sortedResults.size(); i++)
-	{
-		stream << setw(5) << to_string(i + 1).append(".")
-			<< setw(_maxNameLength + 5) << _playerNames[sortedResults[i]._playerNum]
-			<< setw(20) << sortedResults[i]._totalNumWins
-			<< setw(20) << sortedResults[i]._totalNumLosses
-			<< setw(10) << setprecision(2) << fixed << sortedResults[i].getWinPercentage()
-			<< setw(15) << sortedResults[i]._totalNumPointsFor
-			<< setw(15) << sortedResults[i]._totalNumPointsAgainst << endl;
-	}
-	cout << stream.str() << endl;
-	//_logger->log(stream.str());
-}
-
-void GameManager::printResultsForPlayers()
-{
-	ostringstream stream;
-	stream << left << setfill(' ') << setw(5) << "#" << setw(_maxNameLength + 5) << "Player Name"
-		<< setw(20) << "Total Wins" << setw(20) << "Total Losses" << setw(10) << "%" << setw(15)
-		<< "Pts For" << setw(15) << "Pts Against" << endl;
-	stream << setfill('-') << setw(115) << "-" << endl << setfill(' ');
-	vector<PlayerResult> sortedResults(_playerResults.begin(), _playerResults.end());
 	sort(sortedResults.begin(), sortedResults.end(), PlayerResult::cmd);
 	for (int i = 0; i < sortedResults.size(); i++)
 	{

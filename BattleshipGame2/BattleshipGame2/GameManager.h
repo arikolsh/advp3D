@@ -11,9 +11,8 @@ typedef IBattleshipGameAlgo *(*GetAlgoType)();
 class GameManager {
 public:
 	explicit GameManager(std::string& searchDir, int threads);
-	void runGameV2();
+	void runAllGames();
 	bool init();
-	void runGame(); //todo: delete
 	//player results for every player 
 	vector<PlayerResult> _playerResults; //todo: delte
 
@@ -35,7 +34,6 @@ private:
 	void initPlayersDetails(vector<string>& dllPaths);
 	bool initBoards(vector<string> boardPaths);
 	void runMatchV2(pair<int, int> playersPair, int boardNum);
-	void printResultsForPlayers(); //todo: del
 	vector<vector<pair<int, int>>> getAllRoundsSchedule() const;
 	vector<pair<int, int>> getAllPossiblePairs() const;
 	void resultPrinter();
