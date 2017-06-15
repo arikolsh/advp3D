@@ -41,6 +41,11 @@ GameBoard::GameBoard(const GameBoard& that)
 
 char GameBoard::charAt(Coordinate c) const
 {
+	if (c.row > _rows || c.col > _cols || c.depth > _depth 
+		|| c.row < 0 || c.col < 0 || c.depth < 0)
+	{
+		return ' '; // As instructed, return ' ' on any invalid coordinate c
+	}
 	return _board[c.row][c.col][c.depth];
 }
 
